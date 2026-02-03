@@ -1,8 +1,3 @@
 import React from 'react';
-
-// Componente desativado conforme solicitado
-const AIChat: React.FC = () => {
-  return null;
-};
-
+const AIChat: React.FC = () => null;
 export default AIChat;

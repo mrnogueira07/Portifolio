@@ -5,127 +5,83 @@ const navLinks = [
   { name: 'Início', href: '#home' },
   { name: 'Sobre', href: '#about' },
   { name: 'Projetos', href: '#projects' },
-  { name: 'Depoimentos', href: '#testimonials' },
   { name: 'Contato', href: '#contact' },
 ];
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [activeSection, setActiveSection] = useState('home');
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-
-      // Active section logic
-      const sections = navLinks.map(link => link.href.substring(1));
-      const scrollPosition = window.scrollY + 100;
-
-      for (const section of sections) {
-        const element = document.getElementById(section);
-        if (element) {
-          const offsetTop = element.offsetTop;
-          const offsetHeight = element.offsetHeight;
-          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-            setActiveSection(section);
-          }
-        }
-      }
-    };
-
+    const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    e.preventDefault();
-    const targetId = href.substring(1);
-    const element = document.getElementById(targetId);
-    if (element) {
-      const offset = 80;
-      const elementPosition = element.getBoundingClientRect().top + window.scrollY;
-      const offsetPosition = elementPosition - offset;
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      });
+  const scrollTo = (href: string) => {
+    const el = document.querySelector(href);
+    if (el) {
+      window.scrollTo({ top: (el as HTMLElement).offsetTop - 80, behavior: 'smooth' });
       setIsOpen(false);
     }
   };
 
   return (
-    <nav className={`fixed w-full z-50 transition-all duration-500 ease-in-out border-b ${scrolled ? 'bg-slate-900/60 backdrop-blur-xl py-4 border-white/5 shadow-lg shadow-black/5' : 'bg-transparent py-6 border-transparent shadow-none'}`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center">
-          <div className="flex items-center">
-            <a 
-              href="#home" 
-              onClick={(e) => scrollToSection(e, '#home')}
-              className="flex items-center gap-2 group cursor-pointer"
-            >
-              <div className="p-2 bg-gradient-to-tr from-primary to-secondary rounded-lg group-hover:rotate-12 transition-transform">
-                <Code2 className="w-6 h-6 text-white" />
-              </div>
-              <span className="font-display font-bold text-xl tracking-wide">Matheus <span className="text-primary">Nogueira</span></span>
-            </a>
+    <nav className={`fixed w-full z-[100] transition-all duration-300 ${scrolled ? 'bg-[#0f172a]/80 backdrop-blur-xl py-3 border-b border-white/5 shadow-2xl' : 'bg-transparent py-6'}`}>
+      <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
+        <a href="#home" onClick={(e) => { e.preventDefault(); scrollTo('#home'); }} className="flex items-center gap-3 group">
+          <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform">
+            <Code2 className="text-white" size={24} />
           </div>
-          
-          {/* Desktop Menu */}
-          <div className="hidden md:flex items-center space-x-8">
-            {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                onClick={(e) => scrollToSection(e, link.href)}
-                className={`font-medium transition-colors relative cursor-pointer ${
-                  activeSection === link.href.substring(1) 
-                    ? 'text-white after:w-full' 
-                    : 'text-gray-300 hover:text-white after:w-0 hover:after:w-full'
-                } after:content-[''] after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:bg-primary after:transition-all duration-300`}
-              >
-                {link.name}
-              </a>
-            ))}
-            <a 
-              href="#contact"
-              onClick={(e) => scrollToSection(e, '#contact')}
-              className="px-5 py-2.5 rounded-full bg-white text-dark font-bold hover:bg-gray-200 transition-all transform hover:scale-105 cursor-pointer"
-            >
-              Contrate-me
-            </a>
-          </div>
+          <span className="font-display font-bold text-xl tracking-tight text-white">Matheus<span className="text-indigo-500">Nogueira</span></span>
+        </a>
 
-          {/* Mobile Button */}
-          <div className="md:hidden flex items-center">
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="text-gray-300 hover:text-white focus:outline-none"
-            >
-              {isOpen ? <X className="w-8 h-8" /> : <Menu className="w-8 h-8" />}
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile Menu */}
-      <div className={`md:hidden absolute w-full glass-card transition-all duration-300 ease-in-out ${isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10 pointer-events-none'}`}>
-        <div className="px-4 pt-2 pb-6 space-y-2">
+        {/* Desktop Links */}
+        <div className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
-            <a
-              key={link.name}
-              href={link.href}
-              onClick={(e) => scrollToSection(e, link.href)}
-              className={`block px-3 py-3 rounded-md text-base font-medium cursor-pointer ${
-                activeSection === link.href.substring(1)
-                  ? 'text-white bg-white/10'
-                  : 'text-gray-300 hover:text-white hover:bg-white/10'
-              }`}
+            <a 
+              key={link.name} 
+              href={link.href} 
+              onClick={(e) => { e.preventDefault(); scrollTo(link.href); }} 
+              className="text-sm font-bold text-gray-400 hover:text-white transition-colors uppercase tracking-widest"
             >
               {link.name}
             </a>
           ))}
+          <a 
+            href="#contact" 
+            onClick={(e) => { e.preventDefault(); scrollTo('#contact'); }} 
+            className="px-6 py-2.5 rounded-full bg-white text-slate-900 font-extrabold text-xs hover:scale-105 transition-all shadow-xl"
+          >
+            ME CONTRATE
+          </a>
+        </div>
+
+        {/* Mobile Button */}
+        <button onClick={() => setIsOpen(!isOpen)} className="md:hidden text-white p-2 hover:bg-white/5 rounded-lg transition-colors">
+          {isOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+      </div>
+
+      {/* Mobile Menu */}
+      <div className={`md:hidden absolute top-full left-0 w-full glass-card border-b border-white/10 transition-all duration-500 overflow-hidden ${isOpen ? 'max-h-screen py-8 px-6' : 'max-h-0 py-0 opacity-0'}`}>
+        <div className="flex flex-col gap-6">
+          {navLinks.map((link) => (
+            <a 
+              key={link.name} 
+              href={link.href} 
+              onClick={(e) => { e.preventDefault(); scrollTo(link.href); }} 
+              className="text-2xl font-display font-bold text-white hover:text-indigo-400 transition-colors"
+            >
+              {link.name}
+            </a>
+          ))}
+          <button 
+            onClick={() => scrollTo('#contact')} 
+            className="w-full py-4 bg-indigo-600 text-white font-bold rounded-2xl shadow-lg shadow-indigo-500/20"
+          >
+            Falar Comigo
+          </button>
         </div>
       </div>
     </nav>
