@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#6366f1" />
     <meta name="description" content="Portfolio profissional de Matheus Nogueira: Desenvolvedor Full Stack, Game Dev e Engenheiro de Software." />
     <title>Matheus Nogueira | Dev & Game Portfolio</title>
-    <!-- Tailwind CDN para garantir funcionamento imediato dos estilos -->
+    <!-- Tailwind CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -23,8 +23,14 @@
             },
             animation: {
               'blob': 'blob 7s infinite',
-              'fade-in': 'fadeIn 0.5s ease-out',
+              'fade-in': 'fadeIn 3s ease-out forwards',
+              'slide-up': 'slideUp 3s ease-out forwards',
+              'slide-right': 'slideRight 3s ease-out forwards',
+              'slide-left': 'slideLeft 3s ease-out forwards',
+              'scale-in': 'scaleIn 3s cubic-bezier(0.16, 1, 0.3, 1) forwards',
               'float': 'float 6s ease-in-out infinite',
+              'float-delayed': 'float 6s ease-in-out 3s infinite',
+              'spin-slow': 'spin 6s linear infinite',
             },
             keyframes: {
               blob: {
@@ -34,8 +40,28 @@
                 '100%': { transform: 'translate(0px, 0px) scale(1)' },
               },
               fadeIn: {
-                '0%': { opacity: '0', transform: 'translateY(10px)' },
+                '0%': { opacity: '0' },
+                '100%': { opacity: '1' },
+              },
+              slideUp: {
+                '0%': { opacity: '0', transform: 'translateY(40px)' },
                 '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              slideRight: {
+                '0%': { opacity: '0', transform: 'translateX(-40px)' },
+                '100%': { opacity: '1', transform: 'translateX(0)' },
+              },
+              slideLeft: {
+                '0%': { opacity: '0', transform: 'translateX(40px)' },
+                '100%': { opacity: '1', transform: 'translateX(0)' },
+              },
+              scaleIn: {
+                '0%': { opacity: '0', transform: 'scale(0.8)' },
+                '100%': { opacity: '1', transform: 'scale(1)' },
+              },
+              float: {
+                '0%, 100%': { transform: 'translateY(0)' },
+                '50%': { transform: 'translateY(-20px)' },
               }
             }
           }
@@ -51,6 +77,47 @@
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
         border: 1px solid rgba(255, 255, 255, 0.05);
+      }
+      
+      .rotating-border-container {
+        position: relative;
+        overflow: hidden;
+        border-radius: 1.5rem;
+      }
+
+      .rotating-border-bg {
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: conic-gradient(
+          from 0deg,
+          transparent 0deg,
+          transparent 120deg,
+          #6366f1 180deg,
+          #ec4899 240deg,
+          transparent 360deg
+        );
+        animation: spin 4s linear infinite;
+      }
+
+      @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+
+      /* Delays estendidos para complementar a animação de 3s */
+      .delay-100 { animation-delay: 150ms; }
+      .delay-200 { animation-delay: 300ms; }
+      .delay-300 { animation-delay: 450ms; }
+      .delay-400 { animation-delay: 600ms; }
+      .delay-500 { animation-delay: 750ms; }
+      .delay-700 { animation-delay: 1000ms; }
+      .delay-1000 { animation-delay: 1500ms; }
+
+      .animate-fade-in, .animate-slide-up, .animate-slide-right, .animate-slide-left, .animate-scale-in {
+        opacity: 0;
       }
     </style>
   <script type="importmap">

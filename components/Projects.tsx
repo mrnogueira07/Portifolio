@@ -1,7 +1,5 @@
-
 import React, { useState } from 'react';
-// Added ArrowRight to imports
-import { ExternalLink, X, Play, Gamepad2, Eye, Layout, Monitor, ArrowRight } from 'lucide-react';
+import { ExternalLink, X, Play, ArrowRight } from 'lucide-react';
 import { Project } from '../types';
 import { useNavigate } from 'react-router-dom';
 
@@ -61,11 +59,11 @@ const Projects: React.FC = () => {
     <section id="projects" className="py-24 relative bg-dark scroll-mt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
-          <div className="animate-fade-in">
+          <div className="animate-slide-right">
             <h2 className="text-sm font-bold text-primary tracking-widest uppercase mb-2">Portfolio</h2>
             <h3 className="text-4xl md:text-5xl font-bold font-display text-white">Meus Melhores <span className="text-primary">Trabalhos</span></h3>
           </div>
-          <div className="flex gap-2 p-1 bg-white/5 backdrop-blur-md rounded-xl border border-white/10">
+          <div className="flex gap-2 p-1 bg-white/5 backdrop-blur-md rounded-xl border border-white/10 animate-fade-in delay-200">
             {['All', 'Web', 'Game', 'Video'].map((cat) => (
               <button 
                 key={cat} 
@@ -79,8 +77,12 @@ const Projects: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredProjects.map((project) => (
-            <div key={project.id} className="group relative rounded-2xl overflow-hidden glass-card flex flex-col transition-all hover:-translate-y-2 duration-300">
+          {filteredProjects.map((project, index) => (
+            <div 
+              key={project.id} 
+              className={`group relative rounded-2xl overflow-hidden glass-card flex flex-col transition-all hover:-translate-y-2 duration-300 animate-scale-in`}
+              style={{ animationDelay: `${index * 150}ms` }}
+            >
               <div className="h-64 overflow-hidden relative">
                 <img src={project.image} alt={project.title} className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" />
                 <div className="absolute inset-0 bg-gradient-to-t from-dark to-transparent opacity-60"></div>
@@ -106,7 +108,7 @@ const Projects: React.FC = () => {
           ))}
         </div>
 
-        <div className="mt-20 flex justify-center">
+        <div className="mt-20 flex justify-center animate-slide-up delay-300">
           <button onClick={() => navigate('/projects')} className="group flex items-center gap-2 px-8 py-3 rounded-full border border-white/10 hover:border-primary/50 text-gray-300 hover:text-white transition-all font-bold">
             Ver Galeria Completa <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
           </button>
@@ -115,7 +117,7 @@ const Projects: React.FC = () => {
 
       {selectedVideo && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/95 backdrop-blur-lg" onClick={() => setSelectedVideo(null)}>
-          <div className="relative w-full max-w-5xl h-[80vh] rounded-2xl overflow-hidden bg-black border border-white/10 shadow-2xl" onClick={e => e.stopPropagation()}>
+          <div className="relative w-full max-w-5xl h-[80vh] rounded-2xl overflow-hidden bg-black border border-white/10 shadow-2xl animate-scale-in" onClick={e => e.stopPropagation()}>
             <button onClick={() => setSelectedVideo(null)} className="absolute top-4 right-4 z-50 p-2 rounded-full bg-black/50 text-white hover:bg-red-500 transition-colors"><X /></button>
             <iframe src={selectedVideo} className="w-full h-full" frameBorder="0" allowFullScreen></iframe>
           </div>
