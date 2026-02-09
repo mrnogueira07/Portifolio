@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ExternalLink, X, Play, ArrowRight } from 'lucide-react';
+import { ExternalLink, X, Play, ArrowRight, Layers } from 'lucide-react';
 import { Project } from '../types';
 import { useNavigate } from 'react-router-dom';
 
@@ -56,19 +56,29 @@ const Projects: React.FC = () => {
   };
 
   return (
-    <section id="projects" className="py-24 relative bg-dark scroll-mt-20">
+    <section id="projects" className="py-24 relative bg-dark scroll-mt-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
           <div className="animate-slide-right">
-            <h2 className="text-sm font-bold text-primary tracking-widest uppercase mb-2">Portfolio</h2>
-            <h3 className="text-4xl md:text-5xl font-bold font-display text-white">Meus Melhores <span className="text-primary">Trabalhos</span></h3>
+             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold uppercase tracking-wider mb-4">
+               <Layers size={12} /> Portfolio
+             </div>
+            <h3 className="text-4xl md:text-5xl font-bold font-display text-white">
+              Meus Melhores <span className="text-primary">Trabalhos</span>
+            </h3>
           </div>
-          <div className="flex gap-2 p-1 bg-white/5 backdrop-blur-md rounded-xl border border-white/10 animate-fade-in delay-200">
+          
+          {/* Filtros */}
+          <div className="flex flex-wrap gap-2 p-1.5 bg-white/5 backdrop-blur-md rounded-xl border border-white/10 animate-fade-in delay-200">
             {['All', 'Web', 'Game', 'Video'].map((cat) => (
               <button 
                 key={cat} 
                 onClick={() => setFilter(cat as any)} 
-                className={`px-6 py-2 rounded-lg text-sm font-bold transition-all ${filter === cat ? 'bg-primary text-white shadow-lg' : 'text-gray-400 hover:text-white'}`}
+                className={`px-5 py-2 rounded-lg text-sm font-bold transition-all duration-300 ${
+                  filter === cat 
+                    ? 'bg-primary text-white shadow-lg shadow-primary/25 scale-105' 
+                    : 'text-gray-400 hover:text-white hover:bg-white/5'
+                }`}
               >
                 {cat === 'All' ? 'Tudo' : cat}
               </button>
@@ -80,27 +90,40 @@ const Projects: React.FC = () => {
           {filteredProjects.map((project, index) => (
             <div 
               key={project.id} 
-              className={`group relative rounded-2xl overflow-hidden glass-card flex flex-col transition-all hover:-translate-y-2 duration-300 animate-scale-in`}
+              className={`group relative rounded-2xl overflow-hidden glass-card flex flex-col transition-all duration-500 hover:scale-105 animate-scale-in border border-white/10 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(99,102,241,0.25)] bg-gradient-to-br from-[#1e293b]/80 to-[#0f172a]/80`}
               style={{ animationDelay: `${index * 150}ms` }}
             >
-              <div className="h-64 overflow-hidden relative">
-                <img src={project.image} alt={project.title} className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" />
-                <div className="absolute inset-0 bg-gradient-to-t from-dark to-transparent opacity-60"></div>
-                <div className="absolute top-4 right-4 bg-dark/60 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold text-white uppercase tracking-wider border border-white/10">
+              {/* Container da Imagem com Padrão de Grid no fundo */}
+              <div className="h-64 overflow-hidden relative bg-grid-pattern border-b border-white/5">
+                <img 
+                  src={project.image} 
+                  alt={project.title} 
+                  className="w-full h-full object-contain transform group-hover:scale-105 transition-transform duration-700 relative z-10" 
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-dark/80 via-transparent to-transparent opacity-60 pointer-events-none z-20"></div>
+                <div className="absolute top-4 right-4 z-30 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold text-white uppercase tracking-wider border border-white/10 shadow-lg">
                   {project.category}
                 </div>
               </div>
-              <div className="p-6 flex-1 flex flex-col">
+              
+              <div className="p-6 flex-1 flex flex-col bg-[#1e293b]/30">
                 <h4 className="text-xl font-bold mb-2 text-white group-hover:text-primary transition-colors">{project.title}</h4>
-                <p className="text-gray-400 text-sm mb-6 line-clamp-2">{project.description}</p>
-                <div className="flex flex-wrap gap-2 mt-auto">
-                  {project.tags.map(tag => <span key={tag} className="text-[10px] px-2 py-1 rounded-md bg-white/5 text-gray-300 border border-white/5">#{tag}</span>)}
+                <p className="text-gray-400 text-sm mb-6 line-clamp-2 leading-relaxed">{project.description}</p>
+                
+                <div className="flex flex-wrap gap-2 mt-auto mb-6">
+                  {project.tags.map(tag => (
+                    <span key={tag} className="text-[10px] font-semibold px-2.5 py-1 rounded-md bg-white/5 text-gray-300 border border-white/5 group-hover:border-white/10 transition-colors">
+                      #{tag}
+                    </span>
+                  ))}
                 </div>
+                
                 <button 
                   onClick={() => handleProjectClick(project)} 
-                  className="w-full mt-6 py-3 rounded-xl bg-primary/10 hover:bg-primary text-primary hover:text-white text-sm font-bold transition-all flex items-center justify-center gap-2"
+                  className="w-full py-3.5 rounded-xl bg-white/5 hover:bg-primary text-white text-sm font-bold transition-all duration-300 flex items-center justify-center gap-2 border border-white/10 hover:border-primary group/btn"
                 >
-                  {project.videoUrl ? <Play size={16} /> : <ExternalLink size={16} />} 
+                  {project.videoUrl ? <Play size={16} className="fill-current" /> : <ExternalLink size={16} />} 
                   {project.videoUrl ? 'Ver Preview' : 'Acessar Link'}
                 </button>
               </div>
@@ -109,8 +132,11 @@ const Projects: React.FC = () => {
         </div>
 
         <div className="mt-20 flex justify-center animate-slide-up delay-300">
-          <button onClick={() => navigate('/projects')} className="group flex items-center gap-2 px-8 py-3 rounded-full border border-white/10 hover:border-primary/50 text-gray-300 hover:text-white transition-all font-bold">
-            Ver Galeria Completa <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+          <button onClick={() => navigate('/projects')} className="group flex items-center gap-3 px-8 py-4 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 hover:border-primary/50 text-white transition-all font-bold tracking-wide shadow-lg">
+            Ver Galeria Completa 
+            <span className="bg-primary/20 p-1 rounded-full group-hover:bg-primary group-hover:text-white transition-colors">
+              <ArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
+            </span>
           </button>
         </div>
       </div>

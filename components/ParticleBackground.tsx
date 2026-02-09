@@ -29,7 +29,7 @@ const ParticleBackground: React.FC = () => {
       constructor() {
         this.x = Math.random() * (canvas?.width || 0);
         this.y = Math.random() * (canvas?.height || 0);
-        this.directionX = (Math.random() - 0.5) * 0.5; // Slow movement
+        this.directionX = (Math.random() - 0.5) * 0.5; // Movimento lento
         this.directionY = (Math.random() - 0.5) * 0.5;
         this.size = Math.random() * 2 + 1;
       }
@@ -37,7 +37,7 @@ const ParticleBackground: React.FC = () => {
       update() {
         if (!canvas) return;
 
-        // Bounce off edges
+        // Rebater nas bordas
         if (this.x > canvas.width || this.x < 0) {
           this.directionX = -this.directionX;
         }
@@ -60,7 +60,7 @@ const ParticleBackground: React.FC = () => {
 
     const initParticles = () => {
       particles = [];
-      // Calculate particle count based on screen area to prevent lag on mobile
+      // Calcular contagem de partículas baseada na área da tela para evitar lag em mobile
       const numberOfParticles = (canvas.width * canvas.height) / 15000;
       for (let i = 0; i < numberOfParticles; i++) {
         particles.push(new Particle());
@@ -75,13 +75,13 @@ const ParticleBackground: React.FC = () => {
         particles[i].update();
         particles[i].draw();
 
-        // Draw connections
+        // Desenhar conexões
         for (let j = i; j < particles.length; j++) {
           const dx = particles[i].x - particles[j].x;
           const dy = particles[i].y - particles[j].y;
           const distance = Math.sqrt(dx * dx + dy * dy);
 
-          if (distance < 150) { // Connection distance
+          if (distance < 150) { // Distância de conexão
             ctx.beginPath();
             ctx.strokeStyle = `rgba(255, 255, 255, ${0.1 - distance/1500})`;
             ctx.lineWidth = 1;
@@ -95,7 +95,7 @@ const ParticleBackground: React.FC = () => {
     };
 
     window.addEventListener('resize', handleResize);
-    handleResize(); // Initial setup
+    handleResize(); // Configuração inicial
     animate();
 
     return () => {

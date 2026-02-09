@@ -5,7 +5,7 @@ export interface Project {
   id: number;
   title: string;
   category: ProjectCategory;
-  subcategory?: DesignSubcategory; // Only for Design
+  subcategory?: DesignSubcategory; // Apenas para Design
   image: string;
   description: string;
   tags: string[];
@@ -23,7 +23,7 @@ export interface Testimonial {
 }
 
 export interface ServiceItem {
-  icon: any; // Using Lucide icons
+  icon: any; // Usando ícones Lucide
   title: string;
   description: string;
 }

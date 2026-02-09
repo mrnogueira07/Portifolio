@@ -4,7 +4,7 @@ import { Project, ProjectCategory, DesignSubcategory } from '../types';
 import Contact from './Contact';
 import { useNavigate } from 'react-router-dom';
 
-// Extended Data Set specifically for the full portfolio page
+// Conjunto de dados estendido especificamente para a página de portfólio completo
 const allProjects: Project[] = [
   // WEB
   {
@@ -106,21 +106,21 @@ const ProjectsPage: React.FC = () => {
 
   return (
     <div className="relative min-h-screen bg-dark">
-      {/* Animated Mirrored Radial Background Layer */}
+      {/* Camada de Fundo Radial Espelhada e Animada */}
       <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-        {/* Mirror Corner 1: Top-Left Primary */}
+        {/* Canto Espelhado 1: Superior-Esquerdo Primário */}
         <div className="absolute top-[-15%] left-[-15%] w-[60%] h-[60%] rounded-full bg-primary/20 blur-[120px] animate-blob"></div>
         
-        {/* Mirror Corner 2: Bottom-Right Primary (Mirrored to 1) */}
+        {/* Canto Espelhado 2: Inferior-Direito Primário (Espelhado ao 1) */}
         <div className="absolute bottom-[-15%] right-[-15%] w-[60%] h-[60%] rounded-full bg-primary/20 blur-[120px] animate-blob delay-700"></div>
         
-        {/* Mirror Corner 3: Top-Right Secondary */}
+        {/* Canto Espelhado 3: Superior-Direito Secundário */}
         <div className="absolute top-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-secondary/15 blur-[100px] animate-blob delay-1000"></div>
         
-        {/* Mirror Corner 4: Bottom-Left Secondary (Mirrored to 3) */}
+        {/* Canto Espelhado 4: Inferior-Esquerdo Secundário (Espelhado ao 3) */}
         <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-secondary/15 blur-[100px] animate-blob delay-500"></div>
         
-        {/* Center Accent */}
+        {/* Acento Central */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[30%] h-[30%] rounded-full bg-indigo-400/5 blur-[150px] animate-pulse"></div>
       </div>
 
@@ -205,17 +205,13 @@ const ProjectsPage: React.FC = () => {
                   className="group relative rounded-2xl overflow-hidden glass-card hover:shadow-2xl hover:shadow-primary/20 transition-all duration-500 flex flex-col animate-scale-in"
                   style={{ animationDelay: `${idx * 150}ms` }}
                 >
-                  <div className={`h-64 overflow-hidden relative ${project.category === 'Game' ? 'bg-[#1f243a]' : 'bg-dark'}`}>
-                    <div className="absolute inset-0 bg-dark/20 group-hover:bg-dark/0 transition-all z-10"></div>
+                  <div className={`h-64 overflow-hidden relative ${project.category === 'Game' ? 'bg-[#1f243a]' : 'bg-gray-900'}`}>
+                    <div className="absolute inset-0 bg-dark/20 group-hover:bg-dark/0 transition-all z-10 pointer-events-none"></div>
                     <img 
                       src={project.image} 
                       alt={project.title} 
                       loading="lazy"
-                      className={`w-full h-full transform group-hover:scale-105 transition-transform duration-700 ${
-                        project.category === 'Game' ? 'object-contain p-4' : 
-                        project.title === 'Landing Page' ? 'object-fill' : 
-                        'object-cover'
-                      }`}
+                      className="w-full h-full transform group-hover:scale-105 transition-transform duration-700 object-contain"
                     />
                     <div className="absolute top-4 right-4 z-20 flex gap-2">
                        <div className="bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-white border border-white/10">
@@ -248,7 +244,7 @@ const ProjectsPage: React.FC = () => {
       </div>
       <Contact />
 
-      {/* Video Modal */}
+      {/* Modal de Vídeo */}
       {selectedVideo && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/90 backdrop-blur-lg animate-fade-in" onClick={() => setSelectedVideo(null)}>
           <div 

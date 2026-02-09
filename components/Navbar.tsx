@@ -11,9 +11,24 @@ const navLinks = [
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [activeLink, setActiveLink] = useState('#home');
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+      
+      // Lógica simples para detectar seção ativa
+      const sections = navLinks.map(link => document.querySelector(link.href));
+      const scrollPos = window.scrollY + 100;
+
+      sections.forEach((section) => {
+        if (section instanceof HTMLElement) {
+          if (section.offsetTop <= scrollPos && (section.offsetTop + section.offsetHeight) > scrollPos) {
+            setActiveLink(`#${section.id}`);
+          }
+        }
+      });
+    };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -23,62 +38,99 @@ const Navbar: React.FC = () => {
     if (el) {
       window.scrollTo({ top: (el as HTMLElement).offsetTop - 80, behavior: 'smooth' });
       setIsOpen(false);
+      setActiveLink(href);
     }
   };
 
   return (
-    <nav className={`fixed w-full z-[100] transition-all duration-300 ${scrolled ? 'bg-[#0f172a]/80 backdrop-blur-xl py-3 border-b border-white/5 shadow-2xl' : 'bg-transparent py-6'}`}>
+    <nav 
+      className={`fixed w-full z-[100] transition-all duration-500 border-b ${
+        scrolled 
+          ? 'bg-[#0f172a]/90 backdrop-blur-md py-3 border-white/10 shadow-lg' 
+          : 'bg-transparent py-6 border-transparent'
+      }`}
+    >
       <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
-        <a href="#home" onClick={(e) => { e.preventDefault(); scrollTo('#home'); }} className="flex items-center gap-3 group">
-          <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform">
-            <Code2 className="text-white" size={24} />
+        {/* Logo */}
+        <a href="#home" onClick={(e) => { e.preventDefault(); scrollTo('#home'); }} className="flex items-center gap-3 group relative z-50">
+          <div className="w-10 h-10 bg-gradient-to-br from-indigo-600 to-pink-600 rounded-xl flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform duration-300">
+            <Code2 className="text-white w-6 h-6" />
           </div>
-          <span className="font-display font-bold text-xl tracking-tight text-white">Matheus<span className="text-indigo-500">Nogueira</span></span>
+          <div className="flex flex-col">
+            <span className="font-display font-bold text-xl tracking-tight text-white leading-none">
+              Matheus<span className="text-indigo-500">Nogueira</span>
+            </span>
+            <span className="text-[10px] text-gray-400 font-medium tracking-widest uppercase opacity-0 group-hover:opacity-100 transition-opacity duration-300 -mt-1 transform translate-y-1 group-hover:translate-y-0">
+              Portfolio
+            </span>
+          </div>
         </a>
 
-        {/* Desktop Links */}
-        <div className="hidden md:flex items-center gap-8">
+        {/* Links Desktop */}
+        <div className="hidden md:flex items-center gap-1">
           {navLinks.map((link) => (
             <a 
               key={link.name} 
               href={link.href} 
               onClick={(e) => { e.preventDefault(); scrollTo(link.href); }} 
-              className="text-sm font-bold text-gray-400 hover:text-white transition-colors uppercase tracking-widest"
+              className={`relative px-4 py-2 text-sm font-bold transition-all duration-300 rounded-lg group overflow-hidden ${
+                activeLink === link.href ? 'text-white' : 'text-gray-400 hover:text-white'
+              }`}
             >
-              {link.name}
+              <span className="relative z-10">{link.name}</span>
+              {/* Fundo animado no hover/active */}
+              <span className={`absolute inset-0 bg-white/5 transform transition-transform duration-300 origin-left ${
+                activeLink === link.href ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
+              }`}></span>
             </a>
           ))}
           <a 
             href="#contact" 
             onClick={(e) => { e.preventDefault(); scrollTo('#contact'); }} 
-            className="px-6 py-2.5 rounded-full bg-white text-slate-900 font-extrabold text-xs hover:scale-105 transition-all shadow-xl"
+            className="ml-6 px-6 py-2.5 rounded-full bg-white text-slate-900 font-extrabold text-xs hover:scale-105 hover:bg-indigo-50 transition-all shadow-[0_0_20px_rgba(255,255,255,0.3)]"
           >
             ME CONTRATE
           </a>
         </div>
 
-        {/* Mobile Button */}
-        <button onClick={() => setIsOpen(!isOpen)} className="md:hidden text-white p-2 hover:bg-white/5 rounded-lg transition-colors">
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
+        {/* Botão Mobile */}
+        <button 
+          onClick={() => setIsOpen(!isOpen)} 
+          className="md:hidden text-white p-2 hover:bg-white/10 rounded-lg transition-colors relative z-50 focus:outline-none"
+          aria-label="Toggle Menu"
+        >
+          {isOpen ? <X size={28} /> : <Menu size={28} />}
         </button>
       </div>
 
-      {/* Mobile Menu */}
-      <div className={`md:hidden absolute top-full left-0 w-full glass-card border-b border-white/10 transition-all duration-500 overflow-hidden ${isOpen ? 'max-h-screen py-8 px-6' : 'max-h-0 py-0 opacity-0'}`}>
-        <div className="flex flex-col gap-6">
-          {navLinks.map((link) => (
+      {/* Menu Mobile Overlay */}
+      <div 
+        className={`md:hidden fixed inset-0 bg-[#0f172a]/95 backdrop-blur-xl transition-all duration-500 flex flex-col items-center justify-center gap-8 ${
+          isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
+      >
+        <div className="flex flex-col items-center gap-8 w-full px-8">
+          {navLinks.map((link, idx) => (
             <a 
               key={link.name} 
               href={link.href} 
               onClick={(e) => { e.preventDefault(); scrollTo(link.href); }} 
-              className="text-2xl font-display font-bold text-white hover:text-indigo-400 transition-colors"
+              className={`text-3xl font-display font-bold text-white hover:text-indigo-400 transition-all transform ${
+                isOpen ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
+              }`}
+              style={{ transitionDelay: `${idx * 100}ms` }}
             >
               {link.name}
             </a>
           ))}
+          <div 
+            className={`w-full max-w-xs h-px bg-white/10 my-2 transition-all duration-700 ${isOpen ? 'scale-x-100' : 'scale-x-0'}`} 
+          />
           <button 
             onClick={() => scrollTo('#contact')} 
-            className="w-full py-4 bg-indigo-600 text-white font-bold rounded-2xl shadow-lg shadow-indigo-500/20"
+            className={`w-full max-w-xs py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-2xl shadow-xl transition-all duration-500 delay-300 transform hover:scale-105 ${
+              isOpen ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
+            }`}
           >
             Falar Comigo
           </button>

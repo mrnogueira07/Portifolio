@@ -9,24 +9,39 @@
   }
 }
 
+/* Glassmorphism Refinado */
 .glass-card {
-  background: rgba(30, 41, 59, 0.7);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 }
 
-/* Scrollbar Customization */
+/* Padrão de Grid para fundos de imagem */
+.bg-grid-pattern {
+  background-color: #0f172a;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+  linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Scrollbar Customizada Premium */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 ::-webkit-scrollbar-track {
   background: #0f172a; 
 }
 ::-webkit-scrollbar-thumb {
   background: #334155; 
-  border-radius: 4px;
+  border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #475569; 
+  background: #6366f1; /* Primary color on hover */
+}
+
+/* Utilitários de Animação Suave */
+html {
+  scroll-behavior: smooth;
 }

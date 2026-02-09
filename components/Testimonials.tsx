@@ -51,12 +51,12 @@ const Testimonials: React.FC = () => {
   const [itemsPerPage, setItemsPerPage] = useState(1);
   const [isPaused, setIsPaused] = useState(false);
   
-  // Drag/Swipe State
+  // Estados para Arrastar/Deslizar (Swipe)
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 
-  // Responsive logic to determine how many items to show
+  // Lógica responsiva para determinar quantos itens mostrar
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 1024) {
@@ -68,12 +68,12 @@ const Testimonials: React.FC = () => {
       }
     };
 
-    handleResize(); // Initial check
+    handleResize(); // Verificação inicial
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Calculate maximum index to prevent empty space at the end
+  // Calcular índice máximo para evitar espaço vazio no final
   const maxIndex = Math.max(0, testimonials.length - itemsPerPage);
 
   const nextSlide = useCallback(() => {
@@ -84,14 +84,14 @@ const Testimonials: React.FC = () => {
     setCurrentIndex((prev) => (prev === 0 ? maxIndex : prev - 1));
   }, [maxIndex]);
 
-  // Auto-play functionality
+  // Funcionalidade de Auto-play
   useEffect(() => {
     if (isPaused || isDragging) return;
     const interval = setInterval(nextSlide, 5000);
     return () => clearInterval(interval);
   }, [isPaused, isDragging, nextSlide]);
 
-  // --- Swipe/Drag Logic ---
+  // --- Lógica de Arrastar/Deslizar ---
   const minSwipeDistance = 50;
 
   const onTouchStart = (e: React.TouchEvent | React.MouseEvent) => {
@@ -121,10 +121,10 @@ const Testimonials: React.FC = () => {
     } else if (isRightSwipe && currentIndex > 0) {
       prevSlide();
     } else if (isLeftSwipe && currentIndex === maxIndex) {
-        // Optional: Wrap around on swipe
+        // Opcional: Voltar ao início ao deslizar no fim
         setCurrentIndex(0);
     } else if (isRightSwipe && currentIndex === 0) {
-        // Optional: Wrap around on swipe
+        // Opcional: Ir para o fim ao deslizar no início
         setCurrentIndex(maxIndex);
     }
 
@@ -135,16 +135,16 @@ const Testimonials: React.FC = () => {
 
   return (
     <section id="testimonials" className="py-24 relative overflow-hidden scroll-mt-28">
-      {/* Top & Bottom Gradients */}
+      {/* Gradientes Superior e Inferior */}
       <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-dark to-transparent pointer-events-none z-10"></div>
       <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-dark to-transparent pointer-events-none z-10"></div>
 
-      {/* Particles Background - Low opacity for subtlety */}
+      {/* Fundo de Partículas - Baixa opacidade para sutileza */}
       <div className="absolute inset-0 z-0 opacity-30 pointer-events-none">
         <ParticleBackground />
       </div>
 
-      {/* Decoration */}
+      {/* Decoração */}
       <div className="absolute top-1/2 left-0 w-96 h-96 bg-primary/10 rounded-full filter blur-[100px] z-0"></div>
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -152,16 +152,16 @@ const Testimonials: React.FC = () => {
           <h2 className="font-display text-4xl font-bold mb-4">O que dizem os <span className="text-secondary">Clientes</span></h2>
         </div>
 
-        {/* Carousel Container */}
+        {/* Container do Carrossel */}
         <div 
           className="relative group select-none"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => {
               setIsPaused(false);
-              setIsDragging(false); // Ensure drag resets on leave
+              setIsDragging(false); // Garantir que o arrasto reinicie ao sair
           }}
         >
-          {/* Navigation Buttons */}
+          {/* Botões de Navegação */}
           <button 
             onClick={prevSlide}
             className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 md:-translate-x-6 z-20 p-3 rounded-full bg-white/10 hover:bg-primary text-white backdrop-blur-md transition-all border border-white/10 shadow-lg opacity-0 group-hover:opacity-100 disabled:opacity-0 hidden md:block"
@@ -177,18 +177,18 @@ const Testimonials: React.FC = () => {
             <ChevronRight className="w-6 h-6" />
           </button>
 
-          {/* Slider Track Wrapper - INCREASED PADDING (px-6 md:px-8) to fix clipping issues */}
+          {/* Wrapper da Trilha do Slider - PADDING AUMENTADO para corrigir cortes */}
           <div className="overflow-hidden px-6 md:px-8 py-12 -my-8">
             <div 
               className={`flex transition-transform duration-500 ease-out ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
               style={{ transform: `translateX(-${currentIndex * (100 / itemsPerPage)}%)` }}
               
-              // Touch Events (Mobile)
+              // Eventos de Toque (Mobile)
               onTouchStart={onTouchStart}
               onTouchMove={onTouchMove}
               onTouchEnd={onTouchEnd}
               
-              // Mouse Events (Desktop Drag)
+              // Eventos de Mouse (Desktop Drag)
               onMouseDown={onTouchStart}
               onMouseMove={onTouchMove}
               onMouseUp={onTouchEnd}
@@ -224,7 +224,7 @@ const Testimonials: React.FC = () => {
             </div>
           </div>
 
-          {/* Dots Indicators */}
+          {/* Indicadores de Pontos */}
           <div className="flex justify-center gap-2 mt-4">
             {Array.from({ length: maxIndex + 1 }).map((_, idx) => (
               <button
@@ -235,7 +235,7 @@ const Testimonials: React.FC = () => {
                     ? 'bg-primary w-6' 
                     : 'bg-gray-600 hover:bg-gray-400'
                 }`}
-                aria-label={`Go to slide ${idx + 1}`}
+                aria-label={`Ir para o slide ${idx + 1}`}
               />
             ))}
           </div>
