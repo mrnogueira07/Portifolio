@@ -42,6 +42,9 @@ const Hero: React.FC = () => {
             <h1 className="font-display text-4xl sm:text-5xl md:text-7xl font-extrabold leading-tight text-white animate-slide-right delay-100">
               Desenvolvendo <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-indigo-400 to-secondary animate-color-cycle">Experiências</span> Digitais Únicas.
             </h1>
+            
+            {/* Linha Divisória com Gradiente */}
+            <div className="w-full max-w-lg h-[1px] bg-gradient-to-r from-transparent via-primary/50 to-transparent animate-scale-in delay-200"></div>
 
             <p className="text-lg md:text-xl text-gray-400 max-w-lg leading-relaxed animate-slide-right delay-200">
               Sou Matheus Nogueira, 24 anos. Especialista em Desenvolvimento Full Stack, Software e Games. Criando o futuro um pixel por vez.

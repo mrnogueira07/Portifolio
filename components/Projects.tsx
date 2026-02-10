@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ExternalLink, X, Play, ArrowRight, Layers } from 'lucide-react';
+import { ExternalLink, X, Play, ArrowRight, Layers, Cpu } from 'lucide-react';
 import { Project } from '../types';
 import { useNavigate } from 'react-router-dom';
 
@@ -56,31 +56,47 @@ const Projects: React.FC = () => {
   };
 
   return (
-    <section id="projects" className="py-24 relative bg-dark scroll-mt-10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="projects" className="py-24 relative bg-[#0a0f1e] scroll-mt-10 overflow-hidden">
+      {/* Background Cyberpunk Grid (Mesmo do Contato) */}
+      <div className="absolute inset-0 bg-grid-pattern opacity-20 pointer-events-none"></div>
+      
+      {/* Linha de Gradiente Superior (Divisão Inicial) */}
+      <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent z-20"></div>
+
+      {/* Orbes de Luz Neon */}
+      <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] -translate-x-1/2 -translate-y-1/2 animate-pulse"></div>
+      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-secondary/10 rounded-full blur-[120px] translate-x-1/2 translate-y-1/2 animate-pulse delay-1000"></div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
           <div className="animate-slide-right">
-             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold uppercase tracking-wider mb-4">
-               <Layers size={12} /> Portfolio
+             {/* Badge System Online Style */}
+             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/10 backdrop-blur-md mb-6 shadow-[0_0_15px_rgba(99,102,241,0.15)]">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
+                </span>
+                <span className="text-xs font-bold text-indigo-300 tracking-widest uppercase font-display">System Portfolio</span>
              </div>
-            <h3 className="text-4xl md:text-5xl font-bold font-display text-white">
-              Meus Melhores <span className="text-primary">Trabalhos</span>
+             
+            <h3 className="text-4xl md:text-5xl font-bold font-display text-white tracking-tight">
+              Projetos <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-purple-500 to-secondary animate-color-cycle">Inicializados</span>
             </h3>
           </div>
           
-          {/* Filtros */}
-          <div className="flex flex-wrap gap-2 p-1.5 bg-white/5 backdrop-blur-md rounded-xl border border-white/10 animate-fade-in delay-200">
+          {/* Filtros High-Tech */}
+          <div className="flex flex-wrap gap-2 p-1.5 bg-[#0b1221]/80 backdrop-blur-md rounded-xl border border-white/10 animate-fade-in delay-200">
             {['All', 'Web', 'Game', 'Video'].map((cat) => (
               <button 
                 key={cat} 
                 onClick={() => setFilter(cat as any)} 
-                className={`px-5 py-2 rounded-lg text-sm font-bold transition-all duration-300 ${
+                className={`px-5 py-2 rounded-lg text-sm font-bold transition-all duration-300 relative overflow-hidden group ${
                   filter === cat 
-                    ? 'bg-primary text-white shadow-lg shadow-primary/25 scale-105' 
-                    : 'text-gray-400 hover:text-white hover:bg-white/5'
+                    ? 'bg-primary/20 text-primary border border-primary/50 shadow-[0_0_15px_rgba(99,102,241,0.3)]' 
+                    : 'text-gray-400 hover:text-white hover:bg-white/5 border border-transparent'
                 }`}
               >
-                {cat === 'All' ? 'Tudo' : cat}
+                <span className="relative z-10">{cat === 'All' ? 'Todos' : cat}</span>
               </button>
             ))}
           </div>
@@ -90,30 +106,36 @@ const Projects: React.FC = () => {
           {filteredProjects.map((project, index) => (
             <div 
               key={project.id} 
-              className={`group relative rounded-2xl overflow-hidden glass-card flex flex-col transition-all duration-500 hover:scale-105 animate-scale-in border border-white/10 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(99,102,241,0.25)] bg-gradient-to-br from-[#1e293b]/80 to-[#0f172a]/80`}
+              className={`group relative rounded-[1.5rem] overflow-hidden bg-[#0b1221]/80 backdrop-blur-sm border border-white/10 hover:border-primary/50 transition-all duration-500 hover:-translate-y-2 animate-scale-in flex flex-col`}
               style={{ animationDelay: `${index * 150}ms` }}
             >
-              {/* Container da Imagem com Padrão de Grid no fundo */}
-              <div className="h-64 overflow-hidden relative bg-grid-pattern border-b border-white/5">
+              {/* Glow effect on hover */}
+              <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+
+              {/* Container da Imagem */}
+              <div className="h-64 overflow-hidden relative border-b border-white/5 group-hover:border-primary/20 transition-colors">
+                {/* Efeito de Scanline na Imagem */}
+                <div className="absolute inset-0 bg-[linear-gradient(transparent_0%,rgba(99,102,241,0.1)_50%,transparent_100%)] bg-[length:100%_4px] pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity z-20"></div>
+                
                 <img 
                   src={project.image} 
                   alt={project.title} 
-                  className="w-full h-full object-contain transform group-hover:scale-105 transition-transform duration-700 relative z-10" 
+                  className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 filter brightness-90 group-hover:brightness-100" 
                   loading="lazy"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-dark/80 via-transparent to-transparent opacity-60 pointer-events-none z-20"></div>
+                
                 <div className="absolute top-4 right-4 z-30 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold text-white uppercase tracking-wider border border-white/10 shadow-lg">
                   {project.category}
                 </div>
               </div>
               
-              <div className="p-6 flex-1 flex flex-col bg-[#1e293b]/30">
-                <h4 className="text-xl font-bold mb-2 text-white group-hover:text-primary transition-colors">{project.title}</h4>
+              <div className="p-6 flex-1 flex flex-col relative z-10">
+                <h4 className="text-xl font-bold mb-2 text-white group-hover:text-primary transition-colors font-display">{project.title}</h4>
                 <p className="text-gray-400 text-sm mb-6 line-clamp-2 leading-relaxed">{project.description}</p>
                 
                 <div className="flex flex-wrap gap-2 mt-auto mb-6">
                   {project.tags.map(tag => (
-                    <span key={tag} className="text-[10px] font-semibold px-2.5 py-1 rounded-md bg-white/5 text-gray-300 border border-white/5 group-hover:border-white/10 transition-colors">
+                    <span key={tag} className="text-[10px] font-semibold px-2.5 py-1 rounded bg-primary/10 text-primary/80 border border-primary/20 transition-colors">
                       #{tag}
                     </span>
                   ))}
@@ -121,10 +143,13 @@ const Projects: React.FC = () => {
                 
                 <button 
                   onClick={() => handleProjectClick(project)} 
-                  className="w-full py-3.5 rounded-xl bg-white/5 hover:bg-primary text-white text-sm font-bold transition-all duration-300 flex items-center justify-center gap-2 border border-white/10 hover:border-primary group/btn"
+                  className="w-full py-3.5 rounded-xl bg-white/5 hover:bg-primary/20 text-white text-sm font-bold transition-all duration-300 flex items-center justify-center gap-2 border border-white/10 hover:border-primary/50 group/btn relative overflow-hidden"
                 >
-                  {project.videoUrl ? <Play size={16} className="fill-current" /> : <ExternalLink size={16} />} 
-                  {project.videoUrl ? 'Ver Preview' : 'Acessar Link'}
+                  <span className="relative z-10 flex items-center gap-2">
+                    {project.videoUrl ? <Play size={16} className="fill-current" /> : <ExternalLink size={16} />} 
+                    {project.videoUrl ? 'Executar Preview' : 'Acessar Link'}
+                  </span>
+                  <div className="absolute inset-0 bg-primary/10 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300"></div>
                 </button>
               </div>
             </div>
@@ -132,10 +157,17 @@ const Projects: React.FC = () => {
         </div>
 
         <div className="mt-20 flex justify-center animate-slide-up delay-300">
-          <button onClick={() => navigate('/projects')} className="group flex items-center gap-3 px-8 py-4 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 hover:border-primary/50 text-white transition-all font-bold tracking-wide shadow-lg">
-            Ver Galeria Completa 
-            <span className="bg-primary/20 p-1 rounded-full group-hover:bg-primary group-hover:text-white transition-colors">
-              <ArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
+          <button 
+            onClick={() => navigate('/projects')} 
+            className="group relative px-8 py-4 rounded-xl font-bold text-white shadow-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(99,102,241,0.4)] overflow-hidden border border-white/10 bg-[#0b1221]"
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 opacity-80 group-hover:opacity-100 transition-opacity duration-300"></div>
+            {/* Brilho Animado no Botão */}
+            <div className="absolute top-0 -left-[100%] w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 group-hover:animate-shine"></div>
+            
+            <span className="relative flex items-center gap-3 tracking-wider uppercase text-sm">
+              Acessar Database Completa 
+              <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
             </span>
           </button>
         </div>
@@ -149,6 +181,16 @@ const Projects: React.FC = () => {
           </div>
         </div>
       )}
+      
+      <style>{`
+        @keyframes shine {
+          0% { left: -100%; }
+          100% { left: 200%; }
+        }
+        .animate-shine {
+          animation: shine 1.5s infinite linear;
+        }
+      `}</style>
     </section>
   );
 };
