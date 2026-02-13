@@ -17,8 +17,8 @@ const Hero: React.FC = () => {
   }, [showModal]);
 
   return (
-    // Adicionado overflow-hidden para prevenir scroll lateral causado pelos blobs
-    <section id="home" className="relative min-h-screen flex items-center pt-24 pb-12 lg:pb-0 overflow-hidden">
+    // Aumentado o padding inferior (pb-24) e ajustado o overflow para garantir que elementos flutuantes não sejam cortados
+    <section id="home" className="relative min-h-screen flex items-center pt-32 pb-24 lg:pb-32 overflow-x-hidden">
       <div className="absolute inset-0 z-0">
         <ParticleBackground />
         {/* Blobs de fundo ajustados para não causar overflow horizontal */}
@@ -27,7 +27,7 @@ const Hero: React.FC = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           
           {/* Coluna de Texto */}
           <div className="space-y-8">
@@ -81,7 +81,7 @@ const Hero: React.FC = () => {
           </div>
 
           {/* Coluna da Imagem */}
-          <div className="relative block animate-scale-in delay-200 mt-8 lg:mt-0">
+          <div className="relative block animate-scale-in delay-200 mt-12 lg:mt-0">
             {/* Foto Card com Borda Radial Circulante */}
             <div className="relative group z-10 rotating-border-container p-[2px] shadow-2xl animate-float">
               {/* Efeito de borda mágica circulante */}
@@ -91,7 +91,7 @@ const Hero: React.FC = () => {
                  <img 
                   src="https://i.pinimg.com/736x/69/36/05/693605df992b0509b97671fba58051a7.jpg" 
                   alt="Matheus Nogueira" 
-                  className="rounded-[1.2rem] w-full h-[400px] lg:h-[600px] object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 transform group-hover:scale-[1.02]"
+                  className="rounded-[1.2rem] w-full h-[400px] lg:h-[550px] object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 transform group-hover:scale-[1.02]"
                 />
                 
                 {/* Brilho interno suave */}
@@ -102,8 +102,8 @@ const Hero: React.FC = () => {
               <div className="absolute -inset-8 bg-gradient-to-r from-primary/30 to-secondary/30 blur-[80px] -z-10 group-hover:from-primary/40 group-hover:to-secondary/40 transition-all duration-1000 opacity-50 group-hover:opacity-100"></div>
             </div>
             
-            {/* Cartões de Informação Flutuantes */}
-            <div className="absolute -bottom-4 -left-4 md:-bottom-8 md:-left-8 z-30 glass-card p-3 md:p-5 rounded-2xl flex items-center gap-3 md:gap-4 animate-slide-right delay-500 shadow-2xl border border-white/20 hover:scale-110 transition-transform cursor-default backdrop-blur-xl bg-[#0f172a]/80">
+            {/* Cartões de Informação Flutuantes - Ajustados para evitar clipping */}
+            <div className="absolute -bottom-6 -left-4 md:-bottom-10 md:-left-8 z-30 glass-card p-4 md:p-5 rounded-2xl flex items-center gap-3 md:gap-4 animate-slide-right delay-500 shadow-2xl border border-white/20 hover:scale-110 transition-transform cursor-default backdrop-blur-xl bg-[#0f172a]/90">
               <div className="p-2 md:p-3.5 bg-primary/20 rounded-xl text-primary ring-1 ring-primary/30">
                 <Code className="w-5 h-5 md:w-7 md:h-7" />
               </div>
@@ -113,7 +113,7 @@ const Hero: React.FC = () => {
               </div>
             </div>
 
-            <div className="absolute top-4 -right-4 md:top-10 md:-right-8 z-30 glass-card p-3 md:p-5 rounded-2xl flex items-center gap-3 md:gap-4 animate-slide-left delay-500 shadow-2xl border border-white/20 hover:scale-110 transition-transform cursor-default backdrop-blur-xl bg-[#0f172a]/80">
+            <div className="absolute top-4 -right-4 md:top-10 md:-right-8 z-30 glass-card p-4 md:p-5 rounded-2xl flex items-center gap-3 md:gap-4 animate-slide-left delay-500 shadow-2xl border border-white/20 hover:scale-110 transition-transform cursor-default backdrop-blur-xl bg-[#0f172a]/90">
               <div className="p-2 md:p-3.5 bg-secondary/20 rounded-xl text-secondary ring-1 ring-secondary/30">
                 <Gamepad2 className="w-5 h-5 md:w-7 md:h-7" />
               </div>
