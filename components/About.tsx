@@ -1,94 +1,68 @@
 import React from 'react';
-import { Code, Gamepad2, Video, PenTool, Trophy, Briefcase, Heart, Sparkles, Zap, Cpu, Activity } from 'lucide-react';
+import { Code, Gamepad2, Video, PenTool, Trophy, Briefcase, Heart, Sparkles, Activity } from 'lucide-react';
 import { ServiceItem } from '../types';
 
 const services: ServiceItem[] = [
   {
     icon: Code,
-    title: "Full Stack Dev",
-    description: "Arquitetura de software robusta, APIs escaláveis e interfaces reativas com React, Node.js e tecnologias modernas."
+    title: "Sistemas Críticos",
+    description: "Arquiteturas robustas focadas em performance extrema e escalabilidade para ecossistemas de alta demanda."
   },
   {
     icon: Gamepad2,
-    title: "Game Design",
-    description: "Desenvolvimento de mecânicas imersivas e jogabilidade polida em Unity (C#) e Unreal Engine para PC e Mobile."
+    title: "Mundos Imersivos",
+    description: "Desenvolvimento de mecânicas que elevam o engajamento através de gamificação estratégica."
   },
   {
     icon: Video,
-    title: "Audiovisual",
-    description: "Edição cinematográfica, motion graphics avançado e color grading profissional para produções de alto impacto."
+    title: "Storytelling Visual",
+    description: "Audiovisual de alto impacto projetado para converter percepção de marca em autoridade."
   },
   {
     icon: PenTool,
-    title: "UI/UX Design",
-    description: "Prototipagem de interfaces centradas no usuário, focando em usabilidade, acessibilidade e estética premium."
+    title: "UI/UX Estratégico",
+    description: "Interfaces centradas na jornada cognitiva do usuário, otimizando cada ponto de contato."
   }
 ];
 
 const stats = [
-  { value: "4+", label: "Anos de XP", icon: Trophy, color: "text-amber-400" },
-  { value: "50+", label: "Projetos", icon: Briefcase, color: "text-blue-400" },
-  { value: "20+", label: "Jogos", icon: Gamepad2, color: "text-purple-400" },
-  { value: "100%", label: "Satisfação", icon: Heart, color: "text-red-400" }
+  { value: "4+", label: "Anos XP", icon: Trophy, color: "text-[#FFB800]", bgColor: "bg-[#FFB800]/10" },
+  { value: "50+", label: "Ativos", icon: Briefcase, color: "text-[#3B82F6]", bgColor: "bg-[#3B82F6]/10" },
+  { value: "20+", label: "Mundos", icon: Gamepad2, color: "text-[#A855F7]", bgColor: "bg-[#A855F7]/10" },
+  { value: "100%", label: "Precisão", icon: Heart, color: "text-[#EF4444]", bgColor: "bg-[#EF4444]/10" }
 ];
 
 const About: React.FC = () => {
   return (
-    <section id="about" className="py-20 relative scroll-mt-10 overflow-hidden bg-[#0a0f1e]">
-       {/* Background Cyberpunk Grid */}
-       <div className="absolute inset-0 bg-grid-pattern opacity-20 pointer-events-none"></div>
-      
-       {/* Orbes de Luz Neon (Posicionamento Inverso para contraste) */}
-       <div className="absolute top-1/2 left-0 w-[600px] h-[600px] bg-indigo-500/10 rounded-full blur-[120px] -translate-x-1/2 -translate-y-1/2 animate-pulse"></div>
-       <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-pink-500/10 rounded-full blur-[100px] translate-x-1/3 -translate-y-1/3"></div>
-
+    <section id="about" className="py-24 relative scroll-mt-10 overflow-hidden bg-transparent">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
-        {/* Cabeçalho Compacto */}
-        <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6 animate-slide-up">
-          <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-primary text-xs font-bold uppercase tracking-wider mb-4 backdrop-blur-md">
-              <Sparkles size={12} /> Habilidades & Expertise
-            </div>
-            <h2 className="font-display text-4xl md:text-5xl font-bold text-white mb-4 leading-tight">
-              Transformando <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-purple-400 to-pink-400 animate-color-cycle">Lógica</span> em Arte Digital.
-            </h2>
-            <p className="text-gray-400 text-lg leading-relaxed">
-              Combinando engenharia de software precisa com design criativo para construir ecossistemas digitais completos, desde o backend até a experiência visual final.
-            </p>
+        <div className="text-center mb-20 animate-slide-up">
+          <div className="inline-flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-white/[0.02] border border-white/5 text-primary text-[9px] font-black uppercase tracking-[0.4em] mb-6 backdrop-blur-md">
+            <Sparkles size={12} /> Expertises Estratégicas
           </div>
-          
-          {/* Badge Decorativa */}
-          <div className="hidden md:flex items-center gap-3 px-5 py-3 rounded-xl bg-[#0f172a]/50 border border-white/10 backdrop-blur-md">
-             <div className="relative">
-               <div className="w-3 h-3 bg-green-500 rounded-full animate-ping absolute opacity-75"></div>
-               <div className="w-3 h-3 bg-green-500 rounded-full relative"></div>
-             </div>
-             <span className="text-sm font-bold text-gray-300">Open to Work</span>
-          </div>
+          <h2 className="font-display text-3xl md:text-5xl font-black text-white mb-8 tracking-tighter leading-tight">
+            Engenharia que <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Domina Mercados.</span>
+          </h2>
+          <p className="text-gray-500 text-base md:text-lg leading-relaxed font-light max-w-3xl mx-auto">
+            Unifico a precisão algorítmica com a sensibilidade estética para criar ativos que definem novos padrões de excelência.
+          </p>
         </div>
 
-        {/* Grid de Serviços - Layout Bento/Premium */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-24">
           {services.map((service, index) => (
             <div 
               key={index} 
-              className="group relative p-6 rounded-2xl bg-[#0b1221]/60 backdrop-blur-md border border-white/5 hover:border-primary/30 transition-all duration-500 hover:-translate-y-1 overflow-hidden flex flex-col justify-between h-full"
-              style={{ animationDelay: `${index * 100}ms` }}
+              className="group relative p-10 rounded-[2rem] bg-white/[0.01] border border-white/5 hover:border-primary/20 transition-all duration-700 hover:-translate-y-2 overflow-hidden flex flex-col h-full shadow-xl"
             >
-              {/* Gradiente de Fundo no Hover */}
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
-              
               <div className="relative z-10">
-                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-white/5 to-white/10 border border-white/10 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-primary/20 group-hover:border-primary/30 transition-all duration-300 shadow-lg">
-                  <service.icon className="w-6 h-6 text-gray-300 group-hover:text-primary transition-colors" />
+                <div className="w-12 h-12 rounded-xl bg-white/[0.02] border border-white/5 flex items-center justify-center mb-8 group-hover:bg-primary/10 transition-all duration-500">
+                  <service.icon className="w-5 h-5 text-gray-500 group-hover:text-primary transition-colors" />
                 </div>
-                
-                <h3 className="text-lg font-display font-bold text-white mb-2 group-hover:text-primary transition-colors flex items-center gap-2">
+                <h3 className="text-lg font-bold text-white mb-4 tracking-tight">
                   {service.title}
                 </h3>
-                
-                <p className="text-gray-400 text-sm leading-relaxed border-l-2 border-white/5 pl-3 group-hover:border-primary/30 transition-colors">
+                <p className="text-gray-500 text-sm leading-relaxed font-light">
                   {service.description}
                 </p>
               </div>
@@ -96,34 +70,26 @@ const About: React.FC = () => {
           ))}
         </div>
 
-        {/* Barra de Status (Stats) Estilo HUD */}
-        <div className="relative rounded-2xl overflow-hidden bg-[#0b1221]/40 backdrop-blur-xl border border-white/10 animate-scale-in delay-200">
-           {/* Linha de Scan decorativa */}
-           <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-primary/50 to-transparent"></div>
-           
-           <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-white/5">
+        <div className="relative rounded-[2.5rem] overflow-hidden bg-[#08080c] border border-white/[0.05] shadow-2xl animate-scale-in">
+           <div className="grid grid-cols-2 md:grid-cols-4">
              {stats.map((stat, index) => (
-               <div key={index} className="p-6 md:p-8 flex flex-col items-center justify-center relative group hover:bg-white/5 transition-colors">
-                 <div className={`mb-3 p-3 rounded-full bg-white/5 ${stat.color} group-hover:scale-110 transition-transform duration-300`}>
-                   <stat.icon size={24} />
+               <div key={index} className={`p-10 md:p-14 flex flex-col items-center justify-center relative group transition-all duration-700 hover:bg-white/[0.01] ${index !== stats.length - 1 ? 'border-b sm:border-b-0 sm:border-r border-white/[0.05]' : ''}`}>
+                 
+                 <div className={`mb-6 p-4 rounded-xl ${stat.bgColor} ${stat.color} transition-all duration-700 group-hover:scale-110`}>
+                   <stat.icon size={24} strokeWidth={2.5} />
                  </div>
-                 <span className="text-3xl md:text-4xl font-display font-bold text-white mb-1 tracking-tight">
+                 
+                 <span className="text-4xl md:text-5xl font-display font-black text-white mb-2 tracking-tighter">
                    {stat.value}
                  </span>
-                 <span className="text-xs font-bold text-gray-500 uppercase tracking-widest flex items-center gap-2">
+                 
+                 <span className="text-[9px] font-black text-gray-600 uppercase tracking-[0.4em] group-hover:text-gray-400 transition-colors">
                    {stat.label}
                  </span>
                </div>
              ))}
            </div>
-           
-           {/* Detalhes de Interface */}
-           <div className="absolute bottom-2 right-4 flex items-center gap-2 opacity-30">
-              <Activity size={14} className="text-primary animate-pulse" />
-              <span className="text-[10px] uppercase tracking-widest font-mono text-primary">System Optimal</span>
-           </div>
         </div>
-        
       </div>
     </section>
   );

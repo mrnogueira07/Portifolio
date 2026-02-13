@@ -37,8 +37,11 @@ const LandingPage: React.FC = () => {
 
 const App: React.FC = () => {
   return (
-    <div className="min-h-screen w-full text-white bg-dark">
-      <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#1e1b4b] via-[#0f172a] to-[#000000] -z-10"></div>
+    <div className="min-h-screen w-full text-white bg-[#050508]">
+      <div className="fixed inset-0 bg-[#050508] -z-20"></div>
+      <div className="fixed inset-0 bg-grid-pattern opacity-[0.03] -z-10 pointer-events-none"></div>
+      <div className="fixed top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_0%,rgba(99,102,241,0.08)_0%,transparent_50%)] -z-10 pointer-events-none"></div>
+      
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<LandingPage />} />
