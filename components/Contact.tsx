@@ -130,10 +130,6 @@ const Contact: React.FC = () => {
 
             {/* Coluna da Direita: Formulário Terminal */}
             <div className="lg:col-span-7 p-10 md:p-14 bg-white/[0.01] relative">
-              <div className="absolute top-0 right-0 p-4 opacity-20 pointer-events-none">
-                 <Zap className="w-24 h-24 text-primary" />
-              </div>
-
               <form className="space-y-8 relative z-10" onSubmit={handleSubmit}>
                 <div className="group">
                   <label className={`block text-xs font-bold uppercase tracking-widest mb-2 transition-colors ${activeField === 'name' ? 'text-primary' : 'text-gray-500'}`}>Nome de Identificação</label>

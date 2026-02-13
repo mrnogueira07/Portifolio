@@ -92,11 +92,6 @@ const About: React.FC = () => {
                   {service.description}
                 </p>
               </div>
-
-              {/* Decoração Tech */}
-              <div className="absolute top-4 right-4 text-white/5 group-hover:text-primary/10 transition-colors">
-                 <Zap className="w-8 h-8" />
-              </div>
             </div>
           ))}
         </div>

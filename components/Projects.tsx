@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { ExternalLink, X, Play, ArrowRight, Layers, Cpu } from 'lucide-react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { ExternalLink, X, Play, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Project } from '../types';
 import { useNavigate } from 'react-router-dom';
 
@@ -36,6 +36,9 @@ export const projectData: Project[] = [
 const Projects: React.FC = () => {
   const [filter, setFilter] = useState<'All' | 'Web' | 'Game' | 'Video'>('All');
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [itemsPerPage, setItemsPerPage] = useState(1);
+  const lastWheelTime = useRef(0);
   const navigate = useNavigate();
 
   const filteredProjects = filter === 'All' 
@@ -44,6 +47,42 @@ const Projects: React.FC = () => {
         if (filter === 'Video') return p.category.includes('Video');
         return p.category === filter;
       });
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) setItemsPerPage(3);
+      else if (window.innerWidth >= 768) setItemsPerPage(2);
+      else setItemsPerPage(1);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const maxIndex = Math.max(0, filteredProjects.length - itemsPerPage);
+
+  const nextSlide = useCallback(() => {
+    setCurrentIndex(prev => (prev >= maxIndex ? 0 : prev + 1));
+  }, [maxIndex]);
+
+  const prevSlide = useCallback(() => {
+    setCurrentIndex(prev => (prev <= 0 ? maxIndex : prev - 1));
+  }, [maxIndex]);
+
+  const handleWheel = (e: React.WheelEvent) => {
+    const now = Date.now();
+    if (now - lastWheelTime.current < 400) return;
+
+    if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+      if (e.deltaX > 30) {
+        nextSlide();
+        lastWheelTime.current = now;
+      } else if (e.deltaX < -30) {
+        prevSlide();
+        lastWheelTime.current = now;
+      }
+    }
+  };
 
   const handleProjectClick = (project: Project) => {
     if (project.link) {
@@ -56,11 +95,11 @@ const Projects: React.FC = () => {
   };
 
   return (
-    <section id="projects" className="py-24 relative bg-[#0a0f1e] scroll-mt-10 overflow-hidden">
-      {/* Background Cyberpunk Grid (Mesmo do Contato) */}
+    <section id="projects" className="py-24 relative bg-[#0a0f1e] scroll-mt-10 overflow-hidden" onWheel={handleWheel}>
+      {/* Background Cyberpunk Grid */}
       <div className="absolute inset-0 bg-grid-pattern opacity-20 pointer-events-none"></div>
       
-      {/* Linha de Gradiente Superior (Divisão Inicial) */}
+      {/* Linha de Gradiente Superior */}
       <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent z-20"></div>
 
       {/* Orbes de Luz Neon */}
@@ -70,7 +109,6 @@ const Projects: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
           <div className="animate-slide-right">
-             {/* Badge System Online Style */}
              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/10 backdrop-blur-md mb-6 shadow-[0_0_15px_rgba(99,102,241,0.15)]">
                 <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
@@ -84,12 +122,12 @@ const Projects: React.FC = () => {
             </h3>
           </div>
           
-          {/* Filtros High-Tech */}
+          {/* Filtros */}
           <div className="flex flex-wrap gap-2 p-1.5 bg-[#0b1221]/80 backdrop-blur-md rounded-xl border border-white/10 animate-fade-in delay-200">
             {['All', 'Web', 'Game', 'Video'].map((cat) => (
               <button 
                 key={cat} 
-                onClick={() => setFilter(cat as any)} 
+                onClick={() => { setFilter(cat as any); setCurrentIndex(0); }} 
                 className={`px-5 py-2 rounded-lg text-sm font-bold transition-all duration-300 relative overflow-hidden group ${
                   filter === cat 
                     ? 'bg-primary/20 text-primary border border-primary/50 shadow-[0_0_15px_rgba(99,102,241,0.3)]' 
@@ -102,71 +140,96 @@ const Projects: React.FC = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredProjects.map((project, index) => (
-            <div 
-              key={project.id} 
-              className={`group relative rounded-[1.5rem] overflow-hidden bg-[#0b1221]/80 backdrop-blur-sm border border-white/10 hover:border-primary/50 transition-all duration-500 hover:-translate-y-2 animate-scale-in flex flex-col`}
-              style={{ animationDelay: `${index * 150}ms` }}
-            >
-              {/* Glow effect on hover */}
-              <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+        {/* Slider Container */}
+        <div className="relative group">
+          {/* Botões de Navegação */}
+          <button 
+            onClick={prevSlide}
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 md:-translate-x-8 z-30 p-3 rounded-full bg-[#0b1221]/80 hover:bg-white/10 text-white backdrop-blur-xl transition-all border border-white/10 opacity-0 group-hover:opacity-100 hidden md:flex"
+          >
+            <ChevronLeft size={24} />
+          </button>
+          
+          <button 
+            onClick={nextSlide}
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 md:translate-x-8 z-30 p-3 rounded-full bg-[#0b1221]/80 hover:bg-white/10 text-white backdrop-blur-xl transition-all border border-white/10 opacity-0 group-hover:opacity-100 hidden md:flex"
+          >
+            <ChevronRight size={24} />
+          </button>
 
-              {/* Container da Imagem */}
-              <div className="h-64 overflow-hidden relative border-b border-white/5 group-hover:border-primary/20 transition-colors">
-                {/* Efeito de Scanline na Imagem */}
-                <div className="absolute inset-0 bg-[linear-gradient(transparent_0%,rgba(99,102,241,0.1)_50%,transparent_100%)] bg-[length:100%_4px] pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity z-20"></div>
-                
-                <img 
-                  src={project.image} 
-                  alt={project.title} 
-                  className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 filter brightness-90 group-hover:brightness-100" 
-                  loading="lazy"
-                />
-                
-                <div className="absolute top-4 right-4 z-30 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold text-white uppercase tracking-wider border border-white/10 shadow-lg">
-                  {project.category}
-                </div>
-              </div>
-              
-              <div className="p-6 flex-1 flex flex-col relative z-10">
-                <h4 className="text-xl font-bold mb-2 text-white group-hover:text-primary transition-colors font-display">{project.title}</h4>
-                <p className="text-gray-400 text-sm mb-6 line-clamp-2 leading-relaxed">{project.description}</p>
-                
-                <div className="flex flex-wrap gap-2 mt-auto mb-6">
-                  {project.tags.map(tag => (
-                    <span key={tag} className="text-[10px] font-semibold px-2.5 py-1 rounded bg-primary/10 text-primary/80 border border-primary/20 transition-colors">
-                      #{tag}
-                    </span>
-                  ))}
-                </div>
-                
-                <button 
-                  onClick={() => handleProjectClick(project)} 
-                  className="w-full py-3.5 rounded-xl bg-white/5 hover:bg-primary/20 text-white text-sm font-bold transition-all duration-300 flex items-center justify-center gap-2 border border-white/10 hover:border-primary/50 group/btn relative overflow-hidden"
+          <div className="overflow-hidden py-4">
+            <div 
+              className="flex transition-transform duration-500 ease-out"
+              style={{ transform: `translateX(-${currentIndex * (100 / itemsPerPage)}%)` }}
+            >
+              {filteredProjects.map((project, index) => (
+                <div 
+                  key={project.id} 
+                  className="flex-shrink-0 px-4"
+                  style={{ width: `${100 / itemsPerPage}%` }}
                 >
-                  <span className="relative z-10 flex items-center gap-2">
-                    {project.videoUrl ? <Play size={16} className="fill-current" /> : <ExternalLink size={16} />} 
-                    {project.videoUrl ? 'Executar Preview' : 'Acessar Link'}
-                  </span>
-                  <div className="absolute inset-0 bg-primary/10 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300"></div>
-                </button>
-              </div>
+                  <div className="group/card relative h-full rounded-[1.5rem] overflow-hidden bg-[#0b1221]/80 backdrop-blur-sm border border-white/10 hover:border-primary/50 transition-all duration-500 hover:-translate-y-2 flex flex-col">
+                    <div className="h-64 overflow-hidden relative border-b border-white/5 group-hover/card:border-primary/20 transition-colors">
+                      <div className="absolute inset-0 bg-[linear-gradient(transparent_0%,rgba(99,102,241,0.1)_50%,transparent_100%)] bg-[length:100%_4px] pointer-events-none opacity-0 group-hover/card:opacity-100 transition-opacity z-20"></div>
+                      <img 
+                        src={project.image} 
+                        alt={project.title} 
+                        className="w-full h-full object-cover transform group-hover/card:scale-110 transition-transform duration-700 brightness-90 group-hover/card:brightness-100" 
+                        loading="lazy"
+                      />
+                      <div className="absolute top-4 right-4 z-30 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold text-white uppercase tracking-wider border border-white/10 shadow-lg">
+                        {project.category}
+                      </div>
+                    </div>
+                    
+                    <div className="p-6 flex-1 flex flex-col">
+                      <h4 className="text-xl font-bold mb-2 text-white group-hover/card:text-primary transition-colors font-display">{project.title}</h4>
+                      <p className="text-gray-400 text-sm mb-6 line-clamp-2 leading-relaxed">{project.description}</p>
+                      
+                      <div className="flex flex-wrap gap-2 mt-auto mb-6">
+                        {project.tags.map(tag => (
+                          <span key={tag} className="text-[10px] font-semibold px-2.5 py-1 rounded bg-primary/10 text-primary/80 border border-primary/20 transition-colors">#{tag}</span>
+                        ))}
+                      </div>
+                      
+                      <button 
+                        onClick={() => handleProjectClick(project)} 
+                        className="w-full py-3.5 rounded-xl bg-white/5 hover:bg-primary/20 text-white text-sm font-bold transition-all duration-300 flex items-center justify-center gap-2 border border-white/10 hover:border-primary/50 group/btn relative overflow-hidden"
+                      >
+                        <span className="relative z-10 flex items-center gap-2">
+                          {project.videoUrl ? <Play size={16} className="fill-current" /> : <ExternalLink size={16} />} 
+                          {project.videoUrl ? 'Executar Preview' : 'Acessar Link'}
+                        </span>
+                        <div className="absolute inset-0 bg-primary/10 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300"></div>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
+
+          {/* Indicadores */}
+          <div className="flex justify-center gap-2 mt-8">
+            {Array.from({ length: maxIndex + 1 }).map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => setCurrentIndex(idx)}
+                className={`h-1 rounded-full transition-all duration-300 ${currentIndex === idx ? 'w-8 bg-primary' : 'w-2 bg-white/20'}`}
+              />
+            ))}
+          </div>
         </div>
 
-        <div className="mt-20 flex justify-center animate-slide-up delay-300">
+        <div className="mt-16 flex justify-center">
           <button 
             onClick={() => navigate('/projects')} 
             className="group relative px-8 py-4 rounded-xl font-bold text-white shadow-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(99,102,241,0.4)] overflow-hidden border border-white/10 bg-[#0b1221]"
           >
             <div className="absolute inset-0 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 opacity-80 group-hover:opacity-100 transition-opacity duration-300"></div>
-            {/* Brilho Animado no Botão */}
             <div className="absolute top-0 -left-[100%] w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 group-hover:animate-shine"></div>
-            
             <span className="relative flex items-center gap-3 tracking-wider uppercase text-sm">
-              Acessar Database Completa 
+              Database Completa 
               <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
             </span>
           </button>
@@ -183,13 +246,8 @@ const Projects: React.FC = () => {
       )}
       
       <style>{`
-        @keyframes shine {
-          0% { left: -100%; }
-          100% { left: 200%; }
-        }
-        .animate-shine {
-          animation: shine 1.5s infinite linear;
-        }
+        @keyframes shine { 0% { left: -100%; } 100% { left: 200%; } }
+        .animate-shine { animation: shine 1.5s infinite linear; }
       `}</style>
     </section>
   );
