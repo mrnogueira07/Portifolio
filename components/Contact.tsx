@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Github, Linkedin, Instagram, Send, Loader2, ShieldCheck, Zap, Cpu, Sparkles } from 'lucide-react';
+import { Github, Linkedin, Instagram, Music2, Send, Loader2, ShieldCheck, Zap, Cpu, Sparkles } from 'lucide-react';
 
 const Contact: React.FC = () => {
   const [formState, setFormState] = useState({
@@ -12,13 +12,24 @@ const Contact: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formState.name || !formState.email || !formState.message) return;
+    
     setStatus('sending');
+
+    // Número de telefone do Matheus (conforme outros componentes)
+    const phoneNumber = "5592981838704";
+    
+    // Formatação da mensagem personalizada
+    const customMessage = `Olá Matheus! Me chamo ${formState.name}. Gostaria de conversar sobre um projeto: ${formState.message}`;
+    const encodedMessage = encodeURIComponent(customMessage);
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+
+    // Simula um delay de processamento para UX
     setTimeout(() => {
-      window.location.href = `mailto:matheusnog95@gmail.com?subject=Contato&body=${formState.message}`;
+      window.open(whatsappUrl, '_blank');
       setStatus('success');
       setFormState({ name: '', email: '', message: '' });
       setTimeout(() => setStatus('idle'), 5000);
-    }, 1200);
+    }, 1000);
   };
 
   return (
@@ -28,10 +39,10 @@ const Contact: React.FC = () => {
           <div className="relative z-10">
             <div className="text-center mb-12">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.02] border border-white/5 text-primary text-[9px] font-black uppercase tracking-[0.4em] mb-6">
-                <Sparkles size={10} /> Canal de Transmissão
+                <span className="w-1 h-1 bg-primary rounded-full animate-pulse"></span> Canal de Conexão
               </div>
               <h2 className="text-3xl md:text-5xl font-display font-black text-white mb-6 leading-tight tracking-tighter">
-                Iniciar <span className="text-primary">Conexão</span>
+                Iniciar <span className="text-primary">Projeto</span>
               </h2>
               <p className="text-gray-500 text-sm md:text-base font-light max-w-md mx-auto leading-relaxed">
                 Pronto para transformar sua visão em uma solução digital de alto impacto?
@@ -45,7 +56,7 @@ const Contact: React.FC = () => {
                   name="name"
                   value={formState.name}
                   onChange={(e) => setFormState({...formState, name: e.target.value})}
-                  className="w-full bg-white/[0.01] border border-white/5 rounded-xl px-5 py-3.5 text-xs text-white focus:outline-none focus:border-primary/40 transition-all"
+                  className="w-full bg-white/[0.01] border border-white/5 rounded-xl px-5 py-3.5 text-xs text-white focus:outline-none focus:border-primary/40 transition-all placeholder:text-gray-700"
                   placeholder="Seu Nome"
                   required
                 />
@@ -54,7 +65,7 @@ const Contact: React.FC = () => {
                   name="email"
                   value={formState.email}
                   onChange={(e) => setFormState({...formState, email: e.target.value})}
-                  className="w-full bg-white/[0.01] border border-white/5 rounded-xl px-5 py-3.5 text-xs text-white focus:outline-none focus:border-primary/40 transition-all"
+                  className="w-full bg-white/[0.01] border border-white/5 rounded-xl px-5 py-3.5 text-xs text-white focus:outline-none focus:border-primary/40 transition-all placeholder:text-gray-700"
                   placeholder="Seu Email"
                   required
                 />
@@ -64,8 +75,8 @@ const Contact: React.FC = () => {
                 value={formState.message}
                 onChange={(e) => setFormState({...formState, message: e.target.value})}
                 rows={4}
-                className="w-full bg-white/[0.01] border border-white/5 rounded-xl px-5 py-4 text-xs text-white focus:outline-none focus:border-primary/40 transition-all resize-none"
-                placeholder="Briefing do Projeto"
+                className="w-full bg-white/[0.01] border border-white/5 rounded-xl px-5 py-4 text-xs text-white focus:outline-none focus:border-primary/40 transition-all resize-none placeholder:text-gray-700"
+                placeholder="Descreva brevemente sua ideia"
                 required
               ></textarea>
 
@@ -73,24 +84,41 @@ const Contact: React.FC = () => {
                 <button 
                   type="submit" 
                   disabled={status === 'sending'}
-                  className="w-full sm:w-auto px-10 py-4 bg-white text-black rounded-xl font-black text-[9px] uppercase tracking-[0.3em] transition-all hover:scale-105 active:scale-95 shadow-xl"
+                  className="w-full sm:w-auto px-10 py-4 bg-white text-black rounded-xl font-black text-[9px] uppercase tracking-[0.3em] transition-all hover:scale-105 active:scale-95 shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
                 >
-                  Enviar Mensagem
+                  {status === 'sending' ? (
+                    <>
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                      Iniciando WhatsApp...
+                    </>
+                  ) : status === 'success' ? (
+                    "Mensagem Iniciada!"
+                  ) : (
+                    "Enviar Mensagem"
+                  )}
                 </button>
               </div>
             </form>
 
             <div className="mt-16 pt-10 border-t border-white/5 flex flex-col items-center gap-6">
               <div className="flex items-center gap-8">
-                {[Github, Linkedin, Instagram].map((Icon, i) => (
-                  <a key={i} href="#" className="text-gray-600 hover:text-white transition-all transform hover:scale-110">
-                    <Icon size={20} />
-                  </a>
-                ))}
+                <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-white transition-all transform hover:scale-110" title="Github">
+                  <Github size={18} />
+                </a>
+                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-white transition-all transform hover:scale-110" title="LinkedIn">
+                  <Linkedin size={18} />
+                </a>
+                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-white transition-all transform hover:scale-110" title="Instagram">
+                  <Instagram size={18} />
+                </a>
+                <a href="https://www.tiktok.com/@mrnogueira__" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-white transition-all transform hover:scale-110" title="TikTok">
+                  <Music2 size={18} />
+                </a>
               </div>
-              <div className="flex items-center gap-3 opacity-20">
-                 <Zap size={10} className="text-primary" />
-                 <span className="text-[8px] font-black uppercase tracking-[0.6em] text-gray-400">Desenvolvido por Matheus Nogueira</span>
+              <div className="flex items-center opacity-30">
+                 <span className="text-[8px] font-black uppercase tracking-[0.4em] text-gray-500">
+                   © {new Date().getFullYear()} Matheus Nogueira • Todos os direitos reservados
+                 </span>
               </div>
             </div>
           </div>
