@@ -4,9 +4,9 @@ import { Project, ProjectCategory, DesignSubcategory } from '../types';
 import Contact from './Contact';
 import { useNavigate } from 'react-router-dom';
 
-// Data specifically for the full portfolio
+// Banco de dados completo de todos os projetos para a página de portfólio
 const allProjects: Project[] = [
-  // WEB
+  // Categoria: WEB
   {
     id: 99,
     title: "CANVAS AI",
@@ -26,7 +26,7 @@ const allProjects: Project[] = [
     link: "https://emanuelcar.vercel.app/"
   },
 
-  // GAMES
+  // Categoria: GAMES
   {
     id: 3,
     title: "Tipos de Células",
@@ -37,7 +37,7 @@ const allProjects: Project[] = [
     videoUrl: "https://itch.io/embed-upload/12711071?color=333333"
   },
 
-  // VIDEOS
+  // Categoria: VÍDEOS / FILMAGEM
   {
     id: 7,
     title: "Musa - Reserva Adolfo Ducke",
@@ -48,26 +48,28 @@ const allProjects: Project[] = [
     videoUrl: "https://www.youtube.com/embed/EjX7H9sW4iA?si=N-vg8LWodmRtei7i&autoplay=1"
   },
 
-  // DESIGN
+  // Categoria: DESIGN
   {
     id: 10,
     title: "Flyer Promocional",
     category: "Design",
     subcategory: "Flyer",
-    image: "https://instagram.fpll10-1.fna.fbcdn.net/v/t51.82787-15/639726278_18412836703126391_6691856302622686503_n.heic?stp=dst-jpg_e35_tt6&_nc_cat=101&ig_cache_key=Mzg0MDUyNDUyMzk5Nzc0NDcwMA%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6InhwaWRzLjE0NDB4MTQ0MC5zZHIuQzMifQ%3D%3D&_nc_ohc=BM0erOwIiXoQ7kNvwH9UDFK&_nc_oc=AdlVhNy6vz9_rjoMI6Lx_wEUb6lnci4gClAgV22Vplj_yh7mXtiRH9eKASH7ET3e-PY&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.fpll10-1.fna&_nc_gid=maEyBIt5JLAiuWHMh1rerA&oh=00_AftA8C-Dgl8Xs7mxYLPFS3ZAzp0pTlPnNTyO77XyHOSa9A&oe=69A522B0",
+    image: "https://i.pinimg.com/736x/c4/ed/de/c4eddecbd46cc89eb7e21ebb36c2da14.jpg",
     description: "Flyer de alta performance criado para campanhas de marketing visual impactante.",
     tags: ["Design Gráfico", "Marketing", "Visual ID"],
   },
 ];
 
+// Componente da Página Completa de Projetos
 const ProjectsPage: React.FC = () => {
+  // Estados para gerenciar filtros, subfiltros e modais
   const [filter, setFilter] = useState<ProjectCategory>('Web');
   const [designSubFilter, setDesignSubFilter] = useState<DesignSubcategory | 'All'>('All');
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  // Lock scroll when modal is open
+  // Bloqueia scroll do fundo quando modais estão ativos
   useEffect(() => {
     if (selectedVideo || selectedImage) {
       document.body.style.overflow = 'hidden';
@@ -80,6 +82,7 @@ const ProjectsPage: React.FC = () => {
     };
   }, [selectedVideo, selectedImage]);
 
+  // Lista de categorias disponíveis para navegação
   const categories: { id: ProjectCategory; label: string; icon: any }[] = [
     { id: 'Web', label: 'Web', icon: Code },
     { id: 'Game', label: 'Games', icon: Gamepad2 },
@@ -89,6 +92,7 @@ const ProjectsPage: React.FC = () => {
     { id: 'VideoRecorded', label: 'Filmagem', icon: Camera },
   ];
 
+  // Lista de subcategorias específicas para Design
   const designSubs: { id: DesignSubcategory | 'All'; label: string }[] = [
     { id: 'All', label: 'Todos' },
     { id: 'Banner', label: 'Banners' },
@@ -97,13 +101,15 @@ const ProjectsPage: React.FC = () => {
     { id: 'Post', label: 'Social' },
   ];
 
+  // Lógica de filtragem dos projetos
   const filteredProjects = allProjects.filter(p => {
-    if (filter === 'Robotics' || filter === 'VideoEdited') return false;
+    if (filter === 'Robotics' || filter === 'VideoEdited') return false; // Seções em desenvolvimento
     if (p.category !== filter) return false;
     if (filter === 'Design' && designSubFilter !== 'All' && p.subcategory !== designSubFilter) return false;
     return true;
   });
 
+  // Gerencia o clique no card do projeto
   const handleProjectClick = (project: Project) => {
     if (project.link) {
       window.open(project.link, '_blank');
@@ -122,13 +128,14 @@ const ProjectsPage: React.FC = () => {
     }
   };
 
+  // Funções utilitárias para Iframe e Verificação de Estado Vazio
   const isYoutube = (url: string) => url.includes('youtube') || url.includes('youtu.be');
   const getIframeSrc = (url: string) => isYoutube(url) ? `${url}&origin=${window.location.origin}` : url;
   const isUnderDevelopment = filter === 'Robotics' || filter === 'VideoEdited' || (filter === 'Design' && filteredProjects.length === 0);
 
   return (
     <div className="relative min-h-screen bg-dark overflow-x-hidden selection:bg-primary selection:text-white">
-      {/* Premium Background Layer */}
+      {/* Camada de Fundo Prêmium com Gradientes Animados */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <div className="absolute inset-0 bg-[#0a0a0f]"></div>
         <div className="absolute top-0 left-1/4 w-[50%] h-[50%] bg-primary/10 rounded-full blur-[160px] animate-pulse"></div>
@@ -138,7 +145,7 @@ const ProjectsPage: React.FC = () => {
 
       <div className="relative z-10 pt-28 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto min-h-screen">
 
-        {/* Header Section */}
+        {/* Cabeçalho da Página com Botão Voltar */}
         <div className="mb-16">
           <button
             onClick={() => navigate('/')}
@@ -151,7 +158,7 @@ const ProjectsPage: React.FC = () => {
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 animate-slide-up">
             <div className="space-y-4">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-[10px] font-black uppercase tracking-widest">
-                <Sparkles size={12} /> Database Visual
+                <span className="flex items-center gap-2"><Sparkles size={12} /> Database Visual</span>
               </div>
               <h1 className="font-display text-5xl md:text-7xl font-black tracking-tight text-white leading-tight">
                 Nexus <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Portfolio</span>
@@ -161,6 +168,7 @@ const ProjectsPage: React.FC = () => {
               </p>
             </div>
 
+            {/* Painel de Contexto UI/UX */}
             <div className="hidden md:flex items-center gap-3 px-6 py-4 rounded-2xl glass-card border-white/10">
               <div className="flex -space-x-3">
                 {[1, 2, 3].map(i => (
@@ -178,7 +186,7 @@ const ProjectsPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Category Selector - High End Segmented Control */}
+        {/* Seletor de Categorias Estilizado */}
         <div className="relative z-20 mb-12 p-1.5 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl flex flex-wrap gap-1.5 animate-slide-up delay-100">
           {categories.map((cat) => (
             <button
@@ -201,7 +209,7 @@ const ProjectsPage: React.FC = () => {
           ))}
         </div>
 
-        {/* Design Sub-filters with animated transition */}
+        {/* Sub-filtros para Design */}
         {filter === 'Design' && !isUnderDevelopment && (
           <div className="flex flex-wrap gap-2 mb-10 animate-fade-in p-1 bg-white/5 rounded-xl border border-white/5 w-fit mx-auto">
             {designSubs.map((sub) => (
@@ -219,6 +227,7 @@ const ProjectsPage: React.FC = () => {
           </div>
         )}
 
+        {/* Renderização Condicional: Conteúdo ou Placeholder de Desenvolvimento */}
         <div className="min-h-[500px]">
           {isUnderDevelopment ? (
             <div className="w-full py-32 flex flex-col items-center justify-center glass-card rounded-[2.5rem] border-dashed border-white/10 animate-scale-in group">
@@ -255,37 +264,48 @@ const ProjectsPage: React.FC = () => {
                   className="group relative rounded-[2rem] overflow-hidden bg-[#0d0d12] border border-white/5 hover:border-primary/50 transition-all duration-500 flex flex-col shadow-2xl hover:shadow-primary/10"
                   style={{ animationDelay: `${idx * 100}ms` }}
                 >
-                  {/* Card Glow Effect */}
+                  {/* Efeito de Gradiente no Card */}
                   <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
-                  <div className="h-72 overflow-hidden relative border-b border-white/5 bg-gradient-to-br from-primary/20 to-secondary/10 flex items-center justify-center">
-                    <div className="absolute inset-0 bg-[#0d0d12] opacity-90"></div>
-                    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-10"></div>
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d12] via-transparent to-transparent z-10 opacity-60"></div>
+                  {/* Topo do Card com Mockup Visual */}
+                  <div className="h-72 overflow-hidden relative border-b border-white/5 bg-gradient-to-br from-primary/20 to-secondary/10 flex items-center justify-center cursor-pointer" onClick={() => handleProjectClick(project)}>
+                    {project.image ? (
+                      <>
+                        <img 
+                          src={project.image} 
+                          alt={project.title}
+                          className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                        />
+                        <div className="absolute inset-0 bg-[#0d0d12]/80 group-hover:opacity-40 transition-opacity duration-700 z-10"></div>
+                      </>
+                    ) : (
+                      <div className="absolute inset-0 bg-[#0d0d12] opacity-95 z-10"></div>
+                    )}
+                    
+                    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-10 z-[15]"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d12] via-transparent to-transparent z-20 opacity-90"></div>
 
-                    <h3 className="text-3xl md:text-4xl font-display font-black text-white/50 tracking-[0.2em] uppercase z-10 group-hover:scale-110 group-hover:text-white transition-all duration-700">
-                      {project.category === 'Web' ? 'Landing Page' : project.category === 'Game' ? 'Game' : project.category.includes('Video') ? 'Vídeo Edit' : project.category === 'Design' ? 'Design' : project.category}
-                    </h3>
+                      <h3 className="text-3xl md:text-4xl font-display font-black text-white/50 tracking-[0.2em] uppercase z-30 group-hover:scale-110 group-hover:text-white transition-all duration-700">
+                        {project.category === 'Web' ? 'Landing Page' : project.category === 'Game' ? 'Game' : project.category === 'VideoEdited' ? 'Motion' : project.category === 'VideoRecorded' ? 'Filmagem' : project.category}
+                      </h3>
 
-                    {/* Badge Overlay */}
-                    <div className="absolute top-6 left-6 z-20">
+                    {/* Badge de Categoria */}
+                    <div className="absolute top-6 left-6 z-40">
                       <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/60 backdrop-blur-xl border border-white/10 text-[9px] font-black text-white uppercase tracking-widest shadow-xl">
                         {project.category === 'Web' ? <Monitor size={10} /> : <Gamepad2 size={10} />}
                         {project.category}
                       </div>
                     </div>
 
-                    {/* Quick Action Overlay */}
-                    <div className="absolute inset-0 flex items-center justify-center z-30 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <button
-                        onClick={() => handleProjectClick(project)}
-                        className="w-16 h-16 rounded-full bg-white text-dark flex items-center justify-center shadow-2xl scale-75 group-hover:scale-100 transition-transform duration-500"
-                      >
+                    {/* Botão de Ação Rápida (Overlay) */}
+                    <div className="absolute inset-0 flex items-center justify-center z-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                      <div className="w-16 h-16 rounded-full bg-white text-dark flex items-center justify-center shadow-2xl scale-75 group-hover:scale-100 transition-transform duration-500">
                         {project.videoUrl ? <Play fill="currentColor" className="ml-1" /> : (project.category === 'Design' ? <Palette /> : <ExternalLink />)}
-                      </button>
+                      </div>
                     </div>
                   </div>
 
+                  {/* Conteúdo do Card (Título, Descrição, Tags) */}
                   <div className="p-8 relative z-20 flex-1 flex flex-col">
                     <h3 className="text-2xl font-display font-bold mb-3 text-white group-hover:text-primary transition-colors leading-tight">
                       {project.title}
@@ -308,7 +328,7 @@ const ProjectsPage: React.FC = () => {
           )}
         </div>
 
-        {/* Call to Action Banner - Compacted Version */}
+        {/* Banner de Call to Action Final */}
         <div className="relative rounded-[2rem] overflow-hidden p-8 lg:py-12 lg:px-14 bg-gradient-to-br from-[#12121a] to-[#0a0a0f] border border-white/10 text-center animate-slide-up shadow-2xl">
           <div className="absolute top-0 right-0 w-80 h-80 bg-primary/10 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2"></div>
           <div className="relative z-10 max-w-2xl mx-auto">
@@ -341,7 +361,7 @@ const ProjectsPage: React.FC = () => {
         <Contact />
       </div>
 
-      {/* Cinematic Video Overlay */}
+      {/* Overlays Cinemáticos de Vídeo e Imagem */}
       {selectedVideo && (
         <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-10 bg-black/95 backdrop-blur-3xl animate-fade-in-fast" onClick={() => setSelectedVideo(null)}>
           <div
@@ -366,6 +386,7 @@ const ProjectsPage: React.FC = () => {
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             ></iframe>
 
+            {/* Suporte específico para conteúdo do Itch.io com senha master */}
             {selectedVideo.includes('12711071') && (
               <div className="bg-[#0d0d12] px-10 py-8 text-center border-t border-white/10 shrink-0">
                 <p className="text-gray-500 text-xs font-medium mb-3">Ambiente protegido. Requer credenciais Itch.io se solicitado.</p>
@@ -378,7 +399,7 @@ const ProjectsPage: React.FC = () => {
           </div>
         </div>
       )}
-      {/* Image Preview Overlay */}
+
       {selectedImage && (
         <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-10 bg-black/95 backdrop-blur-3xl animate-fade-in-fast" onClick={() => setSelectedImage(null)}>
           <div

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Quote, ChevronLeft, ChevronRight, Star } from 'lucide-react';
 import { Testimonial } from '../types';
 
+// Banco de dados de depoimentos - Feedback dos clientes e parceiros
 const testimonials: Testimonial[] = [
   {
     id: 1,
@@ -92,7 +93,6 @@ const Testimonials: React.FC = () => {
     return () => clearInterval(interval);
   }, [isPaused, isDragging, nextSlide]);
 
-  // Drag handlers for mouse/touch
   const handleDragStart = (e: React.MouseEvent | React.TouchEvent) => {
     setIsDragging(true);
     const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
@@ -110,23 +110,16 @@ const Testimonials: React.FC = () => {
   const handleDragEnd = () => {
     if (!isDragging) return;
     setIsDragging(false);
-    
     const threshold = 80;
-    if (dragOffset > threshold && currentIndex > 0) {
-      prevSlide();
-    } else if (dragOffset < -threshold && currentIndex < maxIndex) {
-      nextSlide();
-    }
+    if (dragOffset > threshold && currentIndex > 0) prevSlide();
+    else if (dragOffset < -threshold && currentIndex < maxIndex) nextSlide();
     setDragOffset(0);
   };
 
-  // Wheel/Trackpad handler
   const handleWheel = (e: React.WheelEvent) => {
-    // Detect horizontal scroll (common on trackpads)
     if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
       scrollAccumulator.current += e.deltaX;
       setDragOffset(-scrollAccumulator.current);
-
       const threshold = 150;
       if (scrollAccumulator.current > threshold) {
         if (currentIndex < maxIndex) nextSlide();
@@ -150,45 +143,27 @@ const Testimonials: React.FC = () => {
   };
 
   return (
-    <section id="testimonials" className="py-24 relative overflow-hidden bg-transparent scroll-mt-20 select-none">
+    <section id="testimonials" className="pt-32 pb-24 md:pt-48 md:pb-32 relative overflow-hidden bg-transparent scroll-mt-32 select-none">
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-secondary/[0.03] rounded-full blur-[120px] pointer-events-none"></div>
-      
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="text-center mb-16 animate-slide-up">
-           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/5 bg-white/5 backdrop-blur-md mb-4">
-              <span className="text-[9px] font-black text-gray-500 tracking-widest uppercase">Relatórios de Missão</span>
-           </div>
-           <h2 className="font-display text-4xl md:text-5xl font-black text-white tracking-tight">O que dizem os <span className="text-secondary">Aliados</span></h2>
-           <p className="mt-4 text-gray-500 text-sm max-w-xl mx-auto font-light">
-             Feedback real de quem transformou visão em resultado através da nossa engenharia.
-           </p>
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/5 bg-white/5 backdrop-blur-md mb-4">
+            <span className="text-[9px] font-black text-gray-500 tracking-widest uppercase">Relatórios de Missão</span>
+          </div>
+          <h2 className="font-display text-4xl md:text-6xl font-black text-white tracking-tight">O que dizem os <span className="text-secondary">Aliados</span></h2>
+          <p className="mt-4 text-gray-500 text-sm md:text-base max-w-xl mx-auto font-light leading-relaxed">
+            Feedback real de quem transformou visão em resultado através da nossa engenharia.
+          </p>
         </div>
 
-        <div 
-          className="relative group" 
-          onMouseEnter={() => setIsPaused(true)} 
-          onMouseLeave={() => setIsPaused(false)}
-        >
-          {/* Controls */}
-          <button 
-            onClick={prevSlide}
-            disabled={currentIndex === 0}
-            className={`absolute -left-4 md:-left-16 top-1/2 -translate-y-1/2 z-30 p-4 rounded-full bg-white/[0.03] border border-white/5 text-gray-500 hover:text-white hover:bg-white/10 transition-all opacity-0 group-hover:opacity-100 hidden md:flex ${currentIndex === 0 ? 'pointer-events-none opacity-10' : ''}`}
-          >
-            <ChevronLeft size={24} />
-          </button>
-          
-          <button 
-            onClick={nextSlide}
-            disabled={currentIndex === maxIndex}
-            className={`absolute -right-4 md:-right-16 top-1/2 -translate-y-1/2 z-30 p-4 rounded-full bg-white/[0.03] border border-white/5 text-gray-500 hover:text-white hover:bg-white/10 transition-all opacity-0 group-hover:opacity-100 hidden md:flex ${currentIndex === maxIndex ? 'pointer-events-none opacity-10' : ''}`}
-          >
-            <ChevronRight size={24} />
-          </button>
+        <div className="relative group" onMouseEnter={() => setIsPaused(true)} onMouseLeave={() => setIsPaused(false)}>
+          <button onClick={prevSlide} disabled={currentIndex === 0} className={`absolute -left-4 md:-left-20 top-1/2 -translate-y-1/2 z-30 p-5 rounded-full bg-white/[0.03] border border-white/5 text-gray-500 hover:text-white hover:bg-white/10 transition-all opacity-0 group-hover:opacity-100 hidden md:flex ${currentIndex === 0 ? 'pointer-events-none opacity-10' : ''}`}><ChevronLeft size={28} /></button>
+          <button onClick={nextSlide} disabled={currentIndex === maxIndex} className={`absolute -right-4 md:-right-20 top-1/2 -translate-y-1/2 z-30 p-5 rounded-full bg-white/[0.03] border border-white/5 text-gray-500 hover:text-white hover:bg-white/10 transition-all opacity-0 group-hover:opacity-100 hidden md:flex ${currentIndex === maxIndex ? 'pointer-events-none opacity-10' : ''}`}><ChevronRight size={28} /></button>
 
-          <div 
+          <div
             ref={sliderRef}
-            className={`overflow-hidden py-6 ${isDragging ? 'cursor-grabbing scale-[0.99]' : 'cursor-grab'} transition-transform duration-500`}
+            className={`overflow-hidden py-10 ${isDragging ? 'cursor-grabbing scale-[0.99]' : 'cursor-grab'} transition-all duration-500`}
             onMouseDown={handleDragStart}
             onMouseMove={handleDragMove}
             onMouseUp={handleDragEnd}
@@ -198,33 +173,47 @@ const Testimonials: React.FC = () => {
             onTouchEnd={handleDragEnd}
             onWheel={handleWheel}
           >
-            <div 
+            <div
               className={`flex transition-transform ${isDragging || Math.abs(dragOffset) > 0 ? 'duration-100' : 'duration-700 cubic-bezier(0.16, 1, 0.3, 1)'}`}
               style={{ transform: `translateX(${getTranslateX()}%)` }}
             >
               {testimonials.map((t) => (
                 <div key={t.id} className="flex-shrink-0 px-4" style={{ width: `${100 / itemsPerPage}%` }}>
-                  <div className="relative h-full bg-[#0d0d12]/50 backdrop-blur-2xl rounded-[2.5rem] p-8 md:p-12 flex flex-col justify-between border border-white/5 hover:border-secondary/20 transition-all duration-700 group/card">
+                  <div className="relative h-full bg-[#050510]/40 backdrop-blur-3xl rounded-[3rem] p-10 md:p-14 flex flex-col justify-between border border-white/5 hover:border-white/10 transition-all duration-700 group/card overflow-hidden">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-secondary/5 blur-3xl rounded-full -translate-y-1/2 translate-x-1/2 group-hover/card:bg-secondary/10 transition-colors"></div>
+                    <div className="absolute bottom-0 left-0 w-32 h-32 bg-primary/5 blur-3xl rounded-full translate-y-1/2 -translate-x-1/2 group-hover/card:bg-primary/10 transition-colors"></div>
+
                     <div className="relative z-10">
-                       <div className="flex justify-between items-start mb-8">
-                          <div className="relative">
-                            <div className="absolute -inset-2 bg-secondary/20 blur-xl opacity-0 group-hover/card:opacity-100 transition-opacity"></div>
-                            <div className="relative w-12 h-12 rounded-xl bg-white/[0.03] border border-white/10 flex items-center justify-center group-hover/card:scale-110 transition-transform duration-500">
-                              <Quote className="w-5 h-5 text-secondary opacity-50" />
-                            </div>
+                      <div className="flex justify-between items-start mb-10">
+                        <div className="relative">
+                          <div className="absolute -inset-4 bg-secondary/20 blur-2xl opacity-0 group-hover/card:opacity-100 transition-opacity duration-700"></div>
+                          <div className="relative w-14 h-14 rounded-2xl bg-white/[0.03] border border-white/10 flex items-center justify-center group-hover/card:scale-110 group-hover/card:rotate-6 transition-all duration-700 shadow-2xl">
+                            <Quote className="w-6 h-6 text-secondary" />
                           </div>
-                          <div className="flex flex-col items-end">
-                             <Quote className="w-10 h-10 text-white/[0.03] mb-2" />
-                             <div className="flex gap-0.5">
-                               {[1,2,3,4,5].map(s => <Star key={s} size={10} className="fill-secondary text-secondary" />)}
-                             </div>
+                        </div>
+                        <div className="flex flex-col items-end">
+                          <div className="flex gap-1 mb-3">
+                            {[1, 2, 3, 4, 5].map(s => <Star key={s} size={12} className="fill-secondary text-secondary animate-pulse" style={{ animationDelay: `${s * 200}ms` }} />)}
                           </div>
-                       </div>
-                       <p className="text-gray-400 text-sm md:text-base leading-relaxed italic font-light mb-8">"{t.text}"</p>
+                          <span className="text-[8px] font-black text-gray-600 uppercase tracking-widest">Verified Client</span>
+                        </div>
+                      </div>
+                      <p className="text-gray-400 text-sm md:text-lg leading-relaxed font-light mb-10 md:mb-12 relative">
+                        <span className="text-white font-medium italic">"</span>{t.text}<span className="text-white font-medium italic">"</span>
+                      </p>
                     </div>
-                    <div className="relative z-10 pt-8 border-t border-white/5">
-                       <h4 className="font-bold text-white text-base tracking-tight">{t.name}</h4>
-                       <p className="text-[9px] font-black text-gray-600 uppercase tracking-widest group-hover/card:text-secondary transition-colors">{t.role} @ {t.company}</p>
+                    
+                    <div className="relative z-10 pt-10 border-t border-white/5 flex items-center gap-5">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-white/10 to-transparent border border-white/10 flex items-center justify-center font-display font-black text-sm text-gray-500 group-hover/card:text-white transition-colors">
+                        {t.name.split(' ').map(n => n[0]).join('')}
+                      </div>
+                      <div>
+                        <h4 className="font-display font-black text-white text-base md:text-lg tracking-tight group-hover/card:text-secondary transition-colors duration-500">{t.name}</h4>
+                        <div className="flex items-center gap-2 mt-1">
+                          <span className="w-1 h-1 rounded-full bg-secondary"></span>
+                          <p className="text-[9px] font-black text-gray-600 uppercase tracking-widest">{t.role} @ {t.company}</p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -232,12 +221,12 @@ const Testimonials: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex justify-center gap-2 mt-12">
+          <div className="flex justify-center gap-3 mt-16">
             {Array.from({ length: maxIndex + 1 }).map((_, idx) => (
-              <button 
-                key={idx} 
-                onClick={() => setCurrentIndex(idx)} 
-                className={`h-1.5 rounded-full transition-all duration-500 ${currentIndex === idx ? 'w-12 bg-secondary shadow-[0_0_10px_rgba(236,72,153,0.5)]' : 'w-2 bg-white/10 hover:bg-white/20'}`} 
+              <button
+                key={idx}
+                onClick={() => setCurrentIndex(idx)}
+                className={`h-2 rounded-full transition-all duration-500 ${currentIndex === idx ? 'w-16 bg-gradient-to-r from-secondary to-pink-500 shadow-[0_0_20px_rgba(236,72,153,0.4)]' : 'w-3 bg-white/10 hover:bg-white/20'}`}
               />
             ))}
           </div>

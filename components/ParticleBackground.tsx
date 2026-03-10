@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 
+// Componente ParticleBackground - Cria um efeito de partículas conectadas usando HTML5 Canvas
 const ParticleBackground: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -13,12 +14,14 @@ const ParticleBackground: React.FC = () => {
     let particles: Particle[] = [];
     let animationFrameId: number;
 
+    // Ajusta o tamanho do canvas para ocupar a tela inteira e reinicia as partículas
     const handleResize = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
       initParticles();
     };
 
+    // Classe que define o comportamento de cada partícula individual
     class Particle {
       x: number;
       y: number;
@@ -29,15 +32,15 @@ const ParticleBackground: React.FC = () => {
       constructor() {
         this.x = Math.random() * (canvas?.width || 0);
         this.y = Math.random() * (canvas?.height || 0);
-        this.directionX = (Math.random() - 0.5) * 0.5; // Movimento lento
-        this.directionY = (Math.random() - 0.5) * 0.5;
+        this.directionX = (Math.random() - 0.5) * 0.5; // Velocidade de movimento horizontal
+        this.directionY = (Math.random() - 0.5) * 0.5; // Velocidade de movimento vertical
         this.size = Math.random() * 2 + 1;
       }
 
+      // Atualiza a posição da partícula e faz ela rebater nas bordas do canvas
       update() {
         if (!canvas) return;
 
-        // Rebater nas bordas
         if (this.x > canvas.width || this.x < 0) {
           this.directionX = -this.directionX;
         }
@@ -49,6 +52,7 @@ const ParticleBackground: React.FC = () => {
         this.y += this.directionY;
       }
 
+      // Desenha a partícula no canvas
       draw() {
         if (!ctx) return;
         ctx.beginPath();
@@ -58,15 +62,17 @@ const ParticleBackground: React.FC = () => {
       }
     }
 
+    // Inicializa o array de partículas com base na resolução da tela
     const initParticles = () => {
       particles = [];
-      // Calcular contagem de partículas baseada na área da tela para evitar lag em mobile
+      // Densidade de partículas calculada para manter performance em diferentes dispositivos
       const numberOfParticles = (canvas.width * canvas.height) / 15000;
       for (let i = 0; i < numberOfParticles; i++) {
         particles.push(new Particle());
       }
     };
 
+    // Função de loop de animação
     const animate = () => {
       if (!canvas || !ctx) return;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -75,15 +81,15 @@ const ParticleBackground: React.FC = () => {
         particles[i].update();
         particles[i].draw();
 
-        // Desenhar conexões
+        // Lógica para desenhar linhas de conexão entre partículas próximas
         for (let j = i; j < particles.length; j++) {
           const dx = particles[i].x - particles[j].x;
           const dy = particles[i].y - particles[j].y;
           const distance = Math.sqrt(dx * dx + dy * dy);
 
-          if (distance < 150) { // Distância de conexão
+          if (distance < 150) { // Distância máxima para criar uma conexão
             ctx.beginPath();
-            ctx.strokeStyle = `rgba(255, 255, 255, ${0.05 - distance/3000})`;
+            ctx.strokeStyle = `rgba(255, 255, 255, ${0.05 - distance / 3000})`;
             ctx.lineWidth = 1;
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
@@ -94,10 +100,12 @@ const ParticleBackground: React.FC = () => {
       animationFrameId = requestAnimationFrame(animate);
     };
 
+    // Event listeners e início da animação
     window.addEventListener('resize', handleResize);
-    handleResize(); // Configuração inicial
+    handleResize();
     animate();
 
+    // Limpeza ao desmontar o componente
     return () => {
       window.removeEventListener('resize', handleResize);
       cancelAnimationFrame(animationFrameId);
@@ -105,8 +113,8 @@ const ParticleBackground: React.FC = () => {
   }, []);
 
   return (
-    <canvas 
-      ref={canvasRef} 
+    <canvas
+      ref={canvasRef}
       className="absolute inset-0 w-full h-full pointer-events-none"
     />
   );

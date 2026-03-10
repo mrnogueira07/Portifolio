@@ -1,20 +1,24 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  // Arquivos onde o Tailwind deve procurar por classes CSS
   content: [
     "./index.html",
     "./**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
+      // Definição de fontes personalizadas
       fontFamily: {
         sans: ['Plus Jakarta Sans', 'sans-serif'],
         display: ['Outfit', 'sans-serif'],
       },
+      // Definição de cores personalizadas do tema
       colors: {
         primary: '#6366f1', // Indigo 500
         secondary: '#ec4899', // Pink 500
         dark: '#0f172a', // Slate 900
       },
+      // Configurações de animações personalizadas
       animation: {
         'blob': 'blob 7s infinite',
         'fade-in': 'fadeIn 3s ease-out forwards',
@@ -31,6 +35,7 @@ export default {
         'color-cycle': 'colorCycle 10s linear infinite',
         'spin-slow': 'spin 8s linear infinite',
       },
+      // Definição dos keyframes (passos) das animações
       keyframes: {
         blob: {
           '0%': { transform: 'translate(0px, 0px) scale(1)' },
