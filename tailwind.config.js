@@ -3,39 +3,40 @@ export default {
   // Arquivos onde o Tailwind deve procurar por classes CSS
   content: [
     "./index.html",
-    "./**/*.{js,ts,jsx,tsx}",
+    "./index.tsx",
+    "./App.tsx",
+    "./src/**/*.{js,ts,jsx,tsx}",
+    "./components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
-      // Definição de fontes personalizadas
       fontFamily: {
         sans: ['Plus Jakarta Sans', 'sans-serif'],
         display: ['Outfit', 'sans-serif'],
       },
-      // Definição de cores personalizadas do tema
       colors: {
-        primary: '#6366f1', // Indigo 500
-        secondary: '#ec4899', // Pink 500
-        dark: '#0f172a', // Slate 900
+        primary: '#6366f1',
+        secondary: '#ec4899',
+        dark: '#0f172a',
       },
-      // Configurações de animações personalizadas
       animation: {
         'blob': 'blob 7s infinite',
-        'fade-in': 'fadeIn 3s ease-out forwards',
+        'fade-in': 'fadeIn 0.25s ease-out forwards',
         'fade-in-fast': 'fadeIn 0.15s ease-out forwards',
-        'slide-up': 'slideUp 3s ease-out forwards',
-        'slide-up-fast': 'slideUp 0.5s ease-out forwards',
-        'slide-right': 'slideRight 3s ease-out forwards',
-        'slide-left': 'slideLeft 3s ease-out forwards',
-        'scale-in': 'scaleIn 3s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-        'scale-in-fast': 'scaleIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+        'slide-up': 'slideUp 0.3s ease-out forwards',
+        'slide-up-fast': 'slideUp 0.2s ease-out forwards',
+        'slide-right': 'slideRight 0.3s ease-out forwards',
+        'slide-left': 'slideLeft 0.3s ease-out forwards',
+        'scale-in': 'scaleIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+        'scale-in-fast': 'scaleIn 0.15s cubic-bezier(0.16, 1, 0.3, 1) forwards',
         'float': 'float 6s ease-in-out infinite',
         'float-delayed': 'float 6s ease-in-out 3s infinite',
         'gradient-x': 'gradient-x 3s ease infinite',
         'color-cycle': 'colorCycle 10s linear infinite',
         'spin-slow': 'spin 8s linear infinite',
+        'marquee': 'marquee 25s linear infinite',
+        'marquee-reverse': 'marqueeReverse 25s linear infinite',
       },
-      // Definição dos keyframes (passos) das animações
       keyframes: {
         blob: {
           '0%': { transform: 'translate(0px, 0px) scale(1)' },
@@ -80,6 +81,14 @@ export default {
         colorCycle: {
           '0%': { filter: 'hue-rotate(0deg)' },
           '100%': { filter: 'hue-rotate(360deg)' },
+        },
+        marquee: {
+          '0%': { transform: 'translateX(0%)' },
+          '100%': { transform: 'translateX(-50%)' },
+        },
+        marqueeReverse: {
+          '0%': { transform: 'translateX(-50%)' },
+          '100%': { transform: 'translateX(0%)' },
         }
       }
     }

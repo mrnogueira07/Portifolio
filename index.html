@@ -1,130 +1,166 @@
 <!DOCTYPE html>
 <html lang="pt-BR" class="scroll-smooth">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#6366f1" />
-    <meta name="description" content="Portfolio profissional de Matheus Nogueira: Desenvolvedor Full Stack, Game Dev e Engenheiro de Software." />
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236366f1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m18 16 4-4-4-4'/><path d='m6 8-4 4 4 4'/><path d='m14.5 4-5 16'/></svg>" />
-    <title>Matheus Nogueira | Dev & Game Portfolio</title>
-    <!-- Tailwind CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            fontFamily: {
-              sans: ['Plus Jakarta Sans', 'sans-serif'],
-              display: ['Outfit', 'sans-serif'],
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#6366f1" />
+  <meta name="description"
+    content="Portfolio profissional de Matheus Nogueira: Desenvolvedor Full Stack, Game Dev e Engenheiro de Software." />
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236366f1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m18 16 4-4-4-4'/><path d='m6 8-4 4 4 4'/><path d='m14.5 4-5 16'/></svg>" />
+  <title>Matheus Nogueira | Portfólio</title>
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+            display: ['Outfit', 'sans-serif'],
+          },
+          colors: {
+            primary: '#6366f1',
+            secondary: '#ec4899',
+            dark: '#0f172a',
+          },
+          animation: {
+            'blob': 'blob 7s infinite',
+            'fade-in': 'fadeIn 0.25s ease-out forwards',
+            'slide-up': 'slideUp 0.3s ease-out forwards',
+            'slide-right': 'slideRight 0.3s ease-out forwards',
+            'slide-left': 'slideLeft 0.3s ease-out forwards',
+            'scale-in': 'scaleIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+            'float': 'float 6s ease-in-out infinite',
+            'float-delayed': 'float 6s ease-in-out 3s infinite',
+            'spin-slow': 'spin 6s linear infinite',
+          },
+          keyframes: {
+            blob: {
+              '0%': { transform: 'translate(0px, 0px) scale(1)' },
+              '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+              '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+              '100%': { transform: 'translate(0px, 0px) scale(1)' },
             },
-            colors: {
-              primary: '#6366f1',
-              secondary: '#ec4899',
-              dark: '#0f172a',
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' },
             },
-            animation: {
-              'blob': 'blob 7s infinite',
-              'fade-in': 'fadeIn 3s ease-out forwards',
-              'slide-up': 'slideUp 3s ease-out forwards',
-              'slide-right': 'slideRight 3s ease-out forwards',
-              'slide-left': 'slideLeft 3s ease-out forwards',
-              'scale-in': 'scaleIn 3s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-              'float': 'float 6s ease-in-out infinite',
-              'float-delayed': 'float 6s ease-in-out 3s infinite',
-              'spin-slow': 'spin 6s linear infinite',
+            slideUp: {
+              '0%': { opacity: '0', transform: 'translateY(40px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
             },
-            keyframes: {
-              blob: {
-                '0%': { transform: 'translate(0px, 0px) scale(1)' },
-                '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
-                '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
-                '100%': { transform: 'translate(0px, 0px) scale(1)' },
-              },
-              fadeIn: {
-                '0%': { opacity: '0' },
-                '100%': { opacity: '1' },
-              },
-              slideUp: {
-                '0%': { opacity: '0', transform: 'translateY(40px)' },
-                '100%': { opacity: '1', transform: 'translateY(0)' },
-              },
-              slideRight: {
-                '0%': { opacity: '0', transform: 'translateX(-40px)' },
-                '100%': { opacity: '1', transform: 'translateX(0)' },
-              },
-              slideLeft: {
-                '0%': { opacity: '0', transform: 'translateX(40px)' },
-                '100%': { opacity: '1', transform: 'translateX(0)' },
-              },
-              scaleIn: {
-                '0%': { opacity: '0', transform: 'scale(0.8)' },
-                '100%': { opacity: '1', transform: 'scale(1)' },
-              },
-              float: {
-                '0%, 100%': { transform: 'translateY(0)' },
-                '50%': { transform: 'translateY(-20px)' },
-              }
+            slideRight: {
+              '0%': { opacity: '0', transform: 'translateX(-40px)' },
+              '100%': { opacity: '1', transform: 'translateX(0)' },
+            },
+            slideLeft: {
+              '0%': { opacity: '0', transform: 'translateX(40px)' },
+              '100%': { opacity: '1', transform: 'translateX(0)' },
+            },
+            scaleIn: {
+              '0%': { opacity: '0', transform: 'scale(0.8)' },
+              '100%': { opacity: '1', transform: 'scale(1)' },
+            },
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-20px)' },
             }
           }
         }
       }
-    </script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style type="text/css">
-      .glass-card {
-        background: rgba(30, 41, 59, 0.7);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.05);
-      }
-      
-      .rotating-border-container {
-        position: relative;
-        overflow: hidden;
-        border-radius: 1.5rem;
-      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <style type="text/css">
+    .glass-card {
+      background: rgba(30, 41, 59, 0.7);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
 
-      .rotating-border-bg {
-        position: absolute;
-        top: -50%;
-        left: -50%;
-        width: 200%;
-        height: 200%;
-        background: conic-gradient(
-          from 0deg,
+    .rotating-border-container {
+      position: relative;
+      overflow: hidden;
+      border-radius: 1.5rem;
+    }
+
+    .rotating-border-bg {
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: conic-gradient(from 0deg,
           transparent 0deg,
           transparent 120deg,
           #6366f1 180deg,
           #ec4899 240deg,
-          transparent 360deg
-        );
-        animation: spin 4s linear infinite;
+          transparent 360deg);
+      animation: spin 4s linear infinite;
+    }
+
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
       }
 
-      @keyframes spin {
-        from { transform: rotate(0deg); }
-        to { transform: rotate(360deg); }
+      to {
+        transform: rotate(360deg);
       }
+    }
 
-      /* Delays estendidos para complementar a animação de 3s */
-      .delay-100 { animation-delay: 150ms; }
-      .delay-200 { animation-delay: 300ms; }
-      .delay-300 { animation-delay: 450ms; }
-      .delay-400 { animation-delay: 600ms; }
-      .delay-500 { animation-delay: 750ms; }
-      .delay-700 { animation-delay: 1000ms; }
-      .delay-1000 { animation-delay: 1500ms; }
+    /* Delays estendidos para complementar a animação de 3s */
+    .delay-100 {
+      animation-delay: 150ms;
+    }
 
-      .animate-fade-in, .animate-slide-up, .animate-slide-right, .animate-slide-left, .animate-scale-in {
-        opacity: 0;
-      }
-    </style>
-  </head>
-  <body class="bg-[#0f172a] text-white antialiased selection:bg-indigo-500 selection:text-white overflow-x-hidden">
-    <div class="fixed inset-0 z-[-1] opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
-    <div id="root"></div>
-    <script type="module" src="/index.tsx"></script>
-  </body>
+    .delay-200 {
+      animation-delay: 300ms;
+    }
+
+    .delay-300 {
+      animation-delay: 450ms;
+    }
+
+    .delay-400 {
+      animation-delay: 600ms;
+    }
+
+    .delay-500 {
+      animation-delay: 750ms;
+    }
+
+    .delay-700 {
+      animation-delay: 1000ms;
+    }
+
+    .delay-1000 {
+      animation-delay: 1500ms;
+    }
+
+    .animate-fade-in,
+    .animate-slide-up,
+    .animate-slide-right,
+    .animate-slide-left,
+    .animate-scale-in {
+      opacity: 0;
+    }
+  </style>
+</head>
+
+<body class="bg-[#0f172a] text-white antialiased selection:bg-indigo-500 selection:text-white overflow-x-hidden">
+  <div
+    class="fixed inset-0 z-[-1] opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]">
+  </div>
+  <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+
 </html>
