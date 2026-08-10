@@ -40,14 +40,14 @@ const Navbar: React.FC = () => {
     }
   };
 
-  // Itens do Menu de Navegação 100% Funcionais
+  // Itens do Menu de Navegação 100% Funcionais com largura fixa estabilizada
   const navItems = [
-    { label: t("Início", "Home"), href: "#home" },
-    { label: t("Habilidades", "Skills"), href: "#skills" },
-    { label: t("Serviços", "Services"), href: "#services" },
-    { label: t("Projetos", "Portfolio"), href: "#projects" },
-    { label: t("Depoimentos", "Reviews"), href: "#testimonials" },
-    { label: t("Contato", "Contact"), href: "#contact" }
+    { label: t("Início", "Home"), href: "#home", widthClass: "w-[58px] lg:w-[70px]" },
+    { label: t("Habilidades", "Skills"), href: "#skills", widthClass: "w-[85px] lg:w-[100px]" },
+    { label: t("Serviços", "Services"), href: "#services", widthClass: "w-[72px] lg:w-[86px]" },
+    { label: t("Projetos", "Portfolio"), href: "#projects", widthClass: "w-[72px] lg:w-[90px]" },
+    { label: t("Depoimentos", "Reviews"), href: "#testimonials", widthClass: "w-[96px] lg:w-[115px]" },
+    { label: t("Contato", "Contact"), href: "#contact", widthClass: "w-[64px] lg:w-[78px]" }
   ];
 
   return (
@@ -87,7 +87,7 @@ const Navbar: React.FC = () => {
               <button
                 key={index}
                 onClick={() => scrollToSection(item.href)}
-                className="px-2.5 lg:px-4 py-1.5 text-[11px] lg:text-xs font-medium text-gray-300 hover:text-white transition-colors hover:bg-white/10 rounded-full cursor-pointer whitespace-nowrap"
+                className={`py-1.5 text-[11px] lg:text-xs font-medium text-gray-300 hover:text-white transition-colors hover:bg-white/10 rounded-full cursor-pointer whitespace-nowrap inline-flex items-center justify-center text-center ${item.widthClass}`}
               >
                 {item.label}
               </button>
@@ -148,20 +148,20 @@ const Navbar: React.FC = () => {
               )}
             </div>
 
-            {/* Alternador de Idioma PT / EN */}
+            {/* Alternador de Idioma PT / EN com largura fixa estabilizada */}
             <button
               onClick={toggleLanguage}
-              className="flex items-center gap-1.5 sm:gap-2 px-2.5 lg:px-3.5 py-1.5 lg:py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-[11px] lg:text-xs font-semibold text-gray-200 transition-all hover:scale-105 active:scale-95 whitespace-nowrap"
+              className="flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 lg:px-3.5 py-1.5 lg:py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-[11px] lg:text-xs font-semibold text-gray-200 transition-all hover:scale-105 active:scale-95 whitespace-nowrap min-w-[78px] lg:min-w-[90px]"
               title={t("Mudar para Inglês", "Switch to Portuguese")}
             >
-              <Globe className="w-3.5 h-3.5 lg:w-4 lg:h-4 text-indigo-400 animate-spin-slow" />
+              <Globe className="w-3.5 h-3.5 lg:w-4 lg:h-4 text-indigo-400 animate-spin-slow shrink-0" />
               <span>{language === 'pt' ? 'PT-BR' : 'EN-US'}</span>
             </button>
 
-            {/* CTA Contato Rápido */}
+            {/* CTA Contato Rápido com largura fixa estabilizada */}
             <button
               onClick={() => scrollToSection('contact')}
-              className="px-3.5 lg:px-5 py-2 lg:py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-pink-600 text-white font-bold text-[11px] lg:text-xs uppercase tracking-wider shadow-[0_0_20px_rgba(99,102,241,0.4)] hover:shadow-[0_0_30px_rgba(236,72,153,0.6)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 whitespace-nowrap"
+              className="px-3.5 lg:px-5 py-2 lg:py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-pink-600 text-white font-bold text-[11px] lg:text-xs uppercase tracking-wider shadow-[0_0_20px_rgba(99,102,241,0.4)] hover:shadow-[0_0_30px_rgba(236,72,153,0.6)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 whitespace-nowrap min-w-[105px] lg:min-w-[125px] inline-flex items-center justify-center text-center"
             >
               {t("Falar Comigo", "Get in Touch")}
             </button>
