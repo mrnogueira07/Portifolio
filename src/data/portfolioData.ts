@@ -44,7 +44,7 @@ export const personalInfo = {
     github: "https://github.com/mrnogueira07",
     linkedin: "https://linkedin.com",
     instagram: "https://www.instagram.com/mrnogueira07/",
-    tiktok: "https://www.tiktok.com/@mrnogueira__"
+    tiktok: "https://www.tiktok.com/@mrnogueira07"
   }
 };
 
