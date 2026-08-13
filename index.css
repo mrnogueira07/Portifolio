@@ -104,6 +104,24 @@
   50% { transform: scale(1.05); opacity: 1; }
 }
 
+@keyframes whatsappPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.4), 0 4px 20px rgba(37, 211, 102, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 0 12px rgba(37, 211, 102, 0), 0 8px 30px rgba(37, 211, 102, 0.5);
+  }
+}
+
+@keyframes whatsappSubtleFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+.animate-whatsapp-pulse {
+  animation: whatsappPulse 2.8s cubic-bezier(0.4, 0, 0.6, 1) infinite, whatsappSubtleFloat 4s ease-in-out infinite;
+}
+
 @keyframes colorCycle {
   0% { filter: hue-rotate(0deg); }
   100% { filter: hue-rotate(360deg); }
@@ -114,7 +132,7 @@
 }
 
 .animate-fade-in-up {
-  animation: fadeInUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .animate-pulse-glow {
@@ -146,6 +164,11 @@
 
 .animate-zoom-in {
   animation: zoomIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Suavidade global para elementos interativos */
+a, button, .interactive-card {
+  transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 /* Otimizações para Mobile Landscape (Telas curtas na vertical <= 500px) */

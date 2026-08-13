@@ -103,10 +103,10 @@ const Navbar: React.FC = () => {
                 href={personalInfo.whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 rounded-lg bg-white/5 hover:bg-[#25D366]/20 text-gray-400 hover:text-[#25D366] transition-colors"
+                className="group p-2 rounded-lg bg-white/5 hover:bg-[#25D366]/20 text-gray-400 hover:text-[#25D366] transition-all duration-300 hover:scale-110"
                 title="WhatsApp"
               >
-                <WhatsAppIcon className="w-4 h-4 fill-current" />
+                <WhatsAppIcon className="w-4 h-4 fill-current group-hover:rotate-6 transition-transform duration-300" />
               </a>
               <a
                 href={personalInfo.socials.github}

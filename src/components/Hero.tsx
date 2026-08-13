@@ -137,29 +137,29 @@ const Hero: React.FC = () => {
           <div className="landscape:col-span-6 lg:col-span-6 flex justify-center lg:justify-end animate-fade-in-up" style={{ animationDelay: '200ms' }}>
             <div className="relative group w-full max-w-[550px] sm:max-w-[700px] lg:max-w-[680px] landscape:max-w-[400px]">
               
-              {/* Moldura com gradiente animado */}
-              <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-40 group-hover:opacity-100 blur-lg transition duration-1000 group-hover:duration-200"></div>
+              {/* Moldura com gradiente animado ultra-suave */}
+              <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-30 group-hover:opacity-80 blur-xl transition-all duration-700 ease-out"></div>
 
               {/* Card Container */}
-              <div className="relative rounded-3xl bg-[#0b0d1b] border border-white/10 p-3 shadow-2xl overflow-hidden">
+              <div className="relative rounded-3xl bg-[#0b0d1b] border border-white/10 p-3 shadow-2xl overflow-hidden transition-all duration-500 group-hover:border-indigo-500/40">
                 <div className="relative rounded-2xl overflow-hidden aspect-[4/5] bg-slate-900">
                   <img
                     src={personalInfo.avatarUrl}
                     alt={personalInfo.name}
-                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 transform group-hover:scale-105"
+                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 ease-out transform group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0b0d1b] via-transparent to-transparent opacity-80 group-hover:opacity-40 transition-opacity"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0b0d1b] via-transparent to-transparent opacity-80 group-hover:opacity-40 transition-opacity duration-700"></div>
                 </div>
 
                 {/* Badge Flutuante no Card */}
-                <div className="absolute bottom-6 left-6 right-6 p-4 rounded-xl bg-black/60 backdrop-blur-xl border border-white/15 flex items-center justify-between">
+                <div className="absolute bottom-6 left-6 right-6 p-4 rounded-xl bg-black/70 backdrop-blur-xl border border-white/15 flex items-center justify-between shadow-lg transition-all duration-500 group-hover:border-indigo-400/30">
                   <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-indigo-500/20 text-indigo-400">
+                    <div className="p-2 rounded-lg bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">
                       <Terminal className="w-5 h-5" />
                     </div>
                     <div>
-                      <p className="text-xs font-bold text-white">{personalInfo.name}</p>
-                      <p className="text-[10px] font-mono text-indigo-300">
+                      <p className="text-xs font-bold text-white tracking-wide">{personalInfo.name}</p>
+                      <p className="text-[10px] font-mono text-indigo-300 font-medium">
                         {t(personalInfo.role.pt, personalInfo.role.en)}
                       </p>
                     </div>
@@ -191,158 +191,182 @@ const Hero: React.FC = () => {
 
       </div>
 
-      {/* Pop-Up Modal de Carreira Escolar / Formação Acadêmica (Renderizado via Portal para ficar acima de tudo) */}
+      {/* Pop-Up Modal de Carreira Escolar / Formação Acadêmica (Formal, Elegante e Organizado) */}
       {showEducationModal && typeof document !== 'undefined' && createPortal(
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md animate-fade-in-fast">
-          <div className="relative w-full max-w-3xl bg-[#0c0e1e] rounded-3xl border border-indigo-500/30 shadow-[0_0_50px_rgba(99,102,241,0.25)] max-h-[90vh] flex flex-col overflow-hidden animate-scale-in-fast">
+          <div className="relative w-full max-w-3xl bg-[#0a0d18] rounded-3xl border border-slate-700/60 shadow-[0_20px_60px_rgba(0,0,0,0.9)] max-h-[90vh] flex flex-col overflow-hidden animate-scale-in-fast">
             
-            {/* Header Modal (Fixo no topo da caixa) */}
-            <div className="p-6 sm:p-8 border-b border-white/10 flex items-start justify-between bg-[#0c0e1e] shrink-0">
+            {/* Header Modal Formal */}
+            <div className="p-6 sm:p-8 border-b border-slate-800 flex items-start justify-between bg-[#0a0d18] shrink-0">
               <div className="flex items-center gap-3 text-left">
-                <div className="p-3 rounded-2xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">
+                <div className="p-3 rounded-2xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 shadow-inner">
                   <GraduationCap className="w-7 h-7" />
                 </div>
                 <div>
-                  <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-mono mb-1">
-                    <Award className="w-3 h-3" />
-                    <span>{t("Graduação Concluída • Ensino Superior", "Graduated • Higher Education")}</span>
+                  <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-slate-800/80 border border-slate-700 text-slate-300 text-[10px] font-mono mb-1.5">
+                    <ShieldCheck className="w-3 h-3 text-indigo-400" />
+                    <span>{t("Credenciais Oficiais • Ensino Superior", "Official Credentials • Higher Education")}</span>
                   </div>
                   <h3 className="font-display font-bold text-xl sm:text-2xl text-white">
-                    {t("Carreira Escolar & Formação Acadêmica", "Academic Career & Education")}
+                    {t("Formação Acadêmica & Carreira Escolar", "Academic Background & Qualifications")}
                   </h3>
+                  <p className="text-xs text-slate-400 mt-0.5">
+                    {t("Histórico acadêmico e especializações em Tecnologia da Informação", "Academic degrees and specializations in Information Technology")}
+                  </p>
                 </div>
               </div>
               <button
                 onClick={() => setShowEducationModal(false)}
-                className="p-2 rounded-full bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white transition-colors"
+                className="p-2 rounded-full bg-slate-800/60 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors border border-slate-700/50"
                 title={t("Fechar", "Close")}
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            {/* Conteúdo Rolável (A barra de rolagem fica contida estritamente dentro desta área) */}
+            {/* Conteúdo Rolável Formal */}
             <div className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-6 text-left">
-              {/* Banner do Curso & Faculdade */}
-              <div className="p-5 rounded-2xl bg-gradient-to-r from-indigo-900/40 via-purple-900/30 to-pink-900/40 border border-indigo-500/30 space-y-3">
+              
+              {/* Card de Graduação (Bacharelado) */}
+              <div className="p-5 sm:p-6 rounded-2xl bg-slate-900/70 border border-slate-800 hover:border-slate-700 transition-all space-y-3 shadow-md">
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <h4 className="text-lg font-bold text-white flex items-center gap-2">
-                    <GraduationCap className="w-5 h-5 text-indigo-400" />
-                    <span>Ciência da Computação</span>
-                  </h4>
-                  <span className="px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-mono border border-indigo-500/30">
-                    Bacharelado
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-2.5 h-2.5 rounded-full bg-indigo-400 shadow-[0_0_8px_rgba(129,140,248,0.6)]"></div>
+                    <h4 className="text-lg font-bold text-white">
+                      {t("Ciência da Computação", "Computer Science")}
+                    </h4>
+                  </div>
+                  <span className="px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-300 text-xs font-mono border border-indigo-500/20 font-medium">
+                    {t("Bacharelado", "Bachelor's Degree")}
                   </span>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-gray-300 font-medium">
-                  <MapPin className="w-4 h-4 text-pink-400" />
-                  <span>Formado na <strong>Faculdade Estácio do Amazonas (Estácio Amazonas)</strong></span>
+
+                <div className="flex items-center gap-2 text-sm text-slate-300">
+                  <MapPin className="w-4 h-4 text-indigo-400 shrink-0" />
+                  <span><strong>Centro Universitário Estácio do Amazonas (Estácio Amazonas)</strong></span>
                 </div>
+
+                <p className="text-xs text-slate-400 leading-relaxed pt-1 border-t border-slate-800/80">
+                  {t(
+                    "Formação sólida em fundamentos de computação, engenharia de software, estruturas de dados, algoritmos, arquitetura de sistemas e inteligência artificial.",
+                    "Solid education in computer science fundamentals, software engineering, data structures, algorithms, system architecture, and artificial intelligence."
+                  )}
+                </p>
               </div>
 
-              {/* Banner Pós-Graduação */}
-              <div className="p-5 rounded-2xl bg-gradient-to-r from-emerald-900/40 via-teal-900/30 to-cyan-900/40 border border-emerald-500/30 space-y-3">
+              {/* Card de Pós-Graduação */}
+              <div className="p-5 sm:p-6 rounded-2xl bg-slate-900/70 border border-slate-800 hover:border-slate-700 transition-all space-y-3 shadow-md">
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <h4 className="text-lg font-bold text-white flex items-center gap-2">
-                    <GraduationCap className="w-5 h-5 text-emerald-400" />
-                    <span>Liderança, Inovação e Tecnologia</span>
-                  </h4>
-                  <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-mono border border-emerald-500/30">
-                    Pós-Graduação
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-2.5 h-2.5 rounded-full bg-indigo-400 shadow-[0_0_8px_rgba(129,140,248,0.6)]"></div>
+                    <h4 className="text-lg font-bold text-white">
+                      {t("Liderança, Inovação e Tecnologia", "Leadership, Innovation & Technology")}
+                    </h4>
+                  </div>
+                  <span className="px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-300 text-xs font-mono border border-indigo-500/20 font-medium">
+                    {t("Pós-Graduação Lato Sensu", "Postgraduate Specialization")}
                   </span>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-gray-300 font-medium">
-                  <MapPin className="w-4 h-4 text-emerald-400" />
-                  <span>Formado na <strong>Fasul Educacional</strong></span>
+
+                <div className="flex items-center gap-2 text-sm text-slate-300">
+                  <MapPin className="w-4 h-4 text-indigo-400 shrink-0" />
+                  <span><strong>Faculdade Sul Mineira (Fasul Educacional)</strong></span>
                 </div>
+
+                <p className="text-xs text-slate-400 leading-relaxed pt-1 border-t border-slate-800/80">
+                  {t(
+                    "Especialização estratégica voltada à gestão de projetos tecnológicos, metodologias ágeis, inovação contínua, governança e transformação digital.",
+                    "Strategic specialization focused on technological project management, agile methodologies, continuous innovation, governance, and digital transformation."
+                  )}
+                </p>
               </div>
 
-              {/* O que é possível fazer com esta formação */}
-              <div className="space-y-4">
-                <h5 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-indigo-300 font-mono flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-indigo-400" />
-                  <span>O que é possível desenvolver com Ciência da Computação?</span>
+              {/* Matriz de Competências Técnico-Científicas */}
+              <div className="space-y-4 pt-2">
+                <h5 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-300 font-mono flex items-center gap-2">
+                  <Award className="w-4 h-4 text-indigo-400" />
+                  <span>{t("Matriz de Competências & Domínio Acadêmico", "Core Competency & Technical Domain")}</span>
                 </h5>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div className="p-4 rounded-xl bg-white/[0.03] border border-white/10 hover:border-indigo-500/30 transition-all space-y-1">
-                    <div className="flex items-center gap-2 text-indigo-400 font-bold text-xs">
-                      <Code className="w-4 h-4" />
-                      <span>Desenvolvimento de Software Escalável</span>
+                  <div className="p-4 rounded-xl bg-slate-900/50 border border-slate-800 hover:border-slate-700 hover:bg-slate-900/70 transition-all space-y-1.5">
+                    <div className="flex items-center gap-2 text-indigo-300 font-bold text-xs">
+                      <Code className="w-4 h-4 text-indigo-400" />
+                      <span>{t("Engenharia de Software & Arquitetura", "Software Engineering & Architecture")}</span>
                     </div>
-                    <p className="text-[11px] text-gray-300 leading-relaxed font-light">
-                      Construção de arquiteturas web completas, microsserviços, aplicações mobile e ecossistemas em nuvem para alta demanda.
+                    <p className="text-[11px] text-slate-400 leading-relaxed">
+                      {t("Construção de aplicações robustas, microsserviços, design patterns, clean code e sistemas escaláveis.", "Building robust applications, microservices, design patterns, clean code, and scalable systems.")}
                     </p>
                   </div>
 
-                  <div className="p-4 rounded-xl bg-white/[0.03] border border-white/10 hover:border-purple-500/30 transition-all space-y-1">
-                    <div className="flex items-center gap-2 text-purple-400 font-bold text-xs">
-                      <Brain className="w-4 h-4" />
-                      <span>IA & Ciência de Dados</span>
+                  <div className="p-4 rounded-xl bg-slate-900/50 border border-slate-800 hover:border-slate-700 hover:bg-slate-900/70 transition-all space-y-1.5">
+                    <div className="flex items-center gap-2 text-indigo-300 font-bold text-xs">
+                      <Brain className="w-4 h-4 text-indigo-400" />
+                      <span>{t("Inteligência Artificial & Dados", "Artificial Intelligence & Data")}</span>
                     </div>
-                    <p className="text-[11px] text-gray-300 leading-relaxed font-light">
-                      Criação de algoritmos preditivos, redes neurais, inteligência artificial generativa e análise quantitativa de dados.
+                    <p className="text-[11px] text-slate-400 leading-relaxed">
+                      {t("Algoritmos preditivos, redes neurais, modelagem estatística e análise quantitativa de dados.", "Predictive algorithms, neural networks, statistical modeling, and quantitative data analysis.")}
                     </p>
                   </div>
 
-                  <div className="p-4 rounded-xl bg-white/[0.03] border border-white/10 hover:border-pink-500/30 transition-all space-y-1">
-                    <div className="flex items-center gap-2 text-pink-400 font-bold text-xs">
-                      <Rocket className="w-4 h-4" />
-                      <span>Engenharia de Jogos & Simulações</span>
+                  <div className="p-4 rounded-xl bg-slate-900/50 border border-slate-800 hover:border-slate-700 hover:bg-slate-900/70 transition-all space-y-1.5">
+                    <div className="flex items-center gap-2 text-indigo-300 font-bold text-xs">
+                      <Rocket className="w-4 h-4 text-indigo-400" />
+                      <span>{t("Engenharia de Jogos & Gráficos", "Game Engineering & Graphics")}</span>
                     </div>
-                    <p className="text-[11px] text-gray-300 leading-relaxed font-light">
-                      Desenvolvimento de games 2D/3D interativos, física computacional e motores gráficos usando C++, C#, Unity e Unreal.
+                    <p className="text-[11px] text-slate-400 leading-relaxed">
+                      {t("Desenvolvimento interativo 2D/3D, motores Unity/Unreal, física computacional e C#/C++.", "2D/3D interactive development, Unity/Unreal engines, computational physics, and C#/C++.")}
                     </p>
                   </div>
 
-                  <div className="p-4 rounded-xl bg-white/[0.03] border border-white/10 hover:border-emerald-500/30 transition-all space-y-1">
-                    <div className="flex items-center gap-2 text-emerald-400 font-bold text-xs">
-                      <Cpu className="w-4 h-4" />
-                      <span>Robótica & IoT (Sistemas Embarcados)</span>
+                  <div className="p-4 rounded-xl bg-slate-900/50 border border-slate-800 hover:border-slate-700 hover:bg-slate-900/70 transition-all space-y-1.5">
+                    <div className="flex items-center gap-2 text-indigo-300 font-bold text-xs">
+                      <Cpu className="w-4 h-4 text-indigo-400" />
+                      <span>{t("Sistemas Embarcados & IoT", "Embedded Systems & IoT")}</span>
                     </div>
-                    <p className="text-[11px] text-gray-300 leading-relaxed font-light">
-                      Programação de hardware (Arduino, ESP32), integração de sensores e controle de dispositivos físicos em tempo real.
+                    <p className="text-[11px] text-slate-400 leading-relaxed">
+                      {t("Programação de microcontroladores (ESP32/Arduino), integração de sensores e automação.", "Microcontroller programming (ESP32/Arduino), sensor integration, and hardware automation.")}
                     </p>
                   </div>
 
-                  <div className="p-4 rounded-xl bg-white/[0.03] border border-white/10 hover:border-amber-500/30 transition-all space-y-1">
-                    <div className="flex items-center gap-2 text-amber-400 font-bold text-xs">
-                      <ShieldCheck className="w-4 h-4" />
-                      <span>Cibersegurança & Algoritmos</span>
+                  <div className="p-4 rounded-xl bg-slate-900/50 border border-slate-800 hover:border-slate-700 hover:bg-slate-900/70 transition-all space-y-1.5">
+                    <div className="flex items-center gap-2 text-indigo-300 font-bold text-xs">
+                      <ShieldCheck className="w-4 h-4 text-indigo-400" />
+                      <span>{t("Segurança da Informação & Algoritmos", "Information Security & Algorithms")}</span>
                     </div>
-                    <p className="text-[11px] text-gray-300 leading-relaxed font-light">
-                      Criptografia, segurança de dados, estruturas de dados otimizadas e resolução analítica de problemas computacionais.
+                    <p className="text-[11px] text-slate-400 leading-relaxed">
+                      {t("Criptografia aplicada, estruturas de dados otimizadas e proteção e auditoria de sistemas.", "Applied cryptography, optimized data structures, system protection, and auditing.")}
                     </p>
                   </div>
 
-                  <div className="p-4 rounded-xl bg-white/[0.03] border border-white/10 hover:border-blue-500/30 transition-all space-y-1">
-                    <div className="flex items-center gap-2 text-blue-400 font-bold text-xs">
-                      <Layers className="w-4 h-4" />
-                      <span>Arquitetura de Nuvem & DevOps</span>
+                  <div className="p-4 rounded-xl bg-slate-900/50 border border-slate-800 hover:border-slate-700 hover:bg-slate-900/70 transition-all space-y-1.5">
+                    <div className="flex items-center gap-2 text-indigo-300 font-bold text-xs">
+                      <Layers className="w-4 h-4 text-indigo-400" />
+                      <span>{t("Cloud Computing & DevOps", "Cloud Computing & DevOps")}</span>
                     </div>
-                    <p className="text-[11px] text-gray-300 leading-relaxed font-light">
-                      Implantação contínua (CI/CD), containers, bancos de dados relacionais/NoSQL e servidores de alto desempenho.
+                    <p className="text-[11px] text-slate-400 leading-relaxed">
+                      {t("Pipelines de CI/CD, conteinerização Docker, bancos de dados e ambientes de alta disponibilidade.", "CI/CD pipelines, Docker containerization, databases, and high-availability cloud environments.")}
                     </p>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Rodapé do Modal (Fixo na parte inferior com botões de mesmo tamanho e espaçamento) */}
-            <div className="p-6 border-t border-white/10 bg-[#0c0e1e] flex items-center justify-between gap-4 shrink-0">
+            {/* Rodapé do Modal com Botões Formalizados e Suaves */}
+            <div className="p-6 border-t border-slate-800 bg-[#0a0d18] flex items-center justify-between gap-4 shrink-0">
               <a
                 href={personalInfo.whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 py-3.5 px-4 rounded-xl bg-gradient-to-r from-[#25D366] to-[#128C7E] hover:from-[#20ba5a] hover:to-[#0e7065] text-white font-bold text-xs uppercase tracking-wider shadow-lg shadow-[#25D366]/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center text-center gap-2"
+                className="flex-1 py-3.5 px-4 rounded-xl bg-[#25D366] hover:bg-[#20ba5a] text-white font-bold text-xs uppercase tracking-wider shadow-[0_0_20px_rgba(37,211,102,0.35)] hover:shadow-[0_0_30px_rgba(37,211,102,0.6)] hover:scale-[1.02] active:scale-95 transition-all duration-300 flex items-center justify-center text-center gap-2"
               >
                 <WhatsAppIcon className="w-4 h-4 fill-current" />
-                <span>Conectar via WhatsApp</span>
+                <span>{t("Conectar via WhatsApp", "Connect via WhatsApp")}</span>
               </a>
 
               <button
                 onClick={() => setShowEducationModal(false)}
-                className="flex-1 py-3.5 px-4 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs uppercase tracking-wider transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center text-center border border-white/10"
+                className="flex-1 py-3.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white font-bold text-xs uppercase tracking-wider transition-all duration-300 hover:scale-[1.02] active:scale-95 flex items-center justify-center text-center border border-slate-700"
               >
                 {t("Fechar", "Close")}
               </button>

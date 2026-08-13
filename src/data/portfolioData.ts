@@ -12,24 +12,24 @@ import { Project, Testimonial, ServiceItem, StatItem } from '../types/portfolio'
 export const personalInfo = {
   name: "Matheus Nogueira",
   role: {
-    pt: "Engenheiro Full Stack, Game Dev & Designer",
-    en: "Full Stack Engineer, Game Dev & Designer"
+    pt: "Desenvolvedor Full Stack & Game Dev",
+    en: "Full Stack Developer & Game Dev"
   },
   tagline: {
-    pt: "Engenharia Full Stack, Criatividade & Inovação",
-    en: "Full Stack Engineering, Creativity & Innovation"
+    pt: "Desenvolvimento Full Stack, Criatividade & Inovação",
+    en: "Full Stack Development, Creativity & Innovation"
   },
   headline: {
     pt: "Criando produtos digitais de alta performance e experiências memoráveis",
     en: "Building high-performance digital products and memorable experiences"
   },
   aboutMeShort: {
-    pt: "Unindo precisão técnica em desenvolvimento de software com design gráfico avançado, automação e edição de vídeo para transformar conceitos visionários em realidades escaláveis.",
-    en: "Combining technical precision in software development with advanced graphic design, automation, and video editing to turn visionary concepts into scalable realities."
+    pt: "Unindo precisão técnica em desenvolvimento de software com arquitetura moderna, automação e jogos interativos para transformar conceitos visionários em produtos de alto desempenho.",
+    en: "Combining technical precision in software development with modern architecture, automation, and interactive games to transform visionary concepts into high-performance products."
   },
   aboutMeDetailed: {
-    pt: "Com sólida bagagem em ecossistemas de tecnologia modernos (React, TypeScript, Node.js, Python e C#), atuo na construção de plataformas web robustas, jogos interativos, prototipagem em robótica e estratégias visuais que constroem marcas fortes e geram resultados mensuráveis.",
-    en: "With a solid background in modern tech ecosystems (React, TypeScript, Node.js, Python, and C#), I build robust web platforms, interactive games, robotics prototyping, and visual strategies that construct strong brands and generate measurable results."
+    pt: "Com sólida bagagem em ecossistemas de tecnologia modernos (React, TypeScript, Node.js, Python e C#), atuo na construção de plataformas web robustas, jogos interativos, sistemas embarcados e soluções digitais que geram impacto real e resultados mensuráveis.",
+    en: "With a solid background in modern tech ecosystems (React, TypeScript, Node.js, Python, and C#), I build robust web platforms, interactive games, embedded systems, and digital solutions that generate real impact and measurable results."
   },
   status: {
     pt: "Disponível para novos projetos e consultorias",

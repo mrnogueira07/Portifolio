@@ -189,14 +189,14 @@ const Contact: React.FC = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#25D366] via-[#22c55e] to-[#128C7E] text-white font-bold text-xs uppercase tracking-widest shadow-[0_0_25px_rgba(37,211,102,0.4)] hover:shadow-[0_0_35px_rgba(37,211,102,0.7)] hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-3 disabled:opacity-50"
+                className="group w-full py-4 rounded-2xl bg-gradient-to-r from-[#25D366] via-[#22c55e] to-[#128C7E] text-white font-bold text-xs uppercase tracking-widest shadow-[0_0_25px_rgba(37,211,102,0.4)] hover:shadow-[0_0_35px_rgba(37,211,102,0.8)] hover:scale-[1.015] active:scale-[0.98] transition-all duration-400 ease-out flex items-center justify-center gap-3 disabled:opacity-50 cursor-pointer"
               >
                 {loading ? (
                   <span>{t("Enviando...", "Sending...")}</span>
                 ) : (
                   <>
-                    <WhatsAppIcon className="w-5 h-5 fill-current" />
-                    <span>{t("Enviar para o WhatsApp", "Send to WhatsApp")}</span>
+                    <WhatsAppIcon className="w-5 h-5 fill-current group-hover:rotate-6 group-hover:scale-110 transition-transform duration-300 shrink-0" />
+                    <span className="tracking-wider">{t("Enviar para o WhatsApp", "Send to WhatsApp")}</span>
                   </>
                 )}
               </button>
@@ -214,10 +214,10 @@ const Contact: React.FC = () => {
                 href={personalInfo.whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-3.5 rounded-2xl bg-[#25D366]/20 hover:bg-[#25D366] text-[#25D366] hover:text-white border border-[#25D366]/40 transition-all hover:scale-110 shadow-[0_0_15px_rgba(37,211,102,0.3)]"
+                className="group p-3.5 rounded-2xl bg-[#25D366]/20 hover:bg-[#25D366] text-[#25D366] hover:text-white border border-[#25D366]/40 transition-all duration-400 ease-out hover:scale-115 shadow-[0_0_15px_rgba(37,211,102,0.3)] hover:shadow-[0_0_25px_rgba(37,211,102,0.7)]"
                 title="WhatsApp"
               >
-                <WhatsAppIcon className="w-5 h-5 fill-current" />
+                <WhatsAppIcon className="w-5 h-5 fill-current group-hover:rotate-6 group-hover:scale-105 transition-transform duration-300" />
               </a>
 
               {/* E-mail */}

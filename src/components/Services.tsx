@@ -78,12 +78,12 @@ const Services: React.FC = () => {
 
                     <button
                       onClick={() => handleServiceQuote(title)}
-                      className="p-3 rounded-full bg-[#25D366]/15 hover:bg-[#25D366] text-[#25D366] hover:text-white transition-all hover:scale-110 flex items-center gap-2 group/btn text-xs font-bold border border-[#25D366]/30 shadow-[0_0_15px_rgba(37,211,102,0.2)]"
+                      className="p-3 rounded-full bg-[#25D366]/15 hover:bg-[#25D366] text-[#25D366] hover:text-white transition-all duration-400 ease-out hover:scale-110 flex items-center gap-2 group/btn text-xs font-bold border border-[#25D366]/30 shadow-[0_0_15px_rgba(37,211,102,0.2)] hover:shadow-[0_0_25px_rgba(37,211,102,0.55)] cursor-pointer"
                       title={t("Solicitar Orçamento no WhatsApp", "Request Quote on WhatsApp")}
                     >
-                      <WhatsAppIcon className="w-4 h-4 fill-current" />
+                      <WhatsAppIcon className="w-4 h-4 fill-current group-hover/btn:rotate-6 transition-transform duration-300" />
                       <span className="hidden group-hover/btn:inline px-1">{t("Orçamento", "Quote")}</span>
-                      <ArrowUpRight className="w-4 h-4" />
+                      <ArrowUpRight className="w-4 h-4 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform duration-300" />
                     </button>
                   </div>
 
