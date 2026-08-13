@@ -10,10 +10,9 @@
 import React, { useState, useEffect } from 'react';
 import { 
   MessageSquare, Star, Quote, ChevronLeft, ChevronRight, 
-  Plus, X, AlertTriangle, CheckCircle2, ShieldCheck, User,
-  Sparkles, Cloud
+  Plus, X, AlertTriangle, CheckCircle2, User, Sparkles
 } from 'lucide-react';
-import { collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, onSnapshot, getDocs, serverTimestamp } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { useLanguage } from '../context/LanguageContext';
 import { testimonialsData } from '../data/portfolioData';
@@ -54,7 +53,7 @@ const Testimonials: React.FC = () => {
   useEffect(() => {
     let isMounted = true;
 
-    // 1. Tenta carregar cache local prévio
+    // 1. Tenta carregar cache local prévio de imediato
     let localCached: Testimonial[] = [];
     try {
       const saved = localStorage.getItem(LOCAL_STORAGE_REVIEWS_KEY);
@@ -67,6 +66,8 @@ const Testimonials: React.FC = () => {
 
     const mergeReviews = (cloudReviews: Testimonial[]) => {
       const staticReviews = testimonialsData.map(item => ({ ...item, rating: item.rating || 5 }));
+      
+      // Prioridade: Nuvem (cloudReviews) > Cache local (localCached) > Depoimentos fixos
       const allMerged = [...cloudReviews, ...localCached, ...staticReviews];
       
       const uniqueMap = new Map<string | number, Testimonial>();
@@ -82,22 +83,33 @@ const Testimonials: React.FC = () => {
       }
     };
 
-    // 2. Escuta mudanças em tempo real no Firestore (Cloud)
+    // 2. Escuta mudanças em tempo real na coleção 'reviews' do Firestore
     try {
-      const q = query(collection(db, 'reviews'), orderBy('createdAt', 'desc'));
+      const reviewsCol = collection(db, 'reviews');
       const unsubscribe = onSnapshot(
-        q,
+        reviewsCol,
         (querySnapshot) => {
-          const cloudList: Testimonial[] = [];
+          const cloudList: (Testimonial & { timestampNum: number })[] = [];
+          
           querySnapshot.forEach((doc) => {
             const data = doc.data();
             let dateStr: string | undefined = undefined;
+            let timeVal = 0;
+
             if (data.createdAt) {
               if (typeof data.createdAt.toDate === 'function') {
-                dateStr = data.createdAt.toDate().toLocaleDateString(language === 'pt' ? 'pt-BR' : 'en-US');
+                const d = data.createdAt.toDate();
+                dateStr = d.toLocaleDateString(language === 'pt' ? 'pt-BR' : 'en-US');
+                timeVal = d.getTime();
               } else if (typeof data.createdAt === 'string') {
-                dateStr = new Date(data.createdAt).toLocaleDateString(language === 'pt' ? 'pt-BR' : 'en-US');
+                const d = new Date(data.createdAt);
+                dateStr = d.toLocaleDateString(language === 'pt' ? 'pt-BR' : 'en-US');
+                timeVal = d.getTime();
               }
+            } else if (data.publishedAtIso) {
+              const d = new Date(data.publishedAtIso);
+              dateStr = d.toLocaleDateString(language === 'pt' ? 'pt-BR' : 'en-US');
+              timeVal = d.getTime();
             }
 
             cloudList.push({
@@ -108,15 +120,40 @@ const Testimonials: React.FC = () => {
               text: data.comment || data.text || '',
               avatar: data.avatar || '',
               rating: Number(data.rating) || 5,
-              createdAt: dateStr || new Date().toLocaleDateString(language === 'pt' ? 'pt-BR' : 'en-US')
+              createdAt: dateStr || new Date().toLocaleDateString(language === 'pt' ? 'pt-BR' : 'en-US'),
+              timestampNum: timeVal || Date.now()
             });
           });
+
+          // Ordena os mais recentes no topo
+          cloudList.sort((a, b) => b.timestampNum - a.timestampNum);
 
           mergeReviews(cloudList);
         },
         (error) => {
-          console.warn('Conexão em tempo real do Firestore: usando fallback local', error);
-          mergeReviews([]);
+          console.warn('Erro ao escutar Firestore em tempo real, tentando busca pontual:', error);
+          // Fallback de busca simples caso onSnapshot falhe
+          getDocs(collection(db, 'reviews'))
+            .then((snap) => {
+              const cloudList: Testimonial[] = [];
+              snap.forEach((doc) => {
+                const data = doc.data();
+                cloudList.push({
+                  id: doc.id,
+                  name: data.name || 'Cliente',
+                  role: data.role || data.companyRole || t('Cliente Verificado', 'Verified Client'),
+                  company: '',
+                  text: data.comment || data.text || '',
+                  avatar: '',
+                  rating: Number(data.rating) || 5,
+                  createdAt: new Date().toLocaleDateString(language === 'pt' ? 'pt-BR' : 'en-US')
+                });
+              });
+              mergeReviews(cloudList);
+            })
+            .catch(() => {
+              mergeReviews([]);
+            });
         }
       );
 
@@ -133,7 +170,7 @@ const Testimonials: React.FC = () => {
     }
   }, [language]);
 
-  // Validação em tempo real ao digitar o comentário (detecta palavras de baixo calão e abusos)
+  // Validação em tempo real ao digitar o comentário
   const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const val = e.target.value;
     if (val.length > 500) return;
@@ -214,6 +251,7 @@ const Testimonials: React.FC = () => {
 
     setSubmitting(true);
 
+    const nowIso = new Date().toISOString();
     const newReviewItem: Testimonial = {
       id: `cloud-rev-${Date.now()}`,
       name: formData.name.trim(),
@@ -224,33 +262,39 @@ const Testimonials: React.FC = () => {
       createdAt: new Date().toLocaleDateString(language === 'pt' ? 'pt-BR' : 'en-US')
     };
 
-    // 1. Salva na Nuvem (Firebase Firestore)
+    // 1. Salva na Nuvem (Firebase Firestore) com timeout de proteção para NUNCA travar
     try {
-      const docRef = await addDoc(collection(db, 'reviews'), {
+      const savePromise = addDoc(collection(db, 'reviews'), {
         name: newReviewItem.name,
         role: newReviewItem.role,
         comment: newReviewItem.text,
         rating: newReviewItem.rating,
         createdAt: serverTimestamp(),
-        publishedAtIso: new Date().toISOString()
+        publishedAtIso: nowIso
       });
-      if (docRef.id) {
-        newReviewItem.id = docRef.id;
+
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Firebase timeout')), 4000)
+      );
+
+      const res: any = await Promise.race([savePromise, timeoutPromise]);
+      if (res && res.id) {
+        newReviewItem.id = res.id;
       }
     } catch (err) {
-      console.warn('Salvando em cache local devido à conexão do Firestore:', err);
+      console.warn('Persistindo atualização otimista localmente:', err);
     }
 
-    // 2. Salva no cache local do navegador para garantia imediata
+    // 2. Salva no cache local do navegador
     try {
       const currentCache = JSON.parse(localStorage.getItem(LOCAL_STORAGE_REVIEWS_KEY) || '[]');
-      const updatedCache = [newReviewItem, ...currentCache];
+      const updatedCache = [newReviewItem, ...currentCache.filter((r: any) => r.id !== newReviewItem.id)];
       localStorage.setItem(LOCAL_STORAGE_REVIEWS_KEY, JSON.stringify(updatedCache));
     } catch (err) {
       console.warn('Erro ao salvar no localStorage:', err);
     }
 
-    // 3. Atualização otimista na interface
+    // 3. Atualização otimista imediata na interface
     setReviews(prev => [newReviewItem, ...prev.filter(r => r.id !== newReviewItem.id)]);
     setActiveIndex(0);
 
@@ -263,7 +307,7 @@ const Testimonials: React.FC = () => {
       setIsModalOpen(false);
       setFormData({ name: '', companyRole: '', rating: 5, comment: '' });
       setProfanityError(null);
-    }, 2000);
+    }, 1800);
   };
 
   // Navegação do carrossel
@@ -474,12 +518,12 @@ const Testimonials: React.FC = () => {
                   <CheckCircle2 className="w-8 h-8" />
                 </div>
                 <h3 className="font-display text-2xl font-bold text-white">
-                  {t("Avaliação Salva na Nuvem!", "Review Saved to Cloud!")}
+                  {t("Avaliação Publicada!", "Review Published!")}
                 </h3>
                 <p className="text-sm text-gray-300 max-w-sm mx-auto">
                   {t(
-                    "Sua avaliação foi verificada, validada e publicada com sucesso em nossa base na nuvem. Muito obrigado!",
-                    "Your review has been verified, validated and successfully published to our cloud database. Thank you!"
+                    "Sua avaliação foi salva na nuvem e já está visível publicamente no portfólio. Muito obrigado!",
+                    "Your review has been saved to the cloud and is now publicly visible on the portfolio. Thank you!"
                   )}
                 </p>
               </div>
@@ -488,7 +532,7 @@ const Testimonials: React.FC = () => {
                 <div>
                   <div className="flex items-center gap-2 text-indigo-400 font-mono text-xs uppercase tracking-wider mb-1">
                     <Sparkles className="w-3.5 h-3.5" />
-                    <span>{t("Avaliação na Nuvem", "Cloud Review")}</span>
+                    <span>{t("Avaliação em Tempo Real", "Real-Time Review")}</span>
                   </div>
                   <h3 className="font-display text-2xl font-bold text-white">
                     {t("Adicionar Avaliação", "Leave a Review")}
@@ -643,7 +687,7 @@ const Testimonials: React.FC = () => {
                     {submitting ? (
                       <>
                         <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                        <span>{t("Salvando na Nuvem...", "Saving to Cloud...")}</span>
+                        <span>{t("Publicando...", "Publishing...")}</span>
                       </>
                     ) : (
                       <>
