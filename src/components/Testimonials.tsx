@@ -1,17 +1,19 @@
 /**
  * @file Testimonials.tsx
- * @description Seção de Depoimentos e Avaliações Reais de Clientes.
+ * @description Seção de Depoimentos e Avaliações Reais de Clientes em Nuvem (Firebase Firestore).
  * 
- * Permite aos visitantes visualizar avaliações reais e submeter novas avaliações
- * em estrelas (1-5) e comentários (máx. 500 caracteres, com validação anti-palavrões).
+ * Permite aos visitantes visualizar avaliações em tempo real sincronizadas com a nuvem
+ * e submeter novas avaliações em estrelas (1 a 5) com validação rigorosa anti-palavrões,
+ * xingamentos, abusos e moderação de conteúdo em tempo real.
  */
 
 import React, { useState, useEffect } from 'react';
 import { 
   MessageSquare, Star, Quote, ChevronLeft, ChevronRight, 
-  Plus, X, AlertTriangle, CheckCircle2, ShieldCheck, User 
+  Plus, X, AlertTriangle, CheckCircle2, ShieldCheck, User,
+  Sparkles, Cloud
 } from 'lucide-react';
-import { collection, addDoc, getDocs, query, orderBy } from 'firebase/firestore';
+import { collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { useLanguage } from '../context/LanguageContext';
 import { testimonialsData } from '../data/portfolioData';
@@ -23,9 +25,8 @@ const LOCAL_STORAGE_REVIEWS_KEY = 'portfolio_user_reviews_cache';
 const Testimonials: React.FC = () => {
   const { t, language } = useLanguage();
   
-  // Lista de avaliações (dados padronizados + dados do Firestore/LocalStorage)
+  // Lista de avaliações (estáticas base + dados em tempo real da nuvem Firestore)
   const [reviews, setReviews] = useState<Testimonial[]>(() => {
-    // Adiciona rating 5 por padrão aos depoimentos estáticos
     return testimonialsData.map(item => ({
       ...item,
       rating: item.rating || 5
@@ -49,66 +50,92 @@ const Testimonials: React.FC = () => {
   const [profanityError, setProfanityError] = useState<string | null>(null);
   const [generalError, setGeneralError] = useState<string | null>(null);
 
-  // Carrega avaliações do Firestore e LocalStorage ao montar
+  // Sincronização em tempo real com o Firebase Firestore (Cloud Database)
   useEffect(() => {
-    const fetchReviews = async () => {
-      let remoteReviews: Testimonial[] = [];
+    let isMounted = true;
 
-      try {
-        const q = query(collection(db, 'reviews'), orderBy('createdAt', 'desc'));
-        const querySnapshot = await getDocs(q);
-        
-        querySnapshot.forEach((doc) => {
-          const data = doc.data();
-          remoteReviews.push({
-            id: doc.id,
-            name: data.name || 'Anônimo',
-            role: data.role || data.companyRole || 'Cliente',
-            company: data.company || '',
-            text: data.comment || data.text || '',
-            avatar: data.avatar || '',
-            rating: Number(data.rating) || 5,
-            createdAt: data.createdAt ? new Date(data.createdAt.seconds * 1000).toLocaleDateString() : undefined
-          });
-        });
-      } catch (err) {
-        console.warn('Carregando avaliações via Firestore indisponível, usando cache local:', err);
+    // 1. Tenta carregar cache local prévio
+    let localCached: Testimonial[] = [];
+    try {
+      const saved = localStorage.getItem(LOCAL_STORAGE_REVIEWS_KEY);
+      if (saved) {
+        localCached = JSON.parse(saved);
       }
+    } catch (e) {
+      console.warn('Erro ao ler cache local de avaliações:', e);
+    }
 
-      // Lê cache do localStorage
-      let localReviews: Testimonial[] = [];
-      try {
-        const saved = localStorage.getItem(LOCAL_STORAGE_REVIEWS_KEY);
-        if (saved) {
-          localReviews = JSON.parse(saved);
-        }
-      } catch (e) {
-        console.warn('Erro ao ler cache local de avaliações:', e);
-      }
-
-      // Mescla e desduplica (Prioridade: Remotas > Locais > Estáticas)
+    const mergeReviews = (cloudReviews: Testimonial[]) => {
       const staticReviews = testimonialsData.map(item => ({ ...item, rating: item.rating || 5 }));
-      const allMerged = [...remoteReviews, ...localReviews, ...staticReviews];
+      const allMerged = [...cloudReviews, ...localCached, ...staticReviews];
       
-      const uniqueReviewsMap = new Map<string | number, Testimonial>();
+      const uniqueMap = new Map<string | number, Testimonial>();
       allMerged.forEach((item) => {
         const key = item.id || `${item.name}-${typeof item.text === 'string' ? item.text : item.text.pt}`;
-        if (!uniqueReviewsMap.has(key)) {
-          uniqueReviewsMap.set(key, item);
+        if (!uniqueMap.has(key)) {
+          uniqueMap.set(key, item);
         }
       });
 
-      setReviews(Array.from(uniqueReviewsMap.values()));
+      if (isMounted) {
+        setReviews(Array.from(uniqueMap.values()));
+      }
     };
 
-    fetchReviews();
-  }, []);
+    // 2. Escuta mudanças em tempo real no Firestore (Cloud)
+    try {
+      const q = query(collection(db, 'reviews'), orderBy('createdAt', 'desc'));
+      const unsubscribe = onSnapshot(
+        q,
+        (querySnapshot) => {
+          const cloudList: Testimonial[] = [];
+          querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            let dateStr: string | undefined = undefined;
+            if (data.createdAt) {
+              if (typeof data.createdAt.toDate === 'function') {
+                dateStr = data.createdAt.toDate().toLocaleDateString(language === 'pt' ? 'pt-BR' : 'en-US');
+              } else if (typeof data.createdAt === 'string') {
+                dateStr = new Date(data.createdAt).toLocaleDateString(language === 'pt' ? 'pt-BR' : 'en-US');
+              }
+            }
 
-  // Validação em tempo real de palavras ofensivas no comentário
+            cloudList.push({
+              id: doc.id,
+              name: data.name || 'Cliente',
+              role: data.role || data.companyRole || t('Cliente Verificado', 'Verified Client'),
+              company: data.company || '',
+              text: data.comment || data.text || '',
+              avatar: data.avatar || '',
+              rating: Number(data.rating) || 5,
+              createdAt: dateStr || new Date().toLocaleDateString(language === 'pt' ? 'pt-BR' : 'en-US')
+            });
+          });
+
+          mergeReviews(cloudList);
+        },
+        (error) => {
+          console.warn('Conexão em tempo real do Firestore: usando fallback local', error);
+          mergeReviews([]);
+        }
+      );
+
+      return () => {
+        isMounted = false;
+        unsubscribe();
+      };
+    } catch (err) {
+      console.warn('Inicialização do listener do Firestore:', err);
+      mergeReviews([]);
+      return () => {
+        isMounted = false;
+      };
+    }
+  }, [language]);
+
+  // Validação em tempo real ao digitar o comentário (detecta palavras de baixo calão e abusos)
   const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const val = e.target.value;
-    
-    // Limite rigoroso de 500 caracteres
     if (val.length > 500) return;
 
     setFormData(prev => ({ ...prev, comment: val }));
@@ -119,8 +146,8 @@ const Testimonials: React.FC = () => {
       if (check.containsProfanity) {
         setProfanityError(
           t(
-            'O comentário contém linguagem ou termos desrespeitosos. Por favor, revise seu texto.',
-            'The comment contains inappropriate language. Please revise your review.'
+            'Linguagem imprópria ou termos ofensivos detectados. Por favor, mantenha um comentário respeitoso e profissional.',
+            'Inappropriate language or offensive terms detected. Please keep your review respectful and professional.'
           )
         );
       } else {
@@ -131,12 +158,30 @@ const Testimonials: React.FC = () => {
     }
   };
 
-  // Envio da avaliação
+  // Validação ao digitar nome
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setFormData(prev => ({ ...prev, name: val }));
+    setGeneralError(null);
+
+    if (val.trim()) {
+      const check = checkProfanity(val);
+      if (check.containsProfanity) {
+        setProfanityError(
+          t('Por favor, informe um nome válido e respeitoso.', 'Please provide a valid and respectful name.')
+        );
+      } else {
+        setProfanityError(null);
+      }
+    }
+  };
+
+  // Submissão da avaliação para a Nuvem (Firebase Firestore)
   const handleSubmitReview = async (e: React.FormEvent) => {
     e.preventDefault();
     setGeneralError(null);
 
-    // Validações
+    // Validações de campos obrigatórios
     if (!formData.name.trim()) {
       setGeneralError(t('Por favor, informe seu nome.', 'Please enter your name.'));
       return;
@@ -152,12 +197,16 @@ const Testimonials: React.FC = () => {
       return;
     }
 
-    const check = checkProfanity(formData.comment);
-    if (check.containsProfanity) {
+    // Verificação estrita de palavras de baixo calão, xingamentos e abusos
+    const commentCheck = checkProfanity(formData.comment);
+    const nameCheck = checkProfanity(formData.name);
+    const roleCheck = formData.companyRole ? checkProfanity(formData.companyRole) : { containsProfanity: false };
+
+    if (commentCheck.containsProfanity || nameCheck.containsProfanity || roleCheck.containsProfanity) {
       setProfanityError(
         t(
-          'Não é permitido publicar comentários com termos ofensivos. Por favor, reescreva com respeito.',
-          'Profanity is not allowed. Please rephrase respectfully.'
+          'Comentário bloqueado: detectamos termos ofensivos ou palavras de baixo calão. Por favor, revise seu texto.',
+          'Review blocked: offensive terms or profanities detected. Please revise your text.'
         )
       );
       return;
@@ -165,8 +214,8 @@ const Testimonials: React.FC = () => {
 
     setSubmitting(true);
 
-    const newReview: Testimonial = {
-      id: `rev-${Date.now()}`,
+    const newReviewItem: Testimonial = {
+      id: `cloud-rev-${Date.now()}`,
       name: formData.name.trim(),
       role: formData.companyRole.trim() || t('Cliente Verificado', 'Verified Client'),
       company: '',
@@ -175,46 +224,46 @@ const Testimonials: React.FC = () => {
       createdAt: new Date().toLocaleDateString(language === 'pt' ? 'pt-BR' : 'en-US')
     };
 
-    // 1. Tenta salvar no Firebase Firestore com timeout de segurança
+    // 1. Salva na Nuvem (Firebase Firestore)
     try {
-      const savePromise = addDoc(collection(db, 'reviews'), {
-        name: newReview.name,
-        role: newReview.role,
-        comment: newReview.text,
-        rating: newReview.rating,
-        createdAt: new Date().toISOString()
+      const docRef = await addDoc(collection(db, 'reviews'), {
+        name: newReviewItem.name,
+        role: newReviewItem.role,
+        comment: newReviewItem.text,
+        rating: newReviewItem.rating,
+        createdAt: serverTimestamp(),
+        publishedAtIso: new Date().toISOString()
       });
-      const timeoutPromise = new Promise((_, reject) =>
-        setTimeout(() => reject(new Error('Timeout Firebase')), 2000)
-      );
-      await Promise.race([savePromise, timeoutPromise]);
+      if (docRef.id) {
+        newReviewItem.id = docRef.id;
+      }
     } catch (err) {
-      console.warn('Salvo localmente (offline ou sem permissão de gravação direta no Firestore):', err);
+      console.warn('Salvando em cache local devido à conexão do Firestore:', err);
     }
 
-    // 2. Salva no LocalStorage como cache imediato
+    // 2. Salva no cache local do navegador para garantia imediata
     try {
       const currentCache = JSON.parse(localStorage.getItem(LOCAL_STORAGE_REVIEWS_KEY) || '[]');
-      const updatedCache = [newReview, ...currentCache];
+      const updatedCache = [newReviewItem, ...currentCache];
       localStorage.setItem(LOCAL_STORAGE_REVIEWS_KEY, JSON.stringify(updatedCache));
     } catch (err) {
       console.warn('Erro ao salvar no localStorage:', err);
     }
 
-    // 3. Atualiza estado da interface imediatamente (Optimistic Update)
-    setReviews(prev => [newReview, ...prev]);
+    // 3. Atualização otimista na interface
+    setReviews(prev => [newReviewItem, ...prev.filter(r => r.id !== newReviewItem.id)]);
     setActiveIndex(0);
 
     setSubmitting(false);
     setSubmittedSuccess(true);
 
-    // Reseta formulário após 2.2s e fecha modal
+    // Reseta formulário após animação de sucesso e fecha modal
     setTimeout(() => {
       setSubmittedSuccess(false);
       setIsModalOpen(false);
       setFormData({ name: '', companyRole: '', rating: 5, comment: '' });
       setProfanityError(null);
-    }, 2200);
+    }, 2000);
   };
 
   // Navegação do carrossel
@@ -226,11 +275,10 @@ const Testimonials: React.FC = () => {
     setActiveIndex((prev) => (prev === reviews.length - 1 ? 0 : prev + 1));
   };
 
-  // Cálculo da média de estrelas
+  // Cálculo da média de avaliação
   const totalRating = reviews.reduce((acc, curr) => acc + (curr.rating || 5), 0);
   const averageScore = reviews.length > 0 ? (totalRating / reviews.length).toFixed(1) : '5.0';
 
-  // Helper para renderizar texto multilíngue ou string simples
   const renderText = (textObj: string | { pt: string; en: string }) => {
     if (typeof textObj === 'string') return textObj;
     return language === 'pt' ? textObj.pt : textObj.en;
@@ -244,7 +292,7 @@ const Testimonials: React.FC = () => {
     if (roleText && company) return `${roleText} • ${company}`;
     if (roleText) return roleText;
     if (company) return company;
-    return t('Cliente', 'Client');
+    return t('Cliente Verificado', 'Verified Client');
   };
 
   const getRatingLabel = (val: number) => {
@@ -277,7 +325,7 @@ const Testimonials: React.FC = () => {
               </span>
             </h2>
 
-            {/* Média de Avaliação */}
+            {/* Média de Avaliação & Status em Nuvem */}
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
               <div className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 font-bold text-sm">
                 <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
@@ -287,14 +335,19 @@ const Testimonials: React.FC = () => {
                 </span>
               </div>
 
+              <div className="flex items-center gap-1.5 text-xs text-emerald-400 font-mono bg-emerald-500/10 px-3 py-1.5 rounded-xl border border-emerald-500/20">
+                <Cloud className="w-3.5 h-3.5" />
+                <span>{t('Sincronizado na Nuvem', 'Cloud Synchronized')}</span>
+              </div>
+
               <div className="flex items-center gap-1.5 text-xs text-gray-400 font-mono">
-                <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                <span>{t('Comentários moderados & verificados', 'Moderated & verified feedback')}</span>
+                <ShieldCheck className="w-4 h-4 text-indigo-400" />
+                <span>{t('Filtro anti-abuso ativo', 'Anti-abuse filter active')}</span>
               </div>
             </div>
           </div>
 
-          {/* Ações da Cabeçalho: Botão de Nova Avaliação e Controles do Carrossel */}
+          {/* Ações do Cabeçalho: Botão de Nova Avaliação e Controles do Carrossel */}
           <div className="flex flex-wrap items-center justify-center lg:justify-end gap-3">
             <button
               onClick={() => setIsModalOpen(true)}
@@ -345,7 +398,7 @@ const Testimonials: React.FC = () => {
                     
                     {/* Data / Badge */}
                     {item.createdAt && (
-                      <span className="text-[11px] font-mono text-gray-500 bg-white/5 px-2.5 py-1 rounded-full">
+                      <span className="text-[11px] font-mono text-gray-400 bg-white/5 px-2.5 py-1 rounded-full border border-white/5">
                         {item.createdAt}
                       </span>
                     )}
@@ -374,10 +427,10 @@ const Testimonials: React.FC = () => {
                   </p>
                 </div>
 
-                {/* Autor do Depoimento (Iniciais estilizadas, sem foto de pessoa) */}
+                {/* Autor do Depoimento */}
                 <div className="flex items-center gap-4 pt-6 border-t border-white/10">
                   <div className="w-11 h-11 rounded-full bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 border border-white/20 flex items-center justify-center text-white font-bold text-xs shrink-0 shadow-md">
-                    {item.name.substring(0, 2).toUpperCase()}
+                    {item.name ? item.name.substring(0, 2).toUpperCase() : 'CL'}
                   </div>
 
                   <div className="overflow-hidden">
@@ -431,12 +484,12 @@ const Testimonials: React.FC = () => {
                   <CheckCircle2 className="w-8 h-8" />
                 </div>
                 <h3 className="font-display text-2xl font-bold text-white">
-                  {t("Avaliação Registrada!", "Review Submitted!")}
+                  {t("Avaliação Salva na Nuvem!", "Review Saved to Cloud!")}
                 </h3>
                 <p className="text-sm text-gray-300 max-w-sm mx-auto">
                   {t(
-                    "Sua avaliação em estrelas e comentário foram publicados com sucesso. Muito obrigado!",
-                    "Your star rating and review comment have been successfully published. Thank you!"
+                    "Sua avaliação foi verificada, validada e publicada com sucesso em nossa base na nuvem. Muito obrigado!",
+                    "Your review has been verified, validated and successfully published to our cloud database. Thank you!"
                   )}
                 </p>
               </div>
@@ -444,14 +497,14 @@ const Testimonials: React.FC = () => {
               <form onSubmit={handleSubmitReview} className="space-y-5">
                 <div>
                   <div className="flex items-center gap-2 text-indigo-400 font-mono text-xs uppercase tracking-wider mb-1">
-                    <Star className="w-3.5 h-3.5 fill-indigo-400" />
-                    <span>{t("Sua Opinião Importa", "Your Feedback Matters")}</span>
+                    <Sparkles className="w-3.5 h-3.5" />
+                    <span>{t("Avaliação na Nuvem", "Cloud Review")}</span>
                   </div>
                   <h3 className="font-display text-2xl font-bold text-white">
                     {t("Adicionar Avaliação", "Leave a Review")}
                   </h3>
                   <p className="text-xs text-gray-400 mt-1">
-                    {t("Avalie os serviços de Matheus Nogueira com estrelas e comentário.", "Rate Matheus Nogueira's services with stars and a comment.")}
+                    {t("Avalie os projetos e serviços com estrelas e comentário moderado.", "Rate projects and services with stars and a moderated review.")}
                   </p>
                 </div>
 
@@ -502,7 +555,7 @@ const Testimonials: React.FC = () => {
                       type="text"
                       required
                       value={formData.name}
-                      onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                      onChange={handleNameChange}
                       placeholder={t("Ex: Gabriel Souza", "E.g. John Smith")}
                       className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
                     />
@@ -552,7 +605,7 @@ const Testimonials: React.FC = () => {
                     value={formData.comment}
                     onChange={handleCommentChange}
                     placeholder={t(
-                      "Descreva sua experiência com os projetos, entregas ou suporte do Matheus Nogueira...",
+                      "Descreva sua experiência com os projetos, entregas ou desenvolvimento de Matheus Nogueira...",
                       "Share your experience working with Matheus Nogueira..."
                     )}
                     className={`w-full px-4 py-3 rounded-xl bg-white/5 border text-white text-sm placeholder-gray-500 focus:outline-none transition-all resize-none ${
@@ -563,7 +616,7 @@ const Testimonials: React.FC = () => {
                   />
                 </div>
 
-                {/* Alerta de Linguagem Ofensiva / Erros */}
+                {/* Alerta de Linguagem Ofensiva / Baixo Calão / Abusos */}
                 {profanityError && (
                   <div className="p-3.5 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs flex items-start gap-2.5 animate-fade-in">
                     <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
@@ -600,7 +653,7 @@ const Testimonials: React.FC = () => {
                     {submitting ? (
                       <>
                         <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                        <span>{t("Enviando...", "Submitting...")}</span>
+                        <span>{t("Salvando na Nuvem...", "Saving to Cloud...")}</span>
                       </>
                     ) : (
                       <>

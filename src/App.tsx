@@ -17,7 +17,6 @@ import Projects from './components/Projects';
 import Testimonials from './components/Testimonials';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
-import WhatsAppButton from './components/WhatsAppButton';
 import ParticleBackground from './components/ParticleBackground';
 
 /**
@@ -49,7 +48,6 @@ const LandingPage: React.FC = () => {
         <Contact />
       </main>
       <Footer />
-      <WhatsAppButton />
     </>
   );
 };

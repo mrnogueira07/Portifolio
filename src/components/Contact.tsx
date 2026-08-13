@@ -12,6 +12,7 @@ import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { useLanguage } from '../context/LanguageContext';
 import { personalInfo } from '../data/portfolioData';
+import { checkProfanity } from '../utils/profanityFilter';
 import { WhatsAppIcon, GitHubIcon, LinkedInIcon, InstagramIcon, TikTokIcon } from './icons/BrandIcons';
 
 const Contact: React.FC = () => {
@@ -32,13 +33,30 @@ const Contact: React.FC = () => {
   // Atualização dos campos de input
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    if (errorMsg) setErrorMsg('');
   };
 
   // Envio do formulário de contato para o Firebase Firestore e WhatsApp
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     setErrorMsg('');
+
+    // Validação de palavras de baixo calão e termos ofensivos
+    const nameCheck = checkProfanity(formData.name);
+    const msgCheck = checkProfanity(formData.message);
+    const subjectCheck = formData.subject ? checkProfanity(formData.subject) : { containsProfanity: false };
+
+    if (nameCheck.containsProfanity || msgCheck.containsProfanity || subjectCheck.containsProfanity) {
+      setErrorMsg(
+        t(
+          'Mensagem bloqueada: detectamos linguagem imprópria ou termos ofensivos. Por favor, seja respeitoso.',
+          'Message blocked: offensive terms or inappropriate language detected. Please be respectful.'
+        )
+      );
+      return;
+    }
+
+    setLoading(true);
 
     // Formata a mensagem organizada para o WhatsApp
     const text = `*Contato via Portfólio Matheus Nogueira*\n\n👤 *Nome:* ${formData.name}\n✉️ *E-mail:* ${formData.email}\n📌 *Assunto:* ${formData.subject || 'Contato'}\n\n💬 *Mensagem:*\n${formData.message}`;
@@ -209,17 +227,6 @@ const Contact: React.FC = () => {
               {t("Canais Diretos & Redes Sociais", "Direct Channels & Social Media")}
             </p>
             <div className="flex items-center justify-center gap-4 flex-wrap">
-              {/* WhatsApp */}
-              <a
-                href={personalInfo.whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group p-3.5 rounded-2xl bg-[#25D366]/20 hover:bg-[#25D366] text-[#25D366] hover:text-white border border-[#25D366]/40 transition-all duration-400 ease-out hover:scale-115 shadow-[0_0_15px_rgba(37,211,102,0.3)] hover:shadow-[0_0_25px_rgba(37,211,102,0.7)]"
-                title="WhatsApp"
-              >
-                <WhatsAppIcon className="w-5 h-5 fill-current group-hover:rotate-6 group-hover:scale-105 transition-transform duration-300" />
-              </a>
-
               {/* E-mail */}
               <a
                 href={`mailto:${personalInfo.email}`}
