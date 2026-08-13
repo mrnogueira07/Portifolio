@@ -325,7 +325,7 @@ const Testimonials: React.FC = () => {
               </span>
             </h2>
 
-            {/* Média de Avaliação & Status em Nuvem */}
+            {/* Média de Avaliação */}
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
               <div className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 font-bold text-sm">
                 <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
@@ -333,16 +333,6 @@ const Testimonials: React.FC = () => {
                 <span className="text-xs text-amber-400/70 font-normal">
                   ({reviews.length} {t('avaliações', 'reviews')})
                 </span>
-              </div>
-
-              <div className="flex items-center gap-1.5 text-xs text-emerald-400 font-mono bg-emerald-500/10 px-3 py-1.5 rounded-xl border border-emerald-500/20">
-                <Cloud className="w-3.5 h-3.5" />
-                <span>{t('Sincronizado na Nuvem', 'Cloud Synchronized')}</span>
-              </div>
-
-              <div className="flex items-center gap-1.5 text-xs text-gray-400 font-mono">
-                <ShieldCheck className="w-4 h-4 text-indigo-400" />
-                <span>{t('Filtro anti-abuso ativo', 'Anti-abuse filter active')}</span>
               </div>
             </div>
           </div>

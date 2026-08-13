@@ -81,17 +81,6 @@ const Hero: React.FC = () => {
           {/* Coluna da Esquerda: Textos, Badges & CTA (6 Colunas) */}
           <div className="landscape:col-span-6 lg:col-span-6 space-y-5 sm:space-y-8 landscape:space-y-3 text-left animate-fade-in-up">
             
-            {/* Status Pill com Bolinha Verde Neon */}
-            <div className="inline-flex items-center gap-3 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 backdrop-blur-xl animate-pulse-glow shadow-[0_0_20px_rgba(16,185,129,0.2)]">
-              <span className="relative flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-              </span>
-              <span className="text-[11px] sm:text-xs font-semibold text-emerald-300 tracking-wide font-mono uppercase">
-                {t(personalInfo.status.pt, personalInfo.status.en)}
-              </span>
-            </div>
-
             {/* Título Principal */}
             <div className="space-y-3 sm:space-y-4 landscape:space-y-2">
               <h1 className="font-display text-3xl sm:text-6xl lg:text-7xl landscape:text-3xl font-black text-white tracking-tight leading-[1.08]">
@@ -117,18 +106,6 @@ const Hero: React.FC = () => {
                 <span>{t("Carreira Escolar", "Academic Career")}</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
-            </div>
-
-            {/* Garantias Rápidas de Qualidade */}
-            <div className="flex flex-wrap items-center gap-4 sm:gap-6 pt-3 sm:pt-4 text-[11px] sm:text-xs font-mono text-gray-400 border-t border-white/5">
-              <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-indigo-400" />
-                <span>{t("Código Limpo & Tipado", "Clean & Typed Code")}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-pink-400" />
-                <span>{t("Design de Alta Conversão", "High Conversion Design")}</span>
-              </div>
             </div>
 
           </div>
