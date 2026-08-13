@@ -108,14 +108,6 @@ const Services: React.FC = () => {
                       </span>
                     ))}
                   </div>
-
-                  <button
-                    onClick={() => handleServiceQuote(title)}
-                    className="text-xs font-mono font-bold text-[#25D366] hover:text-[#20ba5a] transition-colors underline underline-offset-4 flex items-center gap-1.5"
-                  >
-                    <WhatsAppIcon className="w-3.5 h-3.5 fill-current" />
-                    <span>{t("Cotar no WhatsApp →", "Quote on WhatsApp →")}</span>
-                  </button>
                 </div>
 
               </div>
