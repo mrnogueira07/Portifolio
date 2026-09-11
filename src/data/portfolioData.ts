@@ -39,7 +39,7 @@ export const personalInfo = {
   email: "matheusnogueira.dev@gmail.com",
   phone: "+55 (92) 98183-8704",
   whatsappUrl: "https://wa.me/5592981838704?text=Olá%20Matheus,%20vi%20seu%20portfólio%20e%20gostaria%20de%20conversar!",
-  avatarUrl: "/projects/foto-matheus-nogueira.jpg",
+  avatarUrl: "/projects/foto-perfil-nova.jpeg",
   socials: {
     github: "https://github.com/mrnogueira07",
     linkedin: "https://linkedin.com",
@@ -103,27 +103,27 @@ export const serviceItems: ServiceItem[] = [
     id: "ui-design",
     iconName: "Layout",
     title: {
-      pt: "UI/UX & Design Gráfico",
-      en: "UI/UX & Graphic Design"
+      pt: "UI/UX & Design Gráfico / Modelagem 3D",
+      en: "UI/UX & Graphic Design / 3D Modeling"
     },
     description: {
-      pt: "Criação de interfaces intuitivas, protótipos de alta fidelidade no Figma e materiais publicitários de alto impacto visual (flyers, banners e posts).",
-      en: "Crafting intuitive user interfaces, high-fidelity Figma prototypes, and high-impact visual marketing assets (flyers, banners, and social posts)."
+      pt: "Criação de interfaces intuitivas, protótipos no Figma, materiais gráficos de alto impacto e modelagem/renderização 3D de alta qualidade com Blender.",
+      en: "Crafting intuitive user interfaces, Figma prototypes, high-impact graphic design assets, and high-quality 3D modeling/rendering with Blender."
     },
-    skills: ["Figma", "Photoshop", "Illustrator", "Branding", "UI/UX Design"]
+    skills: ["Figma", "Photoshop", "Illustrator", "Blender", "Modelagem 3D", "UI/UX Design"]
   },
   {
-    id: "robotics",
-    iconName: "Cpu",
+    id: "game-dev",
+    iconName: "Gamepad2",
     title: {
-      pt: "Robótica & Sistemas Embarcados",
-      en: "Robotics & Embedded Systems"
+      pt: "Desenvolvimento de Jogos 2D & 3D / Cultura Maker",
+      en: "2D & 3D Game Development / Maker Culture"
     },
     description: {
-      pt: "Desenvolvimento de protótipos mecatrônicos, integração com sensores, programação microcontrolada (Arduino/ESP32) e lógica de automação.",
-      en: "Development of mechatronic prototypes, sensor integration, microcontroller programming (Arduino/ESP32), and custom automation logic."
+      pt: "Criação e programação de jogos 2D e 3D interativos, mecânicas envolventes, física, integração com modelagem 3D e prototipagem criativa da cultura maker.",
+      en: "Creation and programming of interactive 2D and 3D games, engaging gameplay mechanics, physics, 3D modeling integration, and creative maker culture prototyping."
     },
-    skills: ["Arduino", "ESP32", "C++", "C#", "Sistemas Embarcados"]
+    skills: ["Unity", "Godot", "C#", "Blender", "Jogos 2D/3D", "Cultura Maker", "Prototipagem"]
   },
   {
     id: "video-motion",
@@ -180,6 +180,45 @@ export const projectsData: Project[] = [
     tags: ["Web Design", "Automotivo", "Landing Page"],
     link: "https://emanuelcar.vercel.app/",
     featured: true
+  },
+  {
+    id: 10,
+    title: "Tech Store",
+    category: "Web",
+    image: "/projects/logotechStore.png",
+    description: {
+      pt: "Plataforma web para assistência técnica especializada em celulares, notebooks e videogames, com apresentação de serviços, catálogo e contato direto.",
+      en: "Web platform for specialized technical assistance in smartphones, laptops, and game consoles, featuring service catalog and direct customer contact."
+    },
+    tags: ["React", "Landing Page", "Assistência Técnica"],
+    link: "https://tech-store-assistencia-tecnica.web.app/",
+    featured: true
+  },
+  {
+    id: 11,
+    title: "Identidade Visual & Logo - Tech Store",
+    category: "Design",
+    subcategory: "Post",
+    image: "/projects/logotechStore.png",
+    description: {
+      pt: "Criação da identidade visual e logotipo para a Tech Store Assistência Técnica, transmitindo tecnologia, modernidade e precisão.",
+      en: "Visual identity and logo design created for Tech Store Technical Assistance, conveying technology, modernity, and precision."
+    },
+    tags: ["Logo Design", "Identidade Visual", "Branding", "Photoshop"],
+    featured: true
+  },
+  {
+    id: 12,
+    title: "Manos Lab",
+    category: "Web",
+    image: "https://manos-lab.web.app/MANOS-LAB.png",
+    description: {
+      pt: "Estúdio criativo & tecnológico que conecta tecnologia, criatividade, modelagem 3D e gamificação para transformar ideias em experiências digitais memoráveis.",
+      en: "Creative & tech studio connecting technology, creativity, 3D modeling, and gamification to turn ideas into memorable digital experiences."
+    },
+    tags: ["React", "3D & Games", "Gamificação", "Criatividade"],
+    link: "https://manos-lab.web.app/",
+    featured: true
   }
 ];
 
@@ -222,6 +261,45 @@ export const testimonialsData: Testimonial[] = [
     text: {
       pt: "Trabalhar com o Matheus no projeto de prototipagem em ESP32 foi excelente. Rápido na solução de problemas de lógica e comunicação embarcada.",
       en: "Working with Matheus on our ESP32 prototyping project was fantastic. Fast problem solver in embedded communication and logic."
+    }
+  },
+  {
+    id: 4,
+    name: "Lucas Ferreira",
+    role: {
+      pt: "Fundador & Gestor",
+      en: "Founder & Manager"
+    },
+    company: "Tech Store Assistência",
+    text: {
+      pt: "O Matheus desenvolveu a plataforma da Tech Store e toda a identidade visual com maestria. A presença online e os agendamentos aumentaram consideravelmente desde o lançamento!",
+      en: "Matheus developed the Tech Store platform and entire visual identity masterfully. Our online presence and service inquiries increased considerably since launch!"
+    }
+  },
+  {
+    id: 5,
+    name: "Mariana Costa",
+    role: {
+      pt: "Coordenadora de Projetos",
+      en: "Project Coordinator"
+    },
+    company: "Vanguard Tech",
+    text: {
+      pt: "Excelente profissional! Entrega código limpo, interfaces altamente responsivas e sempre propõe soluções inteligentes para desafios complexos de desenvolvimento.",
+      en: "Outstanding professional! Delivers clean code, highly responsive interfaces, and consistently proposes smart solutions to complex development challenges."
+    }
+  },
+  {
+    id: 6,
+    name: "Felipe Albuquerque",
+    role: {
+      pt: "Head de Produto",
+      en: "Head of Product"
+    },
+    company: "Nexus Digital",
+    text: {
+      pt: "A dedicação aos detalhes e a performance visual dos projetos entregues pelo Matheus são de alto padrão. Uma parceria técnica que agregou muito valor ao nosso ecossistema.",
+      en: "The attention to detail and visual performance of the projects delivered by Matheus are top-notch. A technical partnership that added immense value to our ecosystem."
     }
   }
 ];

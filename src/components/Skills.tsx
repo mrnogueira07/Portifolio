@@ -6,10 +6,14 @@
  * incluindo Photoshop, Illustrator, Lightroom, Premiere Pro, After Effects, Construct 3, Unreal Engine e Firebase.
  */
 
-import React from 'react';
-
+import React, { useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useLanguage } from '../context/LanguageContext';
 import { FigmaIcon } from './icons/BrandIcons';
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface SkillCardItem {
   id: string;
@@ -24,6 +28,24 @@ interface SkillCardItem {
 
 const Skills: React.FC = () => {
   const { t } = useLanguage();
+  const sectionRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.from('.gsap-skills-header', {
+        scrollTrigger: {
+          trigger: '.gsap-skills-header',
+          start: 'top 85%',
+        },
+        opacity: 0,
+        y: 30,
+        duration: 0.8,
+        ease: 'power3.out',
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
 
   // Lista de Habilidades exatamente solicitadas pelo usuário (Estilo Zelio)
   const skillsList: SkillCardItem[] = [
@@ -154,11 +176,11 @@ const Skills: React.FC = () => {
   };
 
   return (
-    <section id="skills" className="py-24 relative overflow-hidden bg-black/40">
+    <section ref={sectionRef} id="skills" className="py-24 relative overflow-hidden bg-black/40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
-        {/* Cabeçalho no Estilo Zelio */}
-        <div className="text-center space-y-4 max-w-3xl mx-auto mb-16">
+        {/* Cabeçalho no Estilo Zelio com GSAP */}
+        <div className="gsap-skills-header text-center space-y-4 max-w-3xl mx-auto mb-16">
           <h2 className="font-display text-4xl sm:text-6xl font-black text-white tracking-tight">
             {t("Minhas ", "My ")}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">
@@ -174,13 +196,15 @@ const Skills: React.FC = () => {
           </p>
         </div>
 
-        {/* Marquee de Cards de Habilidades Estilo Zelio */}
+        {/* Marquee de Cards de Habilidades Estilo Zelio com Motion */}
         <div className="relative overflow-hidden w-full mb-12 py-4 -my-4 [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
           <div className="flex w-max animate-marquee hover:[animation-play-state:paused] gap-4">
             {[...skillsList, ...skillsList, ...skillsList].map((skill, index) => (
-              <div
+              <motion.div
                 key={`${skill.id}-${index}`}
-                className="group relative p-5 rounded-2xl w-[140px] md:w-[160px] flex-shrink-0 bg-[#0b0d1b] border border-white/10 hover:border-indigo-500/50 hover:bg-white/[0.04] transition-all duration-300 flex flex-col items-center justify-between min-h-[170px] shadow-lg hover:-translate-y-1.5"
+                whileHover={{ y: -6, scale: 1.04 }}
+                transition={{ type: 'spring', stiffness: 350, damping: 22 }}
+                className="group relative p-5 rounded-2xl w-[140px] md:w-[160px] flex-shrink-0 bg-[#0b0d1b] border border-white/10 hover:border-indigo-500/50 hover:bg-white/[0.04] transition-colors duration-300 flex flex-col items-center justify-between min-h-[170px] shadow-lg cursor-pointer"
               >
                 {/* Badge de Ícone no Topo */}
                 <div className={`w-14 h-14 rounded-2xl ${skill.badgeBg} border ${skill.badgeBorder} flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform duration-300`}>
@@ -196,7 +220,7 @@ const Skills: React.FC = () => {
                 <p className="text-[10px] font-mono font-bold text-gray-400 tracking-wider text-center uppercase">
                   {skill.label}
                 </p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>

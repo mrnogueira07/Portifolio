@@ -11,13 +11,14 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import { LanguageProvider } from './context/LanguageContext';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
+import About from './components/About';
 import Skills from './components/Skills';
 import Services from './components/Services';
 import Projects from './components/Projects';
 import Testimonials from './components/Testimonials';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
-import ParticleBackground from './components/ParticleBackground';
+import ThreeBackground from './components/ThreeBackground';
 
 /**
  * Componente utilitário para rolar a janela para o topo ao alterar rotas
@@ -41,6 +42,7 @@ const LandingPage: React.FC = () => {
       <Navbar />
       <main className="relative z-10">
         <Hero />
+        <About />
         <Skills />
         <Services />
         <Projects />
@@ -56,13 +58,21 @@ const LandingPage: React.FC = () => {
  * Componente Principal App
  */
 const App: React.FC = () => {
+  // Garante que a página sempre inicia no topo ao recarregar
+  useEffect(() => {
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, []);
+
   return (
     <LanguageProvider>
       <div className="min-h-screen w-full text-white bg-[#060813] selection:bg-indigo-500 selection:text-white relative overflow-x-hidden font-sans">
         
-        {/* Camadas Fixas de Efeitos de Fundo (Glow & Grid) */}
+        {/* Camadas Fixas de Efeitos de Fundo 3D WebGL (Three.js) e Gradientes */}
         <div className="fixed inset-0 bg-[#060813] -z-20"></div>
-        <ParticleBackground />
+        <ThreeBackground />
         <div className="fixed inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(99,102,241,0.12)_0%,transparent_60%)] -z-10 pointer-events-none"></div>
 
         {/* Gerenciamento de Rolagem e Rotas */}

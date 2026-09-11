@@ -17,8 +17,8 @@ const Footer: React.FC = () => {
           
 
           {/* Direitos Autorais e Mensagem */}
-          <p className="text-xs text-gray-400 text-center font-mono">
-            <span>© {new Date().getFullYear()} {personalInfo.name}.</span>
+          <p className="text-xs text-gray-500 text-center font-mono tracking-widest uppercase">
+            © 2026 MATHEUS NOGUEIRA. Todos os direitos reservados.
           </p>
 
         </div>

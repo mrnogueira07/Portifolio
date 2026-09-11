@@ -10,7 +10,7 @@
 export type Language = 'pt' | 'en';
 
 // Categorias principais de projetos no portfólio
-export type ProjectCategory = 'Web' | 'Game' | 'Robotics' | 'Design' | 'VideoEdited' | 'VideoRecorded';
+export type ProjectCategory = 'Web' | 'Game' | '3DModel' | 'Design' | 'VideoEdited' | 'VideoRecorded';
 
 // Subcategorias de Design
 export type DesignSubcategory = 'Banner' | 'Flyer' | 'Panfleto' | 'Post' | null;

@@ -6,14 +6,19 @@
  * e abrindo a conversa no WhatsApp com os dados preenchidos.
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Mail, CheckCircle, AlertCircle } from 'lucide-react';
+import { motion } from 'framer-motion';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { useLanguage } from '../context/LanguageContext';
 import { personalInfo } from '../data/portfolioData';
 import { checkProfanity } from '../utils/profanityFilter';
 import { WhatsAppIcon, GitHubIcon, LinkedInIcon, InstagramIcon, TikTokIcon } from './icons/BrandIcons';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const Contact: React.FC = () => {
   const { t } = useLanguage();
@@ -29,6 +34,25 @@ const Contact: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const contactRef = useRef<HTMLElement | null>(null);
+
+  // Animação do cabeçalho de contato com GSAP ScrollTrigger
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.from('.gsap-contact-header', {
+        scrollTrigger: {
+          trigger: '.gsap-contact-header',
+          start: 'top 85%',
+        },
+        opacity: 0,
+        y: 35,
+        duration: 0.8,
+        ease: 'power3.out',
+      });
+    }, contactRef);
+
+    return () => ctx.revert();
+  }, []);
 
   // Atualização dos campos de input
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -90,11 +114,11 @@ const Contact: React.FC = () => {
   };
 
   return (
-    <section id="contact" className="py-24 relative overflow-hidden bg-black/30">
+    <section ref={contactRef} id="contact" className="py-24 relative overflow-hidden bg-black/30">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
-        {/* Cabeçalho da Seção */}
-        <div className="text-center space-y-4 max-w-3xl mx-auto mb-12">
+        {/* Cabeçalho da Seção com GSAP ScrollTrigger */}
+        <div className="gsap-contact-header text-center space-y-4 max-w-3xl mx-auto mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-pink-500/20 bg-pink-500/10 text-pink-400 text-xs font-mono uppercase tracking-widest">
             <Mail className="w-3.5 h-3.5" />
             <span>{t("Conexão & Parcerias", "Get in Touch")}</span>
@@ -204,10 +228,12 @@ const Contact: React.FC = () => {
                 </div>
               )}
 
-              <button
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 type="submit"
                 disabled={loading}
-                className="group w-full py-4 rounded-2xl bg-gradient-to-r from-[#25D366] via-[#22c55e] to-[#128C7E] text-white font-bold text-xs uppercase tracking-widest shadow-[0_0_25px_rgba(37,211,102,0.4)] hover:shadow-[0_0_35px_rgba(37,211,102,0.8)] hover:scale-[1.015] active:scale-[0.98] transition-all duration-400 ease-out flex items-center justify-center gap-3 disabled:opacity-50 cursor-pointer"
+                className="group w-full py-4 rounded-2xl bg-gradient-to-r from-[#25D366] via-[#22c55e] to-[#128C7E] text-white font-bold text-xs uppercase tracking-widest shadow-[0_0_25px_rgba(37,211,102,0.4)] hover:shadow-[0_0_35px_rgba(37,211,102,0.8)] transition-all duration-300 flex items-center justify-center gap-3 disabled:opacity-50 cursor-pointer"
               >
                 {loading ? (
                   <span>{t("Enviando...", "Sending...")}</span>
@@ -217,69 +243,79 @@ const Contact: React.FC = () => {
                     <span className="tracking-wider">{t("Enviar para o WhatsApp", "Send to WhatsApp")}</span>
                   </>
                 )}
-              </button>
+              </motion.button>
             </form>
           )}
 
-          {/* Ícones de Contato & Redes Sociais Abaixo do Formulário */}
+          {/* Ícones de Contato & Redes Sociais Abaixo do Formulário com Motion */}
           <div className="pt-8 mt-8 border-t border-white/10 text-center">
             <p className="text-xs text-gray-400 font-mono mb-4 uppercase tracking-wider">
               {t("Canais Diretos & Redes Sociais", "Direct Channels & Social Media")}
             </p>
             <div className="flex items-center justify-center gap-4 flex-wrap">
               {/* E-mail */}
-              <a
+              <motion.a
+                whileHover={{ scale: 1.15, y: -3 }}
+                whileTap={{ scale: 0.94 }}
                 href={`mailto:${personalInfo.email}`}
-                className="p-3.5 rounded-2xl bg-white/5 hover:bg-indigo-600 text-white border border-white/10 hover:border-white/30 transition-all hover:scale-110"
+                className="p-3.5 rounded-2xl bg-white/5 hover:bg-indigo-600 text-white border border-white/10 hover:border-white/30 transition-colors"
                 title="E-mail"
               >
                 <Mail className="w-5 h-5" />
-              </a>
+              </motion.a>
 
               {/* GitHub */}
-              <a
+              <motion.a
+                whileHover={{ scale: 1.15, y: -3 }}
+                whileTap={{ scale: 0.94 }}
                 href={personalInfo.socials.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-3.5 rounded-2xl bg-white/5 hover:bg-gray-800 text-white border border-white/10 hover:border-white/30 transition-all hover:scale-110"
+                className="p-3.5 rounded-2xl bg-white/5 hover:bg-gray-800 text-white border border-white/10 hover:border-white/30 transition-colors"
                 title="GitHub"
               >
                 <GitHubIcon className="w-5 h-5" />
-              </a>
+              </motion.a>
 
               {/* LinkedIn */}
-              <a
+              <motion.a
+                whileHover={{ scale: 1.15, y: -3 }}
+                whileTap={{ scale: 0.94 }}
                 href={personalInfo.socials.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-3.5 rounded-2xl bg-white/5 hover:bg-[#0A66C2] text-white border border-white/10 hover:border-white/30 transition-all hover:scale-110"
+                className="p-3.5 rounded-2xl bg-white/5 hover:bg-[#0A66C2] text-white border border-white/10 hover:border-white/30 transition-colors"
                 title="LinkedIn"
               >
                 <LinkedInIcon className="w-5 h-5" />
-              </a>
+              </motion.a>
 
               {/* Instagram */}
-              <a
+              <motion.a
+                whileHover={{ scale: 1.15, y: -3 }}
+                whileTap={{ scale: 0.94 }}
                 href={personalInfo.socials.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-3.5 rounded-2xl bg-white/5 hover:bg-[#E4405F] text-white border border-white/10 hover:border-white/30 transition-all hover:scale-110"
+                className="p-3.5 rounded-2xl bg-white/5 hover:bg-[#E4405F] text-white border border-white/10 hover:border-white/30 transition-colors"
                 title="Instagram"
               >
                 <InstagramIcon className="w-5 h-5" />
-              </a>
+              </motion.a>
 
               {/* TikTok */}
               {personalInfo.socials.tiktok && (
-                <a
+                <motion.a
+                  whileHover={{ scale: 1.15, y: -3 }}
+                  whileTap={{ scale: 0.94 }}
                   href={personalInfo.socials.tiktok}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-3.5 rounded-2xl bg-white/5 hover:bg-black text-white border border-white/10 hover:border-white/30 transition-all hover:scale-110"
+                  className="p-3.5 rounded-2xl bg-white/5 hover:bg-black text-white border border-white/10 hover:border-white/30 transition-colors"
                   title="TikTok"
                 >
                   <TikTokIcon className="w-5 h-5" />
-                </a>
+                </motion.a>
               )}
             </div>
           </div>
