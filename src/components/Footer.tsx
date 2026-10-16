@@ -11,13 +11,13 @@ import { personalInfo } from '../data/portfolioData';
 const Footer: React.FC = () => {
 
   return (
-    <footer className="py-12 border-t border-white/10 relative z-10 bg-[#080914]">
+    <footer className="py-12 border-t border-slate-800/80 relative z-10 bg-[#060913]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center justify-center gap-6">
           
 
           {/* Direitos Autorais e Mensagem */}
-          <p className="text-xs text-gray-500 text-center font-mono tracking-widest uppercase">
+          <p className="text-xs text-slate-500 text-center font-mono tracking-widest uppercase">
             © 2026 MATHEUS NOGUEIRA. Todos os direitos reservados.
           </p>
 

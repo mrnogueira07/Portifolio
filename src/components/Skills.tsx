@@ -183,12 +183,12 @@ const Skills: React.FC = () => {
         <div className="gsap-skills-header text-center space-y-4 max-w-3xl mx-auto mb-16">
           <h2 className="font-display text-4xl sm:text-6xl font-black text-white tracking-tight">
             {t("Minhas ", "My ")}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-sky-300 to-slate-200">
               {t("Habilidades", "Skills")}
             </span>
           </h2>
 
-          <p className="text-gray-400 text-sm sm:text-base leading-relaxed font-light">
+          <p className="text-slate-400 text-sm sm:text-base leading-relaxed font-light">
             {t(
               "Eu me destaco transformando problemas complexos em soluções simples, elegantes e bonitas que aumentam a satisfação do usuário.",
               "I excel at transforming complex problems into simple, elegant, and beautiful solutions that elevate user experience."
@@ -202,22 +202,22 @@ const Skills: React.FC = () => {
             {[...skillsList, ...skillsList, ...skillsList].map((skill, index) => (
               <motion.div
                 key={`${skill.id}-${index}`}
-                whileHover={{ y: -6, scale: 1.04 }}
+                whileHover={{ y: -4, scale: 1.02 }}
                 transition={{ type: 'spring', stiffness: 350, damping: 22 }}
-                className="group relative p-5 rounded-2xl w-[140px] md:w-[160px] flex-shrink-0 bg-[#0b0d1b] border border-white/10 hover:border-indigo-500/50 hover:bg-white/[0.04] transition-colors duration-300 flex flex-col items-center justify-between min-h-[170px] shadow-lg cursor-pointer"
+                className="group relative p-5 rounded-2xl w-[140px] md:w-[160px] flex-shrink-0 bg-[#090e1c] border border-slate-800 hover:border-blue-500/50 hover:bg-[#0c1428] transition-colors duration-300 flex flex-col items-center justify-between min-h-[170px] shadow-sm cursor-pointer"
               >
                 {/* Badge de Ícone no Topo */}
-                <div className={`w-14 h-14 rounded-2xl ${skill.badgeBg} border ${skill.badgeBorder} flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform duration-300`}>
+                <div className={`w-14 h-14 rounded-2xl ${skill.badgeBg} border ${skill.badgeBorder} flex items-center justify-center shadow-inner group-hover:scale-105 transition-transform duration-300`}>
                   {renderAppBadge(skill)}
                 </div>
 
                 {/* Percentual de Domínio */}
-                <p className="font-display font-black text-2xl text-white my-2 group-hover:text-indigo-400 transition-colors">
+                <p className="font-display font-black text-2xl text-white my-2 group-hover:text-blue-400 transition-colors">
                   {skill.percentage}
                 </p>
 
                 {/* Rótulo da Ferramenta */}
-                <p className="text-[10px] font-mono font-bold text-gray-400 tracking-wider text-center uppercase">
+                <p className="text-[10px] font-mono font-bold text-slate-400 tracking-wider text-center uppercase">
                   {skill.label}
                 </p>
               </motion.div>
@@ -226,8 +226,8 @@ const Skills: React.FC = () => {
         </div>
 
         {/* Marquee de Tecnologias de Programação (Correndo para a Direita) */}
-        <div className="pt-8 border-t border-white/5 space-y-4">
-          <p className="text-xs sm:text-sm text-gray-400 font-mono text-center">
+        <div className="pt-8 border-t border-slate-800/80 space-y-4">
+          <p className="text-xs sm:text-sm text-slate-400 font-mono text-center">
             {t("Além disso, tenho sólido conhecimento de programação e engenharia:", "Additionally, I have strong programming & engineering skills:")}
           </p>
 
@@ -236,9 +236,9 @@ const Skills: React.FC = () => {
               {[...techSkillsList, ...techSkillsList, ...techSkillsList, ...techSkillsList].map((tech, index) => (
                 <div
                   key={`${tech.name}-${index}`}
-                  className={`flex items-center gap-2.5 px-4 py-2 rounded-xl border ${tech.color} backdrop-blur-md text-xs font-mono font-bold uppercase tracking-wider transition-all duration-300 hover:scale-105 shadow-md`}
+                  className="flex items-center gap-2.5 px-4 py-2 rounded-xl border border-slate-800 bg-[#090e1c] text-xs font-mono font-medium text-slate-300 uppercase tracking-wider transition-all duration-200 hover:border-blue-500/40 hover:text-white"
                 >
-                  <span className="w-2 h-2 rounded-full bg-current animate-pulse" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-400" />
                   <span>{tech.name}</span>
                 </div>
               ))}

@@ -15,9 +15,9 @@ export default {
         display: ['Outfit', 'sans-serif'],
       },
       colors: {
-        primary: '#6366f1',
-        secondary: '#ec4899',
-        dark: '#0f172a',
+        primary: '#2563eb', // Corporate Blue
+        secondary: '#0ea5e9', // Elegant Sky Blue
+        dark: '#080c16', // Deep Corporate Navy
       },
       animation: {
         'blob': 'blob 7s infinite',

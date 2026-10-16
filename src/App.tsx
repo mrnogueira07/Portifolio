@@ -19,6 +19,7 @@ import Testimonials from './components/Testimonials';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import ThreeBackground from './components/ThreeBackground';
+import WhatsAppButton from './components/WhatsAppButton';
 
 /**
  * Componente utilitário para rolar a janela para o topo ao alterar rotas
@@ -50,6 +51,7 @@ const LandingPage: React.FC = () => {
         <Contact />
       </main>
       <Footer />
+      <WhatsAppButton />
     </>
   );
 };
@@ -68,12 +70,12 @@ const App: React.FC = () => {
 
   return (
     <LanguageProvider>
-      <div className="min-h-screen w-full text-white bg-[#060813] selection:bg-indigo-500 selection:text-white relative overflow-x-hidden font-sans">
+      <div className="min-h-screen w-full text-white bg-[#060913] selection:bg-blue-600/35 selection:text-white relative overflow-x-hidden font-sans">
         
         {/* Camadas Fixas de Efeitos de Fundo 3D WebGL (Three.js) e Gradientes */}
-        <div className="fixed inset-0 bg-[#060813] -z-20"></div>
+        <div className="fixed inset-0 bg-[#060913] -z-20"></div>
         <ThreeBackground />
-        <div className="fixed inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(99,102,241,0.12)_0%,transparent_60%)] -z-10 pointer-events-none"></div>
+        <div className="fixed inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(37,99,235,0.07)_0%,transparent_60%)] -z-10 pointer-events-none"></div>
 
         {/* Gerenciamento de Rolagem e Rotas */}
         <ScrollToTop />

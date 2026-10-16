@@ -39,7 +39,7 @@ export const personalInfo = {
   email: "matheusnogueira.dev@gmail.com",
   phone: "+55 (92) 98183-8704",
   whatsappUrl: "https://wa.me/5592981838704?text=Olá%20Matheus,%20vi%20seu%20portfólio%20e%20gostaria%20de%20conversar!",
-  avatarUrl: "/projects/foto-perfil-nova.jpeg",
+  avatarUrl: "/projects/foto-perfil-nova.png",
   socials: {
     github: "https://github.com/mrnogueira07",
     linkedin: "https://linkedin.com",
@@ -192,19 +192,6 @@ export const projectsData: Project[] = [
     },
     tags: ["React", "Landing Page", "Assistência Técnica"],
     link: "https://tech-store-assistencia-tecnica.web.app/",
-    featured: true
-  },
-  {
-    id: 11,
-    title: "Identidade Visual & Logo - Tech Store",
-    category: "Design",
-    subcategory: "Post",
-    image: "/projects/logotechStore.png",
-    description: {
-      pt: "Criação da identidade visual e logotipo para a Tech Store Assistência Técnica, transmitindo tecnologia, modernidade e precisão.",
-      en: "Visual identity and logo design created for Tech Store Technical Assistance, conveying technology, modernity, and precision."
-    },
-    tags: ["Logo Design", "Identidade Visual", "Branding", "Photoshop"],
     featured: true
   },
   {

@@ -4,8 +4,8 @@
 
 @layer base {
   :root {
-    --primary: 99 102 241;
-    --secondary: 236 72 153;
+    --primary: 37 99 235;
+    --secondary: 14 165 233;
   }
 
   * {
@@ -22,7 +22,7 @@
   }
 
   body {
-    @apply bg-[#030305] text-white font-sans overflow-x-hidden antialiased;
+    @apply bg-[#060913] text-white font-sans overflow-x-hidden antialiased;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -38,8 +38,49 @@
   }
 
   ::selection {
-    background: rgba(var(--primary), 0.4);
+    background: rgba(37, 99, 235, 0.35);
     color: white;
+  }
+}
+
+@layer components {
+  /* Layout Spacing & Containers */
+  .section-shell {
+    @apply py-20 sm:py-28 relative overflow-hidden;
+  }
+
+  .page-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full;
+  }
+
+  /* Typography & Kickers */
+  .section-kicker {
+    @apply text-xs font-mono font-medium uppercase tracking-[0.2em] text-blue-400 block;
+  }
+
+  .section-title {
+    @apply font-display text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-[1.1];
+  }
+
+  .section-copy {
+    @apply text-slate-300 text-sm sm:text-base leading-relaxed font-light;
+  }
+
+  /* Cards & Tags */
+  .surface-card {
+    @apply rounded-3xl bg-[#090e1d]/75 border border-slate-800/80 backdrop-blur-xl hover:border-blue-500/30 transition-all duration-300 shadow-[0_10px_30px_rgba(0,0,0,0.5)];
+  }
+
+  .tech-tag {
+    @apply text-xs font-mono text-slate-400 tracking-wide;
+  }
+
+  .button-primary {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm font-semibold tracking-wide transition-all duration-200 shadow-sm hover:shadow-md hover:shadow-blue-900/20;
+  }
+
+  .button-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-slate-800 text-slate-200 hover:text-white text-xs sm:text-sm font-medium transition-all duration-200;
   }
 }
 

@@ -66,7 +66,7 @@ const ParticleBackground: React.FC = () => {
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(99, 102, 241, 0.4)';
+        ctx.fillStyle = 'rgba(37, 99, 235, 0.35)';
         ctx.fill();
 
         // Conecta partículas próximas
@@ -80,7 +80,7 @@ const ParticleBackground: React.FC = () => {
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
-            ctx.strokeStyle = `rgba(99, 102, 241, ${0.15 * (1 - dist / 120)})`;
+            ctx.strokeStyle = `rgba(14, 165, 233, ${0.12 * (1 - dist / 120)})`;
             ctx.stroke();
           }
         }

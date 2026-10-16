@@ -1,160 +1,117 @@
-/**
- * @file Services.tsx
- * @description Seção de Serviços e Especializações do Portfólio com animações de Scroll GSAP
- * e física de micro-interações motion.dev.
- */
-
-import React, { useEffect, useRef } from 'react';
-import { Code, Layout, Cpu, Video, Wrench, ArrowUpRight, Gamepad2 } from 'lucide-react';
-import { motion } from 'framer-motion';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import React from 'react';
+import { ArrowUpRight, Code2, Gamepad2, Globe2 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
-import { serviceItems, personalInfo } from '../data/portfolioData';
-import { WhatsAppIcon } from './icons/BrandIcons';
-
-gsap.registerPlugin(ScrollTrigger);
+import { personalInfo } from '../data/portfolioData';
 
 const Services: React.FC = () => {
   const { t } = useLanguage();
-  const sectionRef = useRef<HTMLElement | null>(null);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Cabeçalho da seção
-      gsap.from('.gsap-services-header', {
-        scrollTrigger: {
-          trigger: '.gsap-services-header',
-          start: 'top 85%',
-        },
-        opacity: 0,
-        y: 35,
-        duration: 0.8,
-        ease: 'power3.out',
-      });
-
-      // Stagger dos cards de serviço
-      gsap.from('.gsap-service-card', {
-        scrollTrigger: {
-          trigger: '.gsap-services-grid',
-          start: 'top 80%',
-        },
-        opacity: 0,
-        y: 40,
-        stagger: 0.15,
-        duration: 0.8,
-        ease: 'power3.out',
-      });
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
-
-  // Mapeamento dinâmico dos ícones Lucide
-  const getIcon = (name: string) => {
-    switch (name) {
-      case 'Code': return Code;
-      case 'Layout': return Layout;
-      case 'Gamepad2': return Gamepad2;
-      case 'Cpu': return Cpu;
-      case 'Video': return Video;
-      default: return Wrench;
-    }
-  };
-
-  // Função para redirecionar para o WhatsApp com mensagem pré-preenchida por serviço
-  const handleServiceQuote = (serviceTitle: string) => {
-    const text = encodeURIComponent(`Olá Matheus! Vi seu portfólio e gostaria de um orçamento para o serviço: ${serviceTitle}`);
-    const whatsappBase = personalInfo.whatsappUrl ? personalInfo.whatsappUrl.split('?')[0] : 'https://wa.me/5592981838704';
-    window.open(`${whatsappBase}?text=${text}`, '_blank');
-  };
+  const services = [
+    {
+      id: 'software',
+      number: '01',
+      icon: Code2,
+      title: t('Software sob medida', 'Custom software'),
+      description: t(
+        'Sistemas e aplicações desenvolvidos para organizar processos, integrar serviços e atender às necessidades da sua operação.',
+        'Systems and applications designed to streamline processes, integrate services, and meet the needs of your business.'
+      ),
+      capabilities: [
+        t('Aplicações full stack', 'Full-stack applications'),
+        t('APIs e integrações', 'APIs and integrations'),
+        t('Automação de processos', 'Process automation'),
+      ],
+    },
+    {
+      id: 'websites',
+      number: '02',
+      icon: Globe2,
+      title: t('Websites e plataformas', 'Websites and platforms'),
+      description: t(
+        'Presença digital consistente, com interfaces responsivas, navegação intuitiva e desenvolvimento alinhado à identidade da sua empresa.',
+        'A cohesive digital presence with responsive interfaces, intuitive navigation, and development aligned with your company’s identity.'
+      ),
+      capabilities: [
+        t('Websites institucionais', 'Corporate websites'),
+        t('Landing pages e portais', 'Landing pages and portals'),
+        t('Experiência e performance', 'User experience and performance'),
+      ],
+    },
+    {
+      id: 'games',
+      number: '03',
+      icon: Gamepad2,
+      title: t('Jogos e experiências interativas', 'Games and interactive experiences'),
+      description: t(
+        'Desenvolvimento de jogos 2D e 3D, da prototipação de mecânicas à implementação de experiências interativas.',
+        '2D and 3D game development, from gameplay prototyping to the implementation of interactive experiences.'
+      ),
+      capabilities: [
+        t('Programação de gameplay', 'Gameplay programming'),
+        t('Prototipação de jogos', 'Game prototyping'),
+        t('Interatividade e gamificação', 'Interaction and gamification'),
+      ],
+    },
+  ];
 
   return (
-    <section ref={sectionRef} id="services" className="py-24 relative overflow-hidden">
-      {/* Luz de fundo decorativa */}
-      <div className="absolute top-1/2 left-0 w-[400px] h-[400px] bg-indigo-600/10 rounded-full blur-[140px] pointer-events-none"></div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
-        {/* Cabeçalho da Seção com GSAP */}
-        <div className="gsap-services-header text-center space-y-4 max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-pink-500/20 bg-pink-500/10 text-pink-400 text-xs font-mono uppercase tracking-widest">
-            <Wrench className="w-3.5 h-3.5" />
-            <span>{t("Soluções & Especializações", "Solutions & Services")}</span>
+    <section id="services" aria-labelledby="services-title" className="section-shell relative border-y border-white/[0.05]">
+      <div className="page-container">
+        <div className="mb-12 grid gap-6 lg:grid-cols-[1.1fr_1fr] lg:items-end lg:gap-24">
+          <div>
+            <p className="section-kicker">{t('Áreas de atuação', 'Areas of expertise')}</p>
+            <h2 id="services-title" className="section-title mt-5">
+              {t('Tecnologia a serviço', 'Technology built around')}
+              <br />
+              {t('do seu projeto.', 'your project.')}
+            </h2>
           </div>
-
-          <h2 className="font-display text-3xl sm:text-5xl font-black text-white tracking-tight">
-            {t("Como posso ", "How I can ")}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-indigo-400">
-              {t("impulsionar seu negócio", "empower your business")}
-            </span>
-          </h2>
+          <p className="section-copy max-w-lg lg:pb-1">
+            {t(
+              'Três frentes de desenvolvimento, com o mesmo compromisso: clareza no processo e qualidade em cada entrega.',
+              'Three areas of development with a shared commitment: a clear process and quality in every delivery.'
+            )}
+          </p>
         </div>
 
-        {/* Grid de Cards de Serviços */}
-        <div className="gsap-services-grid grid grid-cols-1 md:grid-cols-2 gap-8">
-          {serviceItems.map((service) => {
-            const IconComponent = getIcon(service.iconName);
-            const title = t(service.title.pt, service.title.en);
+        <div className="grid gap-5 lg:grid-cols-3">
+          {services.map((service) => {
+            const Icon = service.icon;
+            const message = t(
+              `Olá, Matheus. Gostaria de conversar sobre um projeto de ${service.title.toLowerCase()}.`,
+              `Hello, Matheus. I would like to discuss a project involving ${service.title.toLowerCase()}.`
+            );
+            const quoteUrl = `${personalInfo.whatsappUrl.split('?')[0]}?text=${encodeURIComponent(message)}`;
 
             return (
-              <motion.div
-                key={service.id}
-                whileHover={{ y: -8, boxShadow: '0 20px 40px -15px rgba(99, 102, 241, 0.25)' }}
-                transition={{ type: 'spring', stiffness: 350, damping: 22 }}
-                className="gsap-service-card group relative p-8 rounded-3xl bg-white/[0.02] border border-white/10 backdrop-blur-xl hover:border-indigo-500/50 hover:bg-white/[0.04] transition-colors duration-500 flex flex-col justify-between"
-              >
-                {/* Efeito Glow de Fundo no Hover */}
-                <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-indigo-500/10 to-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
-
-                <div className="space-y-6 relative z-10">
-                  <div className="flex items-center justify-between">
-                    <div className="p-4 rounded-2xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 group-hover:scale-110 transition-transform duration-300">
-                      <IconComponent className="w-7 h-7" />
-                    </div>
-
-                    <motion.button
-                      whileHover={{ scale: 1.08 }}
-                      whileTap={{ scale: 0.94 }}
-                      onClick={() => handleServiceQuote(title)}
-                      className="p-3 rounded-full bg-[#25D366]/15 hover:bg-[#25D366] text-[#25D366] hover:text-white transition-colors duration-300 flex items-center gap-2 group/btn text-xs font-bold border border-[#25D366]/30 shadow-[0_0_15px_rgba(37,211,102,0.2)] hover:shadow-[0_0_25px_rgba(37,211,102,0.55)] cursor-pointer"
-                      title={t("Solicitar Orçamento no WhatsApp", "Request Quote on WhatsApp")}
-                    >
-                      <WhatsAppIcon className="w-4 h-4 fill-current group-hover/btn:rotate-6 transition-transform duration-300" />
-                      <span className="hidden group-hover/btn:inline px-1">{t("Orçamento", "Quote")}</span>
-                      <ArrowUpRight className="w-4 h-4 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform duration-300" />
-                    </motion.button>
-                  </div>
-
-                  <h3 className="font-display text-2xl font-bold text-white group-hover:text-indigo-300 transition-colors">
-                    {title}
-                  </h3>
-
-                  <p className="text-gray-300 text-sm leading-relaxed font-light">
-                    {t(service.description.pt, service.description.en)}
-                  </p>
+              <article key={service.id} className="surface-card flex h-full flex-col p-7 transition-colors duration-300 hover:border-blue-500/40 sm:p-8">
+                <div className="mb-9 flex items-center justify-between">
+                  <Icon className="h-6 w-6 text-blue-400" strokeWidth={1.5} aria-hidden="true" />
+                  <span className="font-mono text-xs tracking-wider text-slate-500" aria-hidden="true">/{service.number}</span>
                 </div>
-
-                {/* Lista de Skills / Tecnologias do Serviço */}
-                <div className="pt-6 mt-6 border-t border-white/10 flex items-center justify-between relative z-10">
-                  <div className="flex flex-wrap gap-2">
-                    {service.skills.map((skill, sIdx) => (
-                      <motion.span
-                        key={sIdx}
-                        whileHover={{ scale: 1.08, borderColor: 'rgba(236,72,153,0.5)' }}
-                        className="px-3 py-1 rounded-full bg-white/5 text-[11px] font-mono text-gray-400 border border-white/5 cursor-default transition-colors"
-                      >
-                        {skill}
-                      </motion.span>
-                    ))}
-                  </div>
-                </div>
-
-              </motion.div>
+                <h3 className="font-display text-xl font-medium leading-snug tracking-tight text-white lg:min-h-[3.5rem]">{service.title}</h3>
+                <p className="mt-4 text-sm leading-7 text-slate-400">{service.description}</p>
+                <ul className="mb-8 mt-7 space-y-3">
+                  {service.capabilities.map((capability) => (
+                    <li key={capability} className="flex items-start gap-3 text-sm leading-6 text-slate-300">
+                      <span className="mt-2.5 h-1 w-1 shrink-0 rounded-full bg-blue-400/80" aria-hidden="true" />
+                      {capability}
+                    </li>
+                  ))}
+                </ul>
+                <a
+                  href={quoteUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={t(`Conversar sobre ${service.title.toLowerCase()} pelo WhatsApp`, `Discuss ${service.title.toLowerCase()} on WhatsApp`)}
+                  className="mt-auto flex items-center justify-between gap-3 border-t border-slate-800/80 pt-6 text-sm font-medium text-slate-200 transition-colors hover:text-blue-400"
+                >
+                  {t('Conversar sobre o projeto', 'Discuss your project')}
+                  <ArrowUpRight className="h-4 w-4 shrink-0" aria-hidden="true" />
+                </a>
+              </article>
             );
           })}
         </div>
-
       </div>
     </section>
   );

@@ -119,21 +119,20 @@ const Contact: React.FC = () => {
         
         {/* Cabeçalho da Seção com GSAP ScrollTrigger */}
         <div className="gsap-contact-header text-center space-y-4 max-w-3xl mx-auto mb-12">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-pink-500/20 bg-pink-500/10 text-pink-400 text-xs font-mono uppercase tracking-widest">
-            <Mail className="w-3.5 h-3.5" />
-            <span>{t("Conexão & Parcerias", "Get in Touch")}</span>
-          </div>
+          <p className="text-xs font-mono font-medium uppercase tracking-[0.2em] text-blue-400">
+            {t("Conexão & Parcerias", "Get in Touch")}
+          </p>
 
           <h2 className="font-display text-3xl sm:text-5xl font-black text-white tracking-tight">
             {t("Vamos construir algo ", "Let's build something ")}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-indigo-400">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-sky-300 to-slate-200">
               {t("extraordinário juntos?", "extraordinary together?")}
             </span>
           </h2>
         </div>
 
         {/* Card do Formulário de Contato */}
-        <div className="p-8 sm:p-10 rounded-3xl bg-white/[0.02] border border-white/10 backdrop-blur-xl">
+        <div className="p-8 sm:p-10 rounded-3xl bg-[#090e1c]/80 border border-slate-800 backdrop-blur-xl shadow-xl">
           {submitted ? (
             <div className="py-12 text-center space-y-4 animate-fade-in">
               <div className="w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center mx-auto">
@@ -142,7 +141,7 @@ const Contact: React.FC = () => {
               <h3 className="font-display text-2xl font-bold text-white">
                 {t("Mensagem Enviada!", "Message Sent!")}
               </h3>
-              <p className="text-sm text-gray-300 max-w-md mx-auto">
+              <p className="text-sm text-slate-300 max-w-md mx-auto">
                 {t(
                   "Sua mensagem foi enviada para o WhatsApp e salva com sucesso!",
                   "Your message has been sent to WhatsApp and saved successfully!"
@@ -153,7 +152,7 @@ const Contact: React.FC = () => {
                   setSubmitted(false);
                   setLoading(false);
                 }}
-                className="mt-4 px-6 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs uppercase"
+                className="mt-4 px-6 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold text-xs uppercase"
               >
                 {t("Enviar Outra Mensagem", "Send Another Message")}
               </button>
@@ -162,7 +161,7 @@ const Contact: React.FC = () => {
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-xs font-mono text-gray-300 mb-2">
+                  <label className="block text-xs font-mono text-slate-300 mb-2">
                     {t("Seu Nome", "Your Name")} *
                   </label>
                   <input
@@ -172,12 +171,12 @@ const Contact: React.FC = () => {
                     value={formData.name}
                     onChange={handleChange}
                     placeholder="Ex: Ana Silva"
-                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 text-sm"
+                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-slate-800 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 text-sm"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-mono text-gray-300 mb-2">
+                  <label className="block text-xs font-mono text-slate-300 mb-2">
                     {t("Seu E-mail", "Your Email")} *
                   </label>
                   <input
@@ -187,13 +186,13 @@ const Contact: React.FC = () => {
                     value={formData.email}
                     onChange={handleChange}
                     placeholder="ana@empresa.com"
-                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 text-sm"
+                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-slate-800 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 text-sm"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-mono text-gray-300 mb-2">
+                <label className="block text-xs font-mono text-slate-300 mb-2">
                   {t("Assunto", "Subject")}
                 </label>
                 <input
@@ -202,12 +201,12 @@ const Contact: React.FC = () => {
                   value={formData.subject}
                   onChange={handleChange}
                   placeholder="Ex: Novo Projeto Web"
-                  className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 text-sm"
+                  className="w-full px-4 py-3 rounded-xl bg-white/5 border border-slate-800 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 text-sm"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-mono text-gray-300 mb-2">
+                <label className="block text-xs font-mono text-slate-300 mb-2">
                   {t("Mensagem", "Message")} *
                 </label>
                 <textarea
@@ -217,7 +216,7 @@ const Contact: React.FC = () => {
                   value={formData.message}
                   onChange={handleChange}
                   placeholder={t("Descreva brevemente sua ideia...", "Briefly describe your project...")}
-                  className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 text-sm resize-none"
+                  className="w-full px-4 py-3 rounded-xl bg-white/5 border border-slate-800 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 text-sm resize-none"
                 ></textarea>
               </div>
 
@@ -229,17 +228,17 @@ const Contact: React.FC = () => {
               )}
 
               <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.99 }}
                 type="submit"
                 disabled={loading}
-                className="group w-full py-4 rounded-2xl bg-gradient-to-r from-[#25D366] via-[#22c55e] to-[#128C7E] text-white font-bold text-xs uppercase tracking-widest shadow-[0_0_25px_rgba(37,211,102,0.4)] hover:shadow-[0_0_35px_rgba(37,211,102,0.8)] transition-all duration-300 flex items-center justify-center gap-3 disabled:opacity-50 cursor-pointer"
+                className="group w-full py-3.5 rounded-2xl bg-[#25D366] hover:bg-[#20ba5a] text-white font-semibold text-xs uppercase tracking-wider shadow-sm hover:shadow-md transition-all duration-200 flex items-center justify-center gap-3 disabled:opacity-50 cursor-pointer"
               >
                 {loading ? (
                   <span>{t("Enviando...", "Sending...")}</span>
                 ) : (
                   <>
-                    <WhatsAppIcon className="w-5 h-5 fill-current group-hover:rotate-6 group-hover:scale-110 transition-transform duration-300 shrink-0" />
+                    <WhatsAppIcon className="w-5 h-5 fill-current group-hover:rotate-6 transition-transform duration-300 shrink-0" />
                     <span className="tracking-wider">{t("Enviar para o WhatsApp", "Send to WhatsApp")}</span>
                   </>
                 )}
@@ -248,17 +247,17 @@ const Contact: React.FC = () => {
           )}
 
           {/* Ícones de Contato & Redes Sociais Abaixo do Formulário com Motion */}
-          <div className="pt-8 mt-8 border-t border-white/10 text-center">
-            <p className="text-xs text-gray-400 font-mono mb-4 uppercase tracking-wider">
+          <div className="pt-8 mt-8 border-t border-slate-800 text-center">
+            <p className="text-xs text-slate-400 font-mono mb-4 uppercase tracking-wider">
               {t("Canais Diretos & Redes Sociais", "Direct Channels & Social Media")}
             </p>
             <div className="flex items-center justify-center gap-4 flex-wrap">
               {/* E-mail */}
               <motion.a
-                whileHover={{ scale: 1.15, y: -3 }}
-                whileTap={{ scale: 0.94 }}
+                whileHover={{ scale: 1.1, y: -2 }}
+                whileTap={{ scale: 0.95 }}
                 href={`mailto:${personalInfo.email}`}
-                className="p-3.5 rounded-2xl bg-white/5 hover:bg-indigo-600 text-white border border-white/10 hover:border-white/30 transition-colors"
+                className="p-3.5 rounded-2xl bg-white/5 hover:bg-blue-600 text-white border border-slate-800 hover:border-blue-500 transition-colors"
                 title="E-mail"
               >
                 <Mail className="w-5 h-5" />
